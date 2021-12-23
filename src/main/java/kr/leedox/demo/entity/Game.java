@@ -1,5 +1,7 @@
 package kr.leedox.demo.entity;
 
+import kr.leedox.CalendarUtil;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -38,10 +40,11 @@ public class Game {
     public Game() {
     }
 
-    public Game(Integer id, String subject, String creator) {
+    public Game(String subject, String creator) {
         this.id = id;
         this.subject = subject;
         this.creator = creator;
+        this.createDate = CalendarUtil.formatNow("yyyyMMdd HHmmss");
     }
 
     public int getId() {

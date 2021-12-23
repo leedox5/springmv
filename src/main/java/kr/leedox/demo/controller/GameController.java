@@ -35,13 +35,12 @@ public class GameController {
 
     @GetMapping("/")
     public String gameList(Model model) {
-
+        /*
         for (int i = 1; i <= 5; i++) {
-            repo.save(new Game(i, "GAME" + i, "entec"));
+            repo.save(new Game("GAME" + i, "entec"));
         }
-
-        List<Game> gameList = new ArrayList<Game>();
-        gameList = repo.findAll();
+        */
+        List<Game> gameList = repo.findAll();
 
         model.addAttribute("list", gameList);
         return "list";
@@ -65,7 +64,8 @@ public class GameController {
 
     @PostMapping("/create")
     public RedirectView createGame(Game game) {
-        repo.save(game);
+        Game newGame = new Game(game.getSubject(), "entec");
+        repo.save(newGame);
         return new RedirectView("/");
     }
 

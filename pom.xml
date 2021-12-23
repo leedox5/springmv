@@ -15,6 +15,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
+		<webapp.lib>${basedir}/lib</webapp.lib>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -53,6 +54,14 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.27</version>
+		</dependency>
+
+		<dependency>
+			<groupId>leedox</groupId>
+			<artifactId>leedox</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>${webapp.lib}/leedox-1.0-SNAPSHOT.jar</systemPath>
 		</dependency>
 	</dependencies>
 
