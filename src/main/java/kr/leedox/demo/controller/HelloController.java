@@ -1,4 +1,4 @@
-package kr.leedox.demo;
+package kr.leedox.demo.controller;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
 
-    @GetMapping("/")
+    @GetMapping("/home")
 	public List<String> home() {
 		return List.of("Hello", "SpringBoot", "Maven");
 	}
