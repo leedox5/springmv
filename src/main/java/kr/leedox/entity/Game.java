@@ -1,4 +1,4 @@
-package kr.leedox.demo.entity;
+package kr.leedox.entity;
 
 import kr.leedox.CalendarUtil;
 

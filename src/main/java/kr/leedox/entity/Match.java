@@ -1,10 +1,12 @@
-package kr.leedox.demo.entity;
+package kr.leedox.entity;
 
-import kr.leedox.demo.entity.Game;
-import kr.leedox.demo.entity.Player;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
+@Getter
+@Setter
 @Entity
 @SequenceGenerator(name = "SEQ_MATCH", sequenceName = "SEQ_MATCH", allocationSize = 1)
 @Table(name = "GAME_MATCH")
@@ -36,7 +38,21 @@ public class Match {
     private int seq;
 
     private String description;
-    private int score;
+    private int score1;
+    private int score2;
+
+    private int matchSeq1;
+    private int matchSeq2;
+    private int matchSeq3;
+    private int matchSeq4;
+
+    public int getScore2() {
+        return score2;
+    }
+
+    public void setScore2(int score2) {
+        this.score2 = score2;
+    }
 
     public int getSeq() {
         return seq;
@@ -54,12 +70,12 @@ public class Match {
         this.description = description;
     }
 
-    public int getScore() {
-        return score;
+    public int getScore1() {
+        return score1;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setScore1(int score1) {
+        this.score1 = score1;
     }
 
     public int getId() {

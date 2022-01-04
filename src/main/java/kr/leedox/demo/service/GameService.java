@@ -1,6 +1,6 @@
 package kr.leedox.demo.service;
 
-import kr.leedox.demo.entity.Game;
+import kr.leedox.entity.Game;
 import kr.leedox.demo.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
