@@ -35,4 +35,4 @@ build/
 /.mvn/
 
 src/main/resources/application.properties
-src/text/resources/application.properties
+src/test/resources/application.properties
