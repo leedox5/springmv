@@ -15,4 +15,6 @@ public interface WordRepository extends JpaRepository<Wordbook, Integer> {
     List<Wordbook> findTop10BySeqGreaterThanOrderBySeqAsc(int seq);
 
     List<Wordbook> findBySeqGreaterThanOrderBySeqAsc(int seq);
+
+    List<Wordbook> findTop10ByWordStartsWithOrderByWordAsc(String word);
 }

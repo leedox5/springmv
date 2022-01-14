@@ -20,7 +20,7 @@ public class WordService {
     }
 
     public List<Wordbook> getList(String word) {
-        return wordRepository.findByWordStartsWithOrderByWordAsc(word);
+        return wordRepository.findTop10ByWordStartsWithOrderByWordAsc(word);
     }
 
     public Wordbook getWordbook(Integer id) {
