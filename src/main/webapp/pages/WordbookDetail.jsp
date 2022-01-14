@@ -17,6 +17,9 @@
         <div class="collapse mulcol${wordbook.id}" id="comment">
             <form class="my-2" action="/wordbook/save/${wordbook.id}/${path}" method="post">
                 <div class="mb-2">
+                    <input type="text" class="form-control" name="word" id="word" value="${wordbook.word}">
+                </div>
+                <div class="mb-2">
                     <input type="text" class="form-control" name="seq" id="seq" value="${wordbook.seq}">
                 </div>
                 <div class="mb-2">

@@ -145,8 +145,9 @@ public class WordController {
                                Model model,
                                Wordbook wordbookForm) {
         Wordbook wordbookRepo = wordService.getWordbook(id);
-        wordbookRepo.setMeaning1(wordbookForm.getMeaning1());
+        wordbookRepo.setWord(wordbookForm.getWord());
         wordbookRepo.setSeq(wordbookForm.getSeq());
+        wordbookRepo.setMeaning1(wordbookForm.getMeaning1());
         wordbookRepo = wordService.saveWordbook(wordbookRepo);
 
         model.addAttribute("wordbook", wordbookRepo);
