@@ -16,14 +16,17 @@
         </div>
         <div class="collapse mulcol${wordbook.id}" id="comment">
             <form class="my-2" action="/wordbook/save/${wordbook.id}/${path}" method="post">
-                <div class="mb-2">
+                <div class="mb-1">
                     <input type="text" class="form-control" name="word" id="word" value="${wordbook.word}">
                 </div>
-                <div class="mb-2">
+                <div class="mb-1">
                     <input type="text" class="form-control" name="seq" id="seq" value="${wordbook.seq}">
                 </div>
-                <div class="mb-2">
-                    <textarea  name="meaning1" id="meaning1" class="form-control" rows="2">${wordbook.meaning1}</textarea>
+                <div class="mb-1">
+                    <textarea  name="meaning1" id="meaning1" class="form-control" rows="1">${wordbook.meaning1}</textarea>
+                </div>
+                <div class="mb-1">
+                    <textarea  name="example1" id="example1" class="form-control" rows="2">${wordbook.example1}</textarea>
                 </div>
                 <div class="text-end">
                     <button type="submit" class="btn btn-sm btn-outline-primary">등록</button>
