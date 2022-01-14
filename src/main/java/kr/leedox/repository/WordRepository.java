@@ -12,9 +12,11 @@ public interface WordRepository extends JpaRepository<Wordbook, Integer> {
     List<Wordbook> findByWordStartsWithOrderByWordAsc(String word);
     List<Wordbook> findTop10ByOrderByUpdDateDesc();
 
-    List<Wordbook> findTop10BySeqGreaterThanOrderBySeqAsc(int seq);
+    List<Wordbook> findTop10BySeqGreaterThanOrderBySeqAscIdAsc(int seq);
 
     List<Wordbook> findBySeqGreaterThanOrderBySeqAsc(int seq);
 
     List<Wordbook> findTop10ByWordStartsWithOrderByWordAsc(String word);
+
+    List<Wordbook> findTop10ByMeaning1Containing(String key);
 }

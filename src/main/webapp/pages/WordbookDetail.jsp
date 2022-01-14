@@ -15,8 +15,10 @@
             </div>
         </div>
         <div class="collapse mulcol${wordbook.id}" id="comment">
-            <form class="my-2" action="/wordbook/save/${wordbook.id}" method="post">
-                <input type="hidden" name="word" id="word" value="${key}">
+            <form class="my-2" action="/wordbook/save/${wordbook.id}/${path}" method="post">
+                <div class="mb-2">
+                    <input type="text" class="form-control" name="seq" id="seq" value="${wordbook.seq}">
+                </div>
                 <div class="mb-2">
                     <textarea  name="meaning1" id="meaning1" class="form-control" rows="2">${wordbook.meaning1}</textarea>
                 </div>
@@ -35,13 +37,12 @@
                 </div>
                 <div class="card-footer text-end comment">
                     <a href=".mulcol${wordMeaning.id}" role="button" data-bs-toggle="collapse" class="small">수정</a>
-                    <a href="#" class="small delete" data-uri="/wordbook/deletemeaning/${wordMeaning.id}/${key}">삭제</a>
+                    <a href="#" class="small delete" data-uri="/wordbook/deletemeaning/${wordMeaning.id}/${path}">삭제</a>
                 </div>
             </div>
         </div>
         <div class="collapse mulcol${wordMeaning.id}" id="comment">
-            <form class="my-2" action="/wordbook/savemeaning/${wordbook.id}" method="post">
-                <input  type="hidden" name="key" id="key" value="${key}">
+            <form class="my-2" action="/wordbook/savemeaning/${wordbook.id}/${path}" method="post">
                 <input  type="hidden" name="id" id="id" value="${wordMeaning.id}">
                 <div class="mb-2">
                     <textarea  name="meaning" id="meaning" class="form-control" rows="2">${wordMeaning.meaning}</textarea>
@@ -78,8 +79,7 @@
     </div>
     </c:if>
 
-   <form class="my-2" action="/wordbook/savemeaning/${wordbook.id}" method="post">
-        <input  type="hidden" name="key" id="key" value="${key}">
+   <form class="my-2" action="/wordbook/savemeaning/${wordbook.id}/${path}" method="post">
         <div class="mb-2">
             <textarea  name="meaning" id="meaning" class="form-control" rows="2"></textarea>
         </div>
@@ -89,7 +89,8 @@
     </form>
 
     <form action="/wordbook" method="post">
-        <input  type="hidden" name="word" id="word" value="${key}">
+        <input  type="hidden" name="opt" id="opt" value="${opt}">
+        <input  type="hidden" name="key" id="key" value="${key}">
         <button  type="submit" class="btn btn-outline-secondary">목록으로</button>
     </form>
 

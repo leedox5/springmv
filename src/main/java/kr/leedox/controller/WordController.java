@@ -6,14 +6,16 @@ import kr.leedox.entity.Wordbook;
 import kr.leedox.service.WordMeaningService;
 import kr.leedox.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class WordController {
@@ -28,10 +30,12 @@ public class WordController {
     public String getList(Model model) {
         List<Wordbook> words = wordService.getList();
         model.addAttribute("list", words);
+        model.addAttribute("path","");
         return "WordbookList";
     }
 
-    @PostMapping("/wordbook")
+
+    @PostMapping("/wordbook1")
     public String getList(Model model, Wordbook wordbook) {
         List<Wordbook> words = null;
 
@@ -45,7 +49,64 @@ public class WordController {
         return "WordbookList";
     }
 
-    @GetMapping("/wordbook/{id}")
+    @PostMapping("/wordpost")
+    public String wordPost() {
+        return "Hello, POST";
+    }
+
+    @PostMapping("/wordbook")
+    public String getListOpt(Model model, @RequestParam MultiValueMap<String, String> formData) {
+        List<Wordbook> words = null;
+        System.out.println(formData);
+        String selEng = "";
+        String selKor = "";
+        String selNum = "";
+        String path = "";
+
+        if("eng".equals(formData.getFirst("opt"))) {
+            selEng = "selected";
+            path = "eng";
+            if(formData.getFirst("key").isEmpty()) {
+                words = wordService.getList();
+            } else {
+                words = wordService.getList(formData.getFirst("key"));
+                model.addAttribute("key", formData.getFirst("key"));
+                path += "/" + formData.getFirst("key");
+            }
+            System.out.println("ENG" + words.size());
+        } else if ("kor".equals(formData.getFirst("opt"))) {
+            selKor = "selected";
+            path = formData.getFirst("opt");
+            if (formData.getFirst("key").isEmpty()) {
+                words = wordService.getList();
+            } else {
+                words = wordService.getListByMeaning(formData.getFirst("key"));
+                model.addAttribute("key", formData.getFirst("key"));
+                path += "/" + formData.getFirst("key");
+            }
+        } else if ("num".equals(formData.getFirst("opt"))) {
+            selNum = "selected";
+            path = formData.getFirst("opt");
+            if (formData.getFirst("key").isEmpty()) {
+                words = wordService.getList();
+            } else {
+                words = wordService.getListBySeq(formData.getFirst("key"));
+                model.addAttribute("key", formData.getFirst("key"));
+                path += "/" + formData.getFirst("key");
+            }
+        } else {
+            words = wordService.getList();
+        }
+        model.addAttribute("list", words);
+        model.addAttribute("selEng", selEng);
+        model.addAttribute("selKor", selKor);
+        model.addAttribute("selNum", selNum);
+        model.addAttribute("path", path);
+
+        return "WordbookList";
+    }
+
+    @GetMapping("/wordbook1/{id}")
     public String getWordbook1(@PathVariable Integer id, Model model) {
         Wordbook wordbook = wordService.getWordbook(id);
         model.addAttribute("wordbook", wordbook);
@@ -53,48 +114,110 @@ public class WordController {
     }
 
 
-    @GetMapping("/wordbook/{id}/{key}")
-    public String getWordbook(@PathVariable Integer id, @PathVariable String key, Model model) {
+    @GetMapping( value = {"/wordbook/{id}", "/wordbook/{id}/{opt}", "/wordbook/{id}/{opt}/{key}"})
+    public String getWordbook(@PathVariable Integer id,
+                              @PathVariable(required = false) Optional<String> opt,
+                              @PathVariable(required = false) Optional<String> key, Model model) {
         Wordbook wordbook = wordService.getWordbook(id);
         model.addAttribute("wordbook", wordbook);
-        model.addAttribute("key", key);
+
+        String path = "";
+
+        if (opt.isPresent()) {
+            model.addAttribute("opt", opt.get());
+            path = opt.get();
+        }
+
+        if (key.isPresent()) {
+            model.addAttribute("key", key.get());
+            path += "/" + key.get();
+        }
+
+        model.addAttribute("path", path);
+
         return "WordbookDetail";
     }
 
-    @PostMapping("/wordbook/save/{id}")
-    public String saveWordbook(@PathVariable Integer id, Model model, Wordbook wordbookForm) {
+    @PostMapping( value = {"/wordbook/save/{id}", "/wordbook/save/{id}/{opt}", "/wordbook/save/{id}/{opt}/{key}"})
+    public String saveWordbook(@PathVariable Integer id,
+                               @PathVariable( required = false) Optional<String> opt,
+                               @PathVariable( required = false) Optional<String> key,
+                               Model model,
+                               Wordbook wordbookForm) {
         Wordbook wordbookRepo = wordService.getWordbook(id);
         wordbookRepo.setMeaning1(wordbookForm.getMeaning1());
+        wordbookRepo.setSeq(wordbookForm.getSeq());
         wordbookRepo = wordService.saveWordbook(wordbookRepo);
 
-        /*
-        WordMeaning wordMeaning = WordMeaning.builder().wordbook(wordbookRepo).meaning(wordbookRepo.getMeaning1()).build();
-        wordMeaningService.save(wordbookRepo, wordMeaning);
-        */
-
         model.addAttribute("wordbook", wordbookRepo);
-        if(!wordbookForm.getWord().isEmpty()) {
-            model.addAttribute("key", wordbookForm.getWord());
+
+        String path = "";
+
+        if (opt.isPresent()) {
+            model.addAttribute("opt", opt.get());
+            path = opt.get();
         }
+
+        if (key.isPresent()) {
+            model.addAttribute("key", key.get());
+            path += "/" + key.get();
+        }
+
+        model.addAttribute("path", path);
+
         return "WordbookDetail";
     }
 
-    @PostMapping("/wordbook/savemeaning/{id}")
-    public String saveWordMeaning(@PathVariable Integer id, Model model, WordMeaning wordMeaningForm) {
+    @PostMapping( value = {"/wordbook/savemeaning/{id}", "/wordbook/savemeaning/{id}/{opt}", "/wordbook/savemeaning/{id}/{opt}/{key}"})
+    public String saveWordMeaning(@PathVariable Integer id,
+                                  @PathVariable(required = false) Optional<String> opt,
+                                  @PathVariable(required = false) Optional<String> key,
+                                  Model model,
+                                  WordMeaning wordMeaningForm) {
         Wordbook wordbookRepo = wordService.getWordbook(id);
         wordMeaningService.save(wordbookRepo, wordMeaningForm);
 
         model.addAttribute("wordbook", wordbookRepo);
-        model.addAttribute("key", wordMeaningForm.getKey());
+
+        String path = "";
+
+        if (opt.isPresent()) {
+            model.addAttribute("opt", opt.get());
+            path = opt.get();
+        }
+
+        if (key.isPresent()) {
+            model.addAttribute("key", key.get());
+            path += "/" + key.get();
+        }
+
+        model.addAttribute("path", path);
+
         return "WordbookDetail";
     }
 
-    @GetMapping("/wordbook/deletemeaning/{id}/{key}")
-    public String deleteWordMeaning(@PathVariable Integer id, @PathVariable String key, Model model) {
+    @GetMapping(value = {"/wordbook/deletemeaning/{id}", "/wordbook/deletemeaning/{id}/{opt}", "/wordbook/deletemeaning/{id}/{opt}/{key}"})
+    public String deleteWordMeaning(@PathVariable Integer id,
+                                    @PathVariable(required = false) Optional<String> opt,
+                                    @PathVariable(required = false) Optional<String> key,
+                                    Model model) {
         WordMeaning wordMeaning = wordMeaningService.getWordbook(id);
         wordMeaningService.delete(wordMeaning);
         model.addAttribute("wordbook", wordMeaning.getWordbook());
-        model.addAttribute("key", key);
+
+        String path = "";
+
+        if (opt.isPresent()) {
+            model.addAttribute("opt", opt.get());
+            path = opt.get();
+        }
+
+        if (key.isPresent()) {
+            model.addAttribute("key", key.get());
+            path += "/" + key.get();
+        }
+
+        model.addAttribute("path", path);
         return "WordbookDetail";
     }
 

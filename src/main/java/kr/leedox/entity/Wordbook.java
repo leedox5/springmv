@@ -27,6 +27,7 @@ public class Wordbook {
     private String crtDate;
     private String updDate;
     private int access;
+    private Integer meaningCount;
 
     @OneToMany(mappedBy = "wordbook", cascade = CascadeType.ALL)
     private Collection<WordMeaning> wordMeanings;

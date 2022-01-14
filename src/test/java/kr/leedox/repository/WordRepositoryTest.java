@@ -44,7 +44,7 @@ class WordRepositoryTest {
 
     @Test
     void findBySeqTest() {
-        List<Wordbook> words = wordRepository.findTop10BySeqGreaterThanOrderBySeqAsc(-1);
+        List<Wordbook> words = wordRepository.findTop10BySeqGreaterThanOrderBySeqAscIdAsc(-1);
         for(Wordbook wb : words) {
             System.out.println(wb.getWord() + wb.getSeq());
         }

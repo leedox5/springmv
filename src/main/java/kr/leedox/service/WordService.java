@@ -51,4 +51,12 @@ public class WordService {
                 .build();
         wordRepository.save(wordbook);
     }
+
+    public List<Wordbook> getListByMeaning(String key) {
+        return wordRepository.findTop10ByMeaning1Containing(key);
+    }
+
+    public List<Wordbook> getListBySeq(String key) {
+        return wordRepository.findTop10BySeqGreaterThanOrderBySeqAscIdAsc(Integer.parseInt(key));
+    }
 }
