@@ -19,4 +19,6 @@ public interface WordRepository extends JpaRepository<Wordbook, Integer> {
     List<Wordbook> findTop10ByWordStartsWithOrderByWordAsc(String word);
 
     List<Wordbook> findTop10ByMeaning1Containing(String key);
+
+    List<Wordbook> findTop10ByMeaning2Containing(String key);
 }

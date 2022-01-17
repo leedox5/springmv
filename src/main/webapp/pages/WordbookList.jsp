@@ -8,6 +8,7 @@
                     <option value="eng" ${selEng}>단어</option>
                     <option value="kor" ${selKor}>의미</option>
                     <option value="num" ${selNum}>번호</option>
+                    <option value="tag" ${selTag}>태그</option>
                 </select>
             </div>
             <span class="input-group-text">Key</span>

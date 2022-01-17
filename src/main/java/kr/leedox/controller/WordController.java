@@ -61,6 +61,7 @@ public class WordController {
         String selEng = "";
         String selKor = "";
         String selNum = "";
+        String selTag = "";
         String path = "";
 
         if("eng".equals(formData.getFirst("opt"))) {
@@ -94,6 +95,16 @@ public class WordController {
                 model.addAttribute("key", formData.getFirst("key"));
                 path += "/" + formData.getFirst("key");
             }
+        } else if ("tag".equals(formData.getFirst("opt"))) {
+            selTag = "selected";
+            path = formData.getFirst("opt");
+            if (formData.getFirst("key").isEmpty()) {
+                words = wordService.getList();
+            } else {
+                words = wordService.getListByTag(formData.getFirst("key"));
+                model.addAttribute("key", formData.getFirst("key"));
+                path += "/" + formData.getFirst("key");
+            }
         } else {
             words = wordService.getList();
         }
@@ -101,6 +112,7 @@ public class WordController {
         model.addAttribute("selEng", selEng);
         model.addAttribute("selKor", selKor);
         model.addAttribute("selNum", selNum);
+        model.addAttribute("selTag", selTag);
         model.addAttribute("path", path);
 
         return "WordbookList";
@@ -148,6 +160,7 @@ public class WordController {
         wordbookRepo.setWord(wordbookForm.getWord());
         wordbookRepo.setSeq(wordbookForm.getSeq());
         wordbookRepo.setMeaning1(wordbookForm.getMeaning1());
+        wordbookRepo.setMeaning2(wordbookForm.getMeaning2());
         wordbookRepo.setExample1(wordbookForm.getExample1());
         wordbookRepo = wordService.saveWordbook(wordbookRepo);
 

@@ -26,6 +26,9 @@
                     <textarea  name="meaning1" id="meaning1" class="form-control" rows="1">${wordbook.meaning1}</textarea>
                 </div>
                 <div class="mb-1">
+                    <textarea  name="meaning2" id="meaning2" class="form-control" rows="1">${wordbook.meaning2}</textarea>
+                </div>
+                <div class="mb-1">
                     <textarea  name="example1" id="example1" class="form-control" rows="2">${wordbook.example1}</textarea>
                 </div>
                 <div class="text-end">

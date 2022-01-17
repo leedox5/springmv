@@ -59,4 +59,8 @@ public class WordService {
     public List<Wordbook> getListBySeq(String key) {
         return wordRepository.findTop10BySeqGreaterThanOrderBySeqAscIdAsc(Integer.parseInt(key));
     }
+
+    public List<Wordbook> getListByTag(String key) {
+        return wordRepository.findTop10ByMeaning2Containing(key);
+    }
 }
