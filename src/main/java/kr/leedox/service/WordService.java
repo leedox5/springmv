@@ -61,6 +61,6 @@ public class WordService {
     }
 
     public List<Wordbook> getListByTag(String key) {
-        return wordRepository.findTop10ByMeaning2Containing(key);
+        return wordRepository.findByMeaning2ContainingOrderByWordAsc(key);
     }
 }
