@@ -13,6 +13,7 @@ import javax.persistence.*;
 public class WordMeaning {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "bigint")
     private int id;
 
     @Column(columnDefinition = "text")

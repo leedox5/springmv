@@ -36,7 +36,7 @@ class HelloControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("opt", "kor");
         params.add("key", "전략");
-        mvc.perform(post("/word").params(params))
+        mvc.perform(post("/wordbook").params(params))
                 .andDo(print())
                 .andExpect(status().isOk())
         ;
