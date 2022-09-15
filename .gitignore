@@ -33,3 +33,8 @@ build/
 .vscode/
 /.jpb/
 /.mvn/
+/bin/
+
+### ETC ###
+*.log
+src/main/resources/application.properties
