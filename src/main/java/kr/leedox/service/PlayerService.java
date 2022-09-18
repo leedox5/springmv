@@ -1,11 +1,14 @@
 package kr.leedox.service;
 
-import kr.leedox.demo.repository.PlayerRepository;
+import kr.leedox.repository.PlayerRepository;
 import kr.leedox.entity.Match;
 import kr.leedox.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -13,6 +16,11 @@ public class PlayerService {
 
     @Autowired
     PlayerRepository playerRepository;
+
+    public void save(Player player) {
+        player.setName(player.getName().trim());
+        playerRepository.save(player);
+    }
 
     public void getRank(List<Player> players) {
         int currRank = 0;
@@ -40,7 +48,8 @@ public class PlayerService {
     }
 
     public void saveRank(List<Player> players) {
-        getRank(players);
+        getRank1(players);
+
         for ( Player p : players ) {
             playerRepository.save(p);
         }
@@ -170,4 +179,46 @@ public class PlayerService {
 
     }
 
+    public void delete(Integer player_id) {
+        playerRepository.deleteById(player_id);
+    }
+
+    public void resetResult(Player player) {
+        player.setScore01(0);
+        player.setScore11(0);
+        player.setScore02(0);
+        player.setScore12(0);
+        player.setScore03(0);
+        player.setScore13(0);
+        player.setScore04(0);
+        player.setScore14(0);
+        player.setMatchWin(0);
+        player.setMatchLose(0);
+        player.setGameWin(0);
+        player.setGameLose(0);
+        player.setGameSum(0);
+        player.setMatchRank(0);
+        playerRepository.save(player);
+    }
+
+    public void getRank1(List<Player> players) {
+        List<Player> sortedPlayers = new ArrayList<>(players);
+
+        Collections.sort(sortedPlayers, Comparator.comparing(Player::getMatchWin)
+                .thenComparing(Player::getGameSum).reversed());
+
+        for(int i = 0 ; i < sortedPlayers.size() ; i++) {
+            int idx = players.indexOf(sortedPlayers.get(i));
+            if(i == 0) {
+                players.get(idx).setMatchRank(i + 1);
+            } else {
+                if( sortedPlayers.get(i).getMatchWin() == sortedPlayers.get(i-1).getMatchWin() &&
+                    sortedPlayers.get(i).getGameSum() == sortedPlayers.get(i-1).getGameSum()) {
+                    players.get(idx).setMatchRank(i);
+                } else {
+                    players.get(idx).setMatchRank(i + 1);
+                }
+            }
+        }
+    }
 }

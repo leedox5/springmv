@@ -1,31 +1,33 @@
 package kr.leedox.controller;
 
-import kr.leedox.demo.repository.GameRepository;
-import kr.leedox.demo.repository.MatchRepository;
-import kr.leedox.demo.repository.PlayerRepository;
+import kr.leedox.common.ErrorResponse;
+import kr.leedox.repository.GameRepository;
+import kr.leedox.repository.MatchRepository;
 import kr.leedox.entity.Game;
 import kr.leedox.entity.Match;
 import kr.leedox.entity.Player;
-import kr.leedox.demo.service.GameService;
+import kr.leedox.service.GameService;
 import kr.leedox.service.MatchService;
 import kr.leedox.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.validation.Valid;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class GameController {
 
     @Autowired
-    GameRepository repo;
-
-    @Autowired
-    PlayerRepository playerRepository;
+    GameRepository gameRepository;
 
     @Autowired
     MatchRepository matchRepository;
@@ -46,7 +48,7 @@ public class GameController {
             repo.save(new Game("GAME" + i, "entec"));
         }
         */
-        List<Game> gameList = repo.findAll();
+        List<Game> gameList = gameService.getList();
 
         model.addAttribute("list", gameList);
         return "list";
@@ -64,23 +66,29 @@ public class GameController {
     }
 
     @GetMapping("/create")
-    public String create() {
+    public String create(Model model) {
+        Game game = new Game();
+        game.setSubject(kr.leedox.CalendarUtil.formatNow("[yyyy.MM.dd]") + " 모임 A");
+        model.addAttribute("game", game);
         return "game_form";
     }
 
     @PostMapping("/create")
     public RedirectView createGame(Game game) {
         Game newGame = new Game(game.getSubject(), "entec");
-        repo.save(newGame);
+        gameRepository.save(newGame);
         return new RedirectView("/");
     }
 
     @PostMapping("/player/create/{game_id}")
-    public RedirectView playerCreate(@PathVariable Integer game_id, Player player) {
-        Game game = repo.getById(game_id);
+    public RedirectView playerCreate(@PathVariable Integer game_id, @Valid Player player, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getAllErrors());
+        }
+        Game game = gameRepository.getById(game_id);
         player.setGame(game);
         player.setSeq(game.getPlayers().size() + 1);
-        playerRepository.save(player);
+        playerService.save(player);
         return new RedirectView("/game/" + game_id);
     }
 
@@ -137,7 +145,7 @@ public class GameController {
 
     @GetMapping("/match/create/{game_id}")
     public RedirectView matchCreate(@PathVariable Integer game_id) {
-        Game game = repo.getById(game_id);
+        Game game = gameRepository.getById(game_id);
         List<Player> players = (List<Player>) game.getPlayers();
 
         int cnt = players.size();

@@ -1,5 +1,6 @@
 package kr.leedox.entity;
 
+<<<<<<< HEAD
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,4 +43,26 @@ public class Member {
         this.name = name;
     }
     
+=======
+import lombok.*;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "members")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class Member {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String userId;
+    private String name;
+    private String password;
+
+>>>>>>> fa9d3e5c47e552a7b04961f1c8a03284c770f892
 }

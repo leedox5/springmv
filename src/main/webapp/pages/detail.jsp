@@ -33,22 +33,35 @@
                     ${player.score04}:${player.score14}
                 </td>
                 <td>
-
+                    <c:if test="${empty game.getMatches()}">
+                    <a href="/player/delete/${game.id}/${player.id}" class="delete btn btn-sm btn-outline-secondary">삭제</a>
+                    </c:if>
                 </td>
             </c:forEach>
         </tbody>
     </table>
-    <form action="/player/create/${game.id}" method="post">
+    <form id="form1" action="/player/create/${game.id}" method="post">
         <div class="input-group input-group-sm mb-3">
             <span class="input-group-text">Name</span>
-            <input  type="text" class="form-control" name="name" id="name" value="">
-            <button  type="submit" class="btn btn-outline-secondary">Add</button>
+            <input type="text" class="form-control" name="name" id="name" value="">
+            <button type="submit" class="btn btn-outline-secondary">Add</button>
         </div>
+        <div id="err"></div>
     </form>
     <div class="btn-toolbar justify-content-end">
-        <div class="btn-group btn-group-sm">
-            <a href="/match/create/${game.id}" class="btn btn-outline-secondary">대진표 생성</a>
-        </div>
+        <c:choose>
+        <c:when test="${empty game.getMatches()}">
+            <div class="btn-group btn-group-sm">
+                <a href="/match/create/${game.id}" class="btn btn-outline-secondary">대진표 생성</a>
+                <a href="/match/delete/${game.id}" class="btn btn-outline-secondary">대진표 삭제</a>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div class="btn-group btn-group-sm">
+                <a href="/match/delete/${game.id}" class="btn btn-outline-secondary">대진표 삭제</a>
+            </div>
+        </c:otherwise>
+        </c:choose>
     </div>
     <h5 class="border-bottom py-2">대진표</h5>
     <table class="table">
@@ -112,6 +125,9 @@
 
     <!-- 집계-->
     <h5 class="border-bottom py-2">집계</h5>
+    <div class="btn-group btn-group-sm">
+        <a href="/player/ranking/${game.id}" class="btn btn-outline-secondary">집계</a>
+    </div>
     <table class="table">
         <thead class="text-center table-dark">
             <tr>

@@ -5,7 +5,7 @@
     <form method="post" class="post-form my-3">
         <div class="mb-2">
             <label for="subject">제목</label>
-            <input type="text" class="form-control" name="subject" id="subject" value="">
+            <input type="text" class="form-control" name="subject" id="subject" value="${game.getSubject()}">
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
