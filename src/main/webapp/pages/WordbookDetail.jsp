@@ -46,7 +46,7 @@
                 </div>
                 <div class="card-footer text-end comment">
                     <a href=".mulcol${wordMeaning.id}" role="button" data-bs-toggle="collapse" class="small">수정</a>
-                    <a href="#" class="small delete" data-uri="/wordbook/deletemeaning/${wordMeaning.id}/${path}">삭제</a>
+                    <a href="#" class="small delete" data-uri="/meaning/delete/${wordMeaning.id}">삭제</a>
                 </div>
             </div>
         </div>
@@ -88,14 +88,12 @@
     </div>
     </c:if>
 
-   <form class="my-2" action="/wordbook/savemeaning/${wordbook.id}/${path}" method="post">
-        <div class="mb-2">
-            <textarea  name="meaning" id="meaning" class="form-control" rows="2"></textarea>
-        </div>
-        <div class="text-end">
-            <button type="submit" class="btn btn-sm btn-outline-primary">의미등록</button>
-        </div>
-    </form>
+	<div class="mb-2">
+		<textarea  name="meaning11" id="meaning11" class="form-control" rows="2"></textarea>
+	</div>
+	<div class="text-end">
+		<button id="btn2" class="btn btn-sm btn-outline-primary">의미등록</button>
+	</div>
 
     <form action="/wordbook" method="post">
         <input  type="hidden" name="opt" id="opt" value="${opt}">
@@ -104,4 +102,4 @@
     </form>
 
 </div>
-<%@ include file="bottom.jsp" %>
+<%@ include file="WordbookBottom.jsp" %>

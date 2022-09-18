@@ -5,7 +5,29 @@
 $(document).ready(function() {
     $(".delete").on("click", function() {
         if(confirm("정말로 삭제하시겠습니까?")) {
-            location.href = $(this).data("uri");
+			var form_data = {};
+			var loc = $(this).data("uri");
+            $.ajax({
+            type: "GET",
+            contentType: "application/json",
+            url: loc,
+            data: null,
+            dataType: "json",
+            success: function(data) {
+                var json = JSON.stringify(data, null, 4);
+                if(data.errorContent == "Y") {
+                    location.reload();
+                } else {
+                    //$("#err").html(data.messages[0]);
+					alert(data.messages[0]);
+                }
+            },
+            error: function(e) {
+                //$("#err").html(e.responseText);
+				alert(e.responseText);
+                console.log(e);
+            }
+        });
         }
     });
 
@@ -14,26 +36,15 @@ $(document).ready(function() {
         $("#comment").collapse('toggle');
     });
 
-    $("#form1").submit(function(event) {
-        event.preventDefault();
-        ajax_submit();
-    });
-
 	$("#btn2").click(function(event) {
 		event.preventDefault();
         var form_data = {};
-		form_data.meaning = $("#meaning1").val();
+		form_data.meaning = $("#meaning11").val();
 		console.log(form_data);
-	});
-
-    function ajax_submit() {
-        var form_data = {};
-        form_data.name = $("#name").val();
-
         $.ajax({
             type: "POST",
             contentType: "application/json",
-            url: "/player/create1/" + ${game.id},
+            url: "/wordbook/savemeaning1/" + ${wordbook.id},
             data: JSON.stringify(form_data),
             dataType: "json",
             success: function(data) {
@@ -41,15 +52,17 @@ $(document).ready(function() {
                 if(data.errorContent == "Y") {
                     location.reload();
                 } else {
-                    $("#err").html(data.messages[0]);
+                    //$("#err").html(data.messages[0]);
+					alert(data.messages[0]);
                 }
             },
             error: function(e) {
-                $("#err").html(e.responseText);
+                //$("#err").html(e.responseText);
+				alert(e.responseText);
                 console.log(e);
             }
         });
-    }
+	});
 });
 </script>
 </body>
