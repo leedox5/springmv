@@ -67,9 +67,9 @@
         <button id="btn2" class="btn btn-sm btn-outline-primary">의미등록</button>
     </div>
 
-    <form action="/wordbook2" method="get">
-        <input  type="hidden" name="opt" id="opt" value="${opt}">
-        <input  type="hidden" name="key" id="key" value="${key}">
+    <form th:action="@{/wordbook2}" method="post">
+        <input  type="hidden" name="opt" id="opt" th:value="${opt.isEmpty()} ? '' : ${opt}">
+        <input  type="hidden" name="key" id="key" th:value="${key.isEmpty()} ? '' : ${key}">
         <button  type="submit" class="btn btn-outline-secondary">목록으로</button>
     </form>
 </div>

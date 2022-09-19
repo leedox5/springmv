@@ -62,7 +62,7 @@ public class WordController {
         return "Hello, POST";
     }
 
-    @PostMapping("/wordbook")
+    @PostMapping("/wordbook2")
     public String getListOpt(Model model, @RequestParam MultiValueMap<String, String> formData) {
         List<Wordbook> words = null;
         System.out.println(formData);
@@ -123,7 +123,7 @@ public class WordController {
         model.addAttribute("selTag", selTag);
         model.addAttribute("path", path);
 
-        return "WordbookList";
+        return "thymeleaf/wordbook_list";
     }
 
     @GetMapping("/wordbook1/{id}")
@@ -307,4 +307,16 @@ public class WordController {
         wordService.create(wordbook);
         return new RedirectView("/wordbook");
     }
+
+    @GetMapping("/wordbook2/create")
+    public String createWord2() {
+        return "thymeleaf/wordbook_form";
+    }
+
+    @PostMapping("/wordbook2/create")
+    public RedirectView createWordbook(Wordbook wordbook) {
+        wordService.create(wordbook);
+        return new RedirectView("/wordbook2");
+    }
+
 }
