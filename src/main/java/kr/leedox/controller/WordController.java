@@ -49,6 +49,14 @@ public class WordController {
         return "WordbookList";
     }
 
+    @GetMapping("/wordbook2")
+    public String getList2(Model model) {
+        List<Wordbook> words = wordService.getList();
+        model.addAttribute("list", words);
+        model.addAttribute("path","");
+        return "thymeleaf/wordbook_list";
+    }
+
     @PostMapping("/wordpost")
     public String wordPost() {
         return "Hello, POST";
@@ -149,6 +157,31 @@ public class WordController {
 
         return "WordbookDetail";
     }
+
+    @GetMapping( value = {"/wordbook2/{id}", "/wordbook2/{id}/{opt}", "/wordbook2/{id}/{opt}/{key}"})
+    public String getWordbook2(@PathVariable Integer id,
+                              @PathVariable(required = false) Optional<String> opt,
+                              @PathVariable(required = false) Optional<String> key, Model model) {
+        Wordbook wordbook = wordService.getWordbook(id);
+        model.addAttribute("wordbook", wordbook);
+
+        String path = "";
+
+        if (opt.isPresent()) {
+            model.addAttribute("opt", opt.get());
+            path = opt.get();
+        }
+
+        if (key.isPresent()) {
+            model.addAttribute("key", key.get());
+            path += "/" + key.get();
+        }
+
+        model.addAttribute("path", path);
+
+        return "thymeleaf/detail";
+    }
+
 
     @PostMapping( value = {"/wordbook/save/{id}", "/wordbook/save/{id}/{opt}", "/wordbook/save/{id}/{opt}/{key}"})
     public String saveWordbook(@PathVariable Integer id,

@@ -1,0 +1,145 @@
+<html layout:decorate="~{thymeleaf/layout}">
+<div layout:fragment="content" class="container my-3">
+    <h2 class="border-bottom py-2" th:text="${wordbook.word}"></h2>
+    <h6 class="small text-muted text-end" th:text="'조회수:' + ${wordbook.access}"></h6>
+
+    <div th:id="'collap' + ${wordbook.id}" th:class="'collapse show mulcol' + ${wordbook.id}">
+        <div class="card mt-1" >
+            <div class="card-body">
+                <span style="white-space: pre-line;" th:text="${wordbook.meaning1}"></span>
+            </div>
+            <div class="card-footer text-end comment">
+                <a th:href="'.mulcol' + ${wordbook.id}" role="button" data-bs-toggle="collapse" class="small">수정</a>
+            </div>
+        </div>
+    </div>
+    <div th:class="'collapse mulcol' + ${wordbook.id}" id="comment">
+        <form class="my-2" th:action="@{|/wordbook2/save/${wordbook.id}/${path}|}" th:object="${wordbook}" method="post">
+            <div class="mb-1">
+                <input type="text" class="form-control" name="word" id="word" th:field="*{word}">
+            </div>
+            <div class="mb-1">
+                <input type="text" class="form-control" name="seq" id="seq" th:field="*{seq}">
+            </div>
+            <div class="mb-1">
+                <textarea  name="meaning1" id="meaning1" class="form-control" rows="2">[[${wordbook.meaning1}]]</textarea>
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-sm btn-outline-primary">등록</button>
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol' + ${wordbook.id}">취소</button>
+            </div>
+        </form>
+    </div>
+
+    <div th:each="wordMeaning : ${wordbook.getWordMeanings()}">
+        <div th:id="'collap' + ${wordMeaning.id}" th:class="'collapse show mulcol' + ${wordMeaning.id}">
+            <div class="card mt-1" >
+                <div class="card-body">
+                    <span style="white-space: pre-line;" th:text="${wordMeaning.meaning}"></span>
+                </div>
+                <div class="card-footer text-end comment">
+                    <a th:href="@{|.mulcol${wordMeaning.id}|}" role="button" data-bs-toggle="collapse" class="small">수정</a>
+                    <a href="#" class="small delete" th:attr="data-uri='/meaning/delete/' + ${wordMeaning.id}">삭제</a>
+                </div>
+            </div>
+        </div>
+        <div th:class="'collapse mulcol' + ${wordMeaning.id}" id="comment">
+            <form class="my-2" th:action="@{|/wordbook2/savemeaning/${wordbook.id}/${path}|}" th:object="${wordMeaning}" method="post">
+                <input  type="hidden" name="id" id="id">
+                <div class="mb-2">
+                    <textarea  name="meaning" id="meaning" class="form-control" rows="2">[[${wordMeaning.meaning}]]</textarea>
+                </div>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">등록</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol' + ${wordMeaning.id}">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <div class="mb-2">
+        <textarea  name="meaning11" id="meaning11" class="form-control" rows="2"></textarea>
+    </div>
+    <div class="text-end">
+        <button id="btn2" class="btn btn-sm btn-outline-primary">의미등록</button>
+    </div>
+
+    <form action="/wordbook2" method="get">
+        <input  type="hidden" name="opt" id="opt" value="${opt}">
+        <input  type="hidden" name="key" id="key" value="${key}">
+        <button  type="submit" class="btn btn-outline-secondary">목록으로</button>
+    </form>
+</div>
+<script layout:fragment="script" type='text/javascript'>
+const delete_elements = document.getElementsByClassName("delete");
+Array.from(delete_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            //location.href = this.dataset.uri;
+		    var form_data = {};
+			var loc = this.dataset.uri;
+            $.ajax({
+                type: "GET",
+                contentType: "application/json",
+                url: loc,
+                data: null,
+                dataType: "json",
+                success: function(data) {
+                    var json = JSON.stringify(data, null, 4);
+                    if(data.errorContent == "Y") {
+                        location.reload();
+                    } else {
+                        //$("#err").html(data.messages[0]);
+					    alert(data.messages[0]);
+                    }
+                },
+                error: function(e) {
+				    alert(e.responseText);
+                    console.log(e);
+                }
+            });
+        }
+    });
+});
+
+	$("#btn2").click(function(event) {
+		event.preventDefault();
+
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        var form_data = {};
+		form_data.meaning = $("#meaning11").val();
+		console.log(form_data);
+		var wid = [[${wordbook.id}]];
+		console.log(wid);
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/wordbook/savemeaning1/" + wid,
+            data: JSON.stringify(form_data),
+            dataType: "json",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function(data) {
+                var json = JSON.stringify(data, null, 4);
+                if(data.errorContent == "Y") {
+                    location.reload();
+                } else {
+                    //$("#err").html(data.messages[0]);
+					alert(data.messages[0]);
+                }
+            },
+            error: function(e) {
+                //$("#err").html(e.responseText);
+				alert(e.responseText);
+                console.log(e);
+            }
+        });
+	});
+
+</script>

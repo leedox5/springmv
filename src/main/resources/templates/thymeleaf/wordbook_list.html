@@ -1,0 +1,39 @@
+<html layout:decorate="~{thymeleaf/layout}">
+<div layout:fragment="content" class="container my-3">
+    <form action="/wordbook" method="post">
+        <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+                <select class="form-select" name="opt" id="opt">
+                    <option value="eng" >단어</option>
+                    <option value="kor" >의미</option>
+                    <option value="num" >번호</option>
+                    <option value="tag" >태그</option>
+                </select>
+            </div>
+            <span class="input-group-text">Key</span>
+            <input  type="text" class="form-control" name="key" id="key" value="">
+            <button  type="submit" class="btn btn-outline-secondary">Search</button>
+        </div>
+    </form>
+    <table class="table">
+        <thead class="text-center table-dark">
+        <tr>
+            <th>NO</th>
+            <th>단어</th>
+            <th>의미</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="wordbook : ${list}" class="text-start">
+            <td class="text-end" th:text="${wordbook.seq}"></td>
+            <td class="text-start">
+                <a th:href="@{|/wordbook2/${wordbook.id}|}" th:text="${wordbook.word}"></a>
+            </td>
+            <td th:text="${wordbook.meaning1}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/wordbook/create" class="btn btn-primary">추가</a>
+</div>
+

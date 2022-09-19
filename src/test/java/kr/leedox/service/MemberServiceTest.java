@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,27 +19,30 @@ import static org.mockito.BDDMockito.given;
 @DisplayName(("MemberService Test"))
 public class MemberServiceTest {
     @Mock
-    private MemberRepository memberRepository;
     private BCryptPasswordEncoder passwordEncoder;
-    private MemberService memberService;
+
+    @Autowired
+    MemberService memberService;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     @BeforeEach
     void setUp() {
         this.passwordEncoder = new BCryptPasswordEncoder();
-        this.memberService = new MemberService(memberRepository, passwordEncoder);
     }
     @Test
     @DisplayName("insert() test")
     void insertTest() {
         // given
-        Member member = Member.builder().userId("leedox").password("1234").build();
-        given(memberRepository.save(member)).willReturn(Member.builder().userId("leedox").password(passwordEncoder.encode("1234")).build());
+        Member member = Member.builder().email("leedox@naver.com").password("1234").build();
+        given(memberRepository.save(member)).willReturn(Member.builder().email("leedox@naver.com").password(passwordEncoder.encode("1234")).build());
 
         // when
         Member savedMember = memberService.insertMember(member);
 
         // then
-        assertEquals("leedox", savedMember.getUserId());
+        assertEquals("leedox@naver.com", savedMember.getEmail());
         assertTrue(passwordEncoder.matches("1234", savedMember.getPassword()));
     }
 }

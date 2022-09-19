@@ -2,16 +2,20 @@ package kr.leedox.service;
 
 import kr.leedox.entity.Member;
 import kr.leedox.repository.MemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MemberService {
 
-    private final MemberRepository memberRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    MemberRepository memberRepository;
 
-    public MemberService(MemberRepository memberRepository, BCryptPasswordEncoder passwordEncoder) {
-        this.memberRepository = memberRepository;
-        this.passwordEncoder = passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
+
+    public MemberService() {
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public Member insertMember(Member member) {
