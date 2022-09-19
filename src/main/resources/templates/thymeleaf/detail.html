@@ -45,7 +45,7 @@
         </div>
         <div th:class="'collapse mulcol' + ${wordMeaning.id}" id="comment">
             <form class="my-2" th:action="@{|/wordbook2/savemeaning/${wordbook.id}/${path}|}" th:object="${wordMeaning}" method="post">
-                <input  type="hidden" name="id" id="id">
+                <input type="hidden" name="id" id="id" th:value="${wordMeaning.id}">
                 <div class="mb-2">
                     <textarea  name="meaning" id="meaning" class="form-control" rows="2">[[${wordMeaning.meaning}]]</textarea>
                 </div>

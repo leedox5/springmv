@@ -244,6 +244,34 @@ public class WordController {
         return "WordbookDetail";
     }
 
+    @PostMapping( value = {"/wordbook2/savemeaning/{id}", "/wordbook/savemeaning/{id}/{opt}", "/wordbook/savemeaning/{id}/{opt}/{key}"})
+    public String saveWordMeaning2(@PathVariable Integer id,
+                                  @PathVariable(required = false) Optional<String> opt,
+                                  @PathVariable(required = false) Optional<String> key,
+                                  Model model,
+                                  WordMeaning wordMeaningForm) {
+        Wordbook wordbookRepo = wordService.getWordbook(id);
+        wordMeaningService.save(wordbookRepo, wordMeaningForm);
+
+        model.addAttribute("wordbook", wordbookRepo);
+
+        String path = "";
+
+        if (opt.isPresent()) {
+            model.addAttribute("opt", opt.get());
+            path = opt.get();
+        }
+
+        if (key.isPresent()) {
+            model.addAttribute("key", key.get());
+            path += "/" + key.get();
+        }
+
+        model.addAttribute("path", path);
+
+        return "thymeleaf/detail";
+    }
+
     @GetMapping(value = {"/wordbook/deletemeaning/{id}", "/wordbook/deletemeaning/{id}/{opt}", "/wordbook/deletemeaning/{id}/{opt}/{key}"})
     public String deleteWordMeaning(@PathVariable Integer id,
                                     @PathVariable(required = false) Optional<String> opt,
