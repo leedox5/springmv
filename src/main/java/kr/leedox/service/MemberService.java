@@ -1,10 +1,13 @@
 package kr.leedox.service;
 
+import kr.leedox.common.DataNotFoundException;
 import kr.leedox.entity.Member;
 import kr.leedox.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -21,5 +24,14 @@ public class MemberService {
     public Member insertMember(Member member) {
         member.setPassword(passwordEncoder.encode(member.getPassword()));
         return memberRepository.save(member);
+    }
+
+    public Member getMember(String name) {
+        Optional<Member> member = memberRepository.findByemail(name);
+        if(member.isPresent()) {
+            return member.get();
+        } else {
+            throw new DataNotFoundException("Member was not found");
+        }
     }
 }

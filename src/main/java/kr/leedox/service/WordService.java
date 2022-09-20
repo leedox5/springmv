@@ -1,8 +1,12 @@
 package kr.leedox.service;
 
+import kr.leedox.entity.Member;
 import kr.leedox.entity.Wordbook;
 import kr.leedox.repository.WordRepository;
+import kr.leedox.wordbook.WordbookForm;
+import kr.leedox.wordbook.WordbookSpcifications;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -52,6 +56,18 @@ public class WordService {
         wordRepository.save(wordbook);
     }
 
+    public void create(WordbookForm wordbookForm, Member member) {
+        Wordbook wordbook = Wordbook.builder()
+                .word(wordbookForm.getWord())
+                .meaning1(wordbookForm.getMeaning1())
+                .crtDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .updDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .access(1)
+                .author(member)
+                .build();
+        wordRepository.save(wordbook);
+    }
+
     public List<Wordbook> getListByMeaning(String key) {
         return wordRepository.findTop10ByMeaning1Containing(key);
     }
@@ -62,5 +78,27 @@ public class WordService {
 
     public List<Wordbook> getListByTag(String key) {
         return wordRepository.findByMeaning2ContainingOrderByWordAsc(key);
+    }
+
+    public List<Wordbook> getListByAuthor(Member author) {
+        return wordRepository.findByAuthor(author);
+    }
+
+    public List<Wordbook> searchList(Member author, String opt, String key) {
+        Specification<Wordbook> spec = Specification.where(WordbookSpcifications.equalToAuthor(author));
+        if("eng".equals(opt)) {
+            if(!key.isEmpty()) {
+                spec = spec.and(WordbookSpcifications.likeWord(key));
+            }
+        } else if("kor".equals(opt)) {
+            if(!key.isEmpty()) {
+                spec = spec.and(WordbookSpcifications.likeMeaning1(key));
+            }
+        } else if("num".equals(opt)) {
+            spec = spec.and(WordbookSpcifications.greaterThanSeq(key));
+        } else if("tag".equals(opt)) {
+            spec = spec.and(WordbookSpcifications.likeMeaning2(key));
+        }
+        return wordRepository.findAll(spec);
     }
 }

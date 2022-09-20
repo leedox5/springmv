@@ -1,19 +1,23 @@
 package kr.leedox.controller;
 
-import kr.leedox.entity.Game;
+import kr.leedox.entity.Member;
 import kr.leedox.entity.WordMeaning;
 import kr.leedox.entity.Wordbook;
+import kr.leedox.service.MemberService;
 import kr.leedox.service.WordMeaningService;
 import kr.leedox.service.WordService;
+import kr.leedox.wordbook.WordbookForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.swing.text.html.Option;
+import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +29,9 @@ public class WordController {
 
     @Autowired
     WordMeaningService wordMeaningService;
+
+    @Autowired
+    MemberService memberService;
 
     @GetMapping("/wordbook")
     public String getList(Model model) {
@@ -49,9 +56,11 @@ public class WordController {
         return "WordbookList";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/wordbook2")
-    public String getList2(Model model) {
-        List<Wordbook> words = wordService.getList();
+    public String getList2(Model model, Principal principal) {
+        Member author = memberService.getMember(principal.getName());
+        List<Wordbook> words = wordService.getListByAuthor(author);
         model.addAttribute("list", words);
         model.addAttribute("path","");
         return "thymeleaf/wordbook_list";
@@ -63,59 +72,23 @@ public class WordController {
     }
 
     @PostMapping("/wordbook2")
-    public String getListOpt(Model model, @RequestParam MultiValueMap<String, String> formData) {
+    public String getListOpt(Model model, @RequestParam MultiValueMap<String, String> formData, Principal principal) {
         List<Wordbook> words = null;
-        System.out.println(formData);
-        String selEng = "";
-        String selKor = "";
-        String selNum = "";
-        String selTag = "";
-        String path = "";
 
-        if("eng".equals(formData.getFirst("opt"))) {
-            selEng = "selected";
-            path = "eng";
-            if(formData.getFirst("key").isEmpty()) {
-                words = wordService.getList();
-            } else {
-                words = wordService.getList(formData.getFirst("key"));
-                model.addAttribute("key", formData.getFirst("key"));
-                path += "/" + formData.getFirst("key");
-            }
-            System.out.println("ENG" + words.size());
-        } else if ("kor".equals(formData.getFirst("opt"))) {
-            selKor = "selected";
-            path = formData.getFirst("opt");
-            if (formData.getFirst("key").isEmpty()) {
-                words = wordService.getList();
-            } else {
-                words = wordService.getListByMeaning(formData.getFirst("key"));
-                model.addAttribute("key", formData.getFirst("key"));
-                path += "/" + formData.getFirst("key");
-            }
-        } else if ("num".equals(formData.getFirst("opt"))) {
-            selNum = "selected";
-            path = formData.getFirst("opt");
-            if (formData.getFirst("key").isEmpty()) {
-                words = wordService.getList();
-            } else {
-                words = wordService.getListBySeq(formData.getFirst("key"));
-                model.addAttribute("key", formData.getFirst("key"));
-                path += "/" + formData.getFirst("key");
-            }
-        } else if ("tag".equals(formData.getFirst("opt"))) {
-            selTag = "selected";
-            path = formData.getFirst("opt");
-            if (formData.getFirst("key").isEmpty()) {
-                words = wordService.getList();
-            } else {
-                words = wordService.getListByTag(formData.getFirst("key"));
-                model.addAttribute("key", formData.getFirst("key"));
-                path += "/" + formData.getFirst("key");
-            }
-        } else {
-            words = wordService.getList();
-        }
+        String opt = formData.getFirst("opt");
+        String key = formData.getFirst("key");
+
+        String selEng = opt == "eng" ? "selected" : "";
+        String selKor = opt == "kor" ? "selected" : "";
+        String selNum = opt == "num" ? "selected" : "";
+        String selTag = opt == "tag" ? "selected" : "";
+        String path = opt + "/" + key;
+
+        Member author = memberService.getMember(principal.getName());
+
+        words = wordService.searchList(author, opt, key);
+        model.addAttribute("key", formData.getFirst("key"));
+
         model.addAttribute("list", words);
         model.addAttribute("selEng", selEng);
         model.addAttribute("selKor", selKor);
@@ -182,8 +155,7 @@ public class WordController {
         return "thymeleaf/detail";
     }
 
-
-    @PostMapping( value = {"/wordbook/save/{id}", "/wordbook/save/{id}/{opt}", "/wordbook/save/{id}/{opt}/{key}"})
+    @PostMapping(value = {"/wordbook2/save/{id}", "/wordbook2/save/{id}/{opt}", "/wordbook2/save/{id}/{opt}/{key}"})
     public String saveWordbook(@PathVariable Integer id,
                                @PathVariable( required = false) Optional<String> opt,
                                @PathVariable( required = false) Optional<String> key,
@@ -213,7 +185,7 @@ public class WordController {
 
         model.addAttribute("path", path);
 
-        return "WordbookDetail";
+        return "thymeleaf/detail";
     }
 
     @PostMapping( value = {"/wordbook/savemeaning/{id}", "/wordbook/savemeaning/{id}/{opt}", "/wordbook/savemeaning/{id}/{opt}/{key}"})
@@ -308,15 +280,21 @@ public class WordController {
         return new RedirectView("/wordbook");
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/wordbook2/create")
-    public String createWord2() {
+    public String createWord2(WordbookForm wordbookForm) {
         return "thymeleaf/wordbook_form";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/wordbook2/create")
-    public RedirectView createWordbook(Wordbook wordbook) {
-        wordService.create(wordbook);
-        return new RedirectView("/wordbook2");
+    public String createWordbook(@Valid WordbookForm wordbookForm, BindingResult bindingResult, Principal principal) {
+        if(bindingResult.hasErrors()) {
+            return "thymeleaf/wordbook_form";
+        }
+        Member member = memberService.getMember(principal.getName());
+        wordService.create(wordbookForm, member);
+        return "redirect:/wordbook2";
     }
 
 }

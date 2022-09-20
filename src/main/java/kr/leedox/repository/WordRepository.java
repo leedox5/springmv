@@ -1,12 +1,14 @@
 package kr.leedox.repository;
 
+import kr.leedox.entity.Member;
 import kr.leedox.entity.Wordbook;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.awt.print.Pageable;
 import java.util.List;
 
-public interface WordRepository extends JpaRepository<Wordbook, Integer> {
+public interface WordRepository extends JpaRepository<Wordbook, Integer>, JpaSpecificationExecutor<Wordbook> {
     List<Wordbook> findByWord(String word);
     List<Wordbook> findByWordContaining(String word);
     List<Wordbook> findByWordStartsWithOrderByWordAsc(String word);
@@ -25,4 +27,6 @@ public interface WordRepository extends JpaRepository<Wordbook, Integer> {
     List<Wordbook> findByMeaning2Containing(String key);
 
     List<Wordbook> findByMeaning2ContainingOrderByWordAsc(String key);
+
+    List<Wordbook> findByAuthor(Member author);
 }
