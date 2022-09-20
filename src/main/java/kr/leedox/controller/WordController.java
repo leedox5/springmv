@@ -62,7 +62,7 @@ public class WordController {
         Member author = memberService.getMember(principal.getName());
         List<Wordbook> words = wordService.getListByAuthor(author);
         model.addAttribute("list", words);
-        model.addAttribute("path","");
+        model.addAttribute("path","eng");
         return "thymeleaf/wordbook_list";
     }
 
@@ -82,7 +82,7 @@ public class WordController {
         String selKor = opt == "kor" ? "selected" : "";
         String selNum = opt == "num" ? "selected" : "";
         String selTag = opt == "tag" ? "selected" : "";
-        String path = opt + "/" + key;
+        String path = opt.isEmpty() ? "" : opt + "/" + key;
 
         Member author = memberService.getMember(principal.getName());
 
