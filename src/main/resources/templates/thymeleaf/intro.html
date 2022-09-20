@@ -1,15 +1,11 @@
 <html layout:decorate="~{thymeleaf/layout}">
 <div layout:fragment="content" class="container my-3">
     <h2 class="border-bottom py-2" th:text="${wordbook.word}"></h2>
-    <h6 class="small text-muted text-end" th:text="'조회수 : ' + ${wordbook.access}"></h6>
 
     <div th:id="'collap' + ${wordbook.id}" th:class="'collapse show mulcol0' + ${wordbook.id}">
         <div class="card mt-1" >
             <div class="card-body">
                 <span style="white-space: pre-line;" th:text="${wordbook.meaning1}"></span>
-            </div>
-            <div class="card-footer text-end comment">
-                <a th:href="'.mulcol0' + ${wordbook.id}" role="button" data-bs-toggle="collapse" class="small">수정</a>
             </div>
         </div>
     </div>
@@ -37,10 +33,6 @@
                 <div class="card-body">
                     <span style="white-space: pre-line;" th:text="${wordMeaning.meaning}"></span>
                 </div>
-                <div class="card-footer text-end comment">
-                    <a th:href="@{|.mulcol${wordMeaning.id}|}" role="button" data-bs-toggle="collapse" class="small">수정</a>
-                    <a href="#" class="small delete" th:attr="data-uri='/meaning/delete/' + ${wordMeaning.id}">삭제</a>
-                </div>
             </div>
         </div>
         <div th:class="'collapse mulcol' + ${wordMeaning.id}" id="comment">
@@ -56,22 +48,6 @@
             </form>
         </div>
     </div>
-
-    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
-
-    <div class="mb-2">
-        <textarea  name="meaning11" id="meaning11" class="form-control" rows="4"></textarea>
-    </div>
-    <div class="text-end">
-        <button id="btn2" class="btn btn-sm btn-outline-primary">의미등록</button>
-    </div>
-
-    <form th:action="@{/wordbook2}" method="post">
-        <input  type="hidden" name="opt" id="opt" th:value="${opt.isEmpty()} ? '' : ${opt}">
-        <input  type="hidden" name="key" id="key" th:value="${key.isEmpty()} ? '' : ${key}">
-        <button  type="submit" class="btn btn-outline-secondary">목록으로</button>
-    </form>
 </div>
 <script layout:fragment="script" type='text/javascript'>
 const delete_elements = document.getElementsByClassName("delete");

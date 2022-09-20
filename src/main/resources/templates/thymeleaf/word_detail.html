@@ -19,13 +19,10 @@
                 <input type="text" class="form-control" name="word" id="word" th:field="*{word}">
             </div>
             <div class="mb-1">
-                <input type="text" class="form-control" name="seq" id="seq" th:field="*{seq}">
-            </div>
-            <div class="mb-1">
                 <textarea  name="meaning1" id="meaning1" class="form-control" rows="4">[[${wordbook.meaning1}]]</textarea>
             </div>
             <div class="text-end">
-                <button type="submit" class="btn btn-sm btn-outline-primary">등록</button>
+                <button type="submit" class="btn btn-sm btn-outline-primary">저장</button>
                 <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol0' + ${wordbook.id}">취소</button>
             </div>
         </form>
@@ -50,7 +47,7 @@
                     <textarea  name="meaning" id="meaning" class="form-control" rows="4">[[${wordMeaning.meaning}]]</textarea>
                 </div>
                 <div class="text-end">
-                    <button type="submit" class="btn btn-sm btn-outline-primary">등록</button>
+                    <button type="submit" class="btn btn-sm btn-outline-primary">저장</button>
                     <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol' + ${wordMeaning.id}">취소</button>
                 </div>
             </form>
@@ -64,13 +61,12 @@
         <textarea  name="meaning11" id="meaning11" class="form-control" rows="4"></textarea>
     </div>
     <div class="text-end">
-        <button id="btn2" class="btn btn-sm btn-outline-primary">의미등록</button>
+        <button id="btn2" class="btn btn-sm btn-outline-primary">메모등록</button>
     </div>
-
-    <form th:action="@{/wordbook2}" method="post">
+    <form th:action="@{/wordbook2}" method="post" class="text-left">
         <input  type="hidden" name="opt" id="opt" th:value="${opt.isEmpty()} ? '' : ${opt}">
         <input  type="hidden" name="key" id="key" th:value="${key.isEmpty()} ? '' : ${key}">
-        <button  type="submit" class="btn btn-outline-secondary">목록으로</button>
+        <button  type="submit" class="btn btn-sm btn-outline-secondary">목록으로</button>
     </form>
 </div>
 <script layout:fragment="script" type='text/javascript'>

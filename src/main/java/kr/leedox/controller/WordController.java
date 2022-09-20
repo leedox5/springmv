@@ -63,7 +63,7 @@ public class WordController {
         List<Wordbook> words = wordService.getListByAuthor(author);
         model.addAttribute("list", words);
         model.addAttribute("path","eng");
-        return "thymeleaf/wordbook_list";
+        return "thymeleaf/word_list";
     }
 
     @PostMapping("/wordpost")
@@ -89,7 +89,7 @@ public class WordController {
         model.addAttribute("key", key);
         model.addAttribute("path", path);
 
-        return "thymeleaf/wordbook_list";
+        return "thymeleaf/word_list";
     }
 
     @GetMapping("/wordbook1/{id}")
@@ -99,6 +99,12 @@ public class WordController {
         return "WordbookDetail";
     }
 
+    @GetMapping("/intro")
+    public String getIntro(Model model) {
+        Wordbook wordbook = wordService.getWordbook(7);
+        model.addAttribute("wordbook", wordbook);
+        return "thymeleaf/intro";
+    }
 
     @GetMapping( value = {"/wordbook/{id}", "/wordbook/{id}/{opt}", "/wordbook/{id}/{opt}/{key}"})
     public String getWordbook(@PathVariable Integer id,
@@ -145,7 +151,7 @@ public class WordController {
 
         model.addAttribute("path", path);
 
-        return "thymeleaf/detail";
+        return "thymeleaf/word_detail";
     }
 
     @PostMapping(value = {"/wordbook2/save/{id}", "/wordbook2/save/{id}/{opt}", "/wordbook2/save/{id}/{opt}/{key}"})
@@ -178,7 +184,7 @@ public class WordController {
 
         model.addAttribute("path", path);
 
-        return "thymeleaf/detail";
+        return "thymeleaf/word_detail";
     }
 
     @PostMapping( value = {"/wordbook/savemeaning/{id}", "/wordbook/savemeaning/{id}/{opt}", "/wordbook/savemeaning/{id}/{opt}/{key}"})
@@ -209,7 +215,7 @@ public class WordController {
         return "WordbookDetail";
     }
 
-    @PostMapping( value = {"/wordbook2/savemeaning/{id}", "/wordbook/savemeaning/{id}/{opt}", "/wordbook/savemeaning/{id}/{opt}/{key}"})
+    @PostMapping( value = {"/wordbook2/savemeaning/{id}", "/wordbook2/savemeaning/{id}/{opt}", "/wordbook2/savemeaning/{id}/{opt}/{key}"})
     public String saveWordMeaning2(@PathVariable Integer id,
                                   @PathVariable(required = false) Optional<String> opt,
                                   @PathVariable(required = false) Optional<String> key,
