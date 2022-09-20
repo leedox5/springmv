@@ -22,14 +22,14 @@ class MemberRepositoryTest {
     @Test
     void save() {
         // given
-        String userId = "leedox";
-        Member member = Member.builder().userId(userId).build();
+        String email = "leedox@naver.com";
+        Member member = Member.builder().email(email).build();
 
         // when
         Member savedMember = memberRepository.save(member);
 
         // then
-        assertEquals(userId, savedMember.getUserId());
+        assertEquals(email, savedMember.getEmail());
 
     }
 }

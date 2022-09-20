@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberTest {
     @Test
     public void getNameTest() {
-        Member member = Member.builder().userId("leedox").build();
-        assertEquals("leedox", member.getUserId());
+        Member member = Member.builder().email("leedox@naver.com").build();
+        assertEquals("leedox@naver.com", member.getEmail());
     }
 }

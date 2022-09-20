@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ include file="top.jsp" %>
+<%@ include file="WordbookTop.jsp" %>
 <div class="container my-3">
     <h2 class="border-bottom py-2">${wordbook.word}</h2>
     <h6 class="small text-muted text-end">[${wordbook.seq}] ${wordbook.updDate} 조회수:${wordbook.access}</h6>

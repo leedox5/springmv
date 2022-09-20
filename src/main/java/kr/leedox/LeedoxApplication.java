@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
+//@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 public class LeedoxApplication {
 
     public static void main(String[] args) {

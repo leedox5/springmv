@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ include file="top.jsp" %>
+<%@ include file="WordbookTop.jsp" %>
 <div class="container my-3">
    <form action="/wordbook" method="post">
         <div class="input-group input-group-sm mb-3">

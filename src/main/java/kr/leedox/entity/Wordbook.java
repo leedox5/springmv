@@ -29,6 +29,9 @@ public class Wordbook {
     private int access;
     private Integer meaningCount;
 
+    @ManyToOne
+    private Member author;
+
     @OneToMany(mappedBy = "wordbook", cascade = CascadeType.ALL)
     private Collection<WordMeaning> wordMeanings;
 }
