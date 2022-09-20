@@ -95,9 +95,13 @@ public class WordService {
                 spec = spec.and(WordbookSpcifications.likeMeaning1(key));
             }
         } else if("num".equals(opt)) {
-            spec = spec.and(WordbookSpcifications.greaterThanSeq(key));
+			if(!key.isEmpty()) {
+                spec = spec.and(WordbookSpcifications.greaterThanSeq(key));
+			}
         } else if("tag".equals(opt)) {
-            spec = spec.and(WordbookSpcifications.likeMeaning2(key));
+			if(!key.isEmpty()) {
+                spec = spec.and(WordbookSpcifications.likeMeaning2(key));
+			}
         }
         return wordRepository.findAll(spec);
     }

@@ -78,22 +78,15 @@ public class WordController {
         String opt = formData.getFirst("opt");
         String key = formData.getFirst("key");
 
-        String selEng = opt == "eng" ? "selected" : "";
-        String selKor = opt == "kor" ? "selected" : "";
-        String selNum = opt == "num" ? "selected" : "";
-        String selTag = opt == "tag" ? "selected" : "";
         String path = opt.isEmpty() ? "" : opt + "/" + key;
 
         Member author = memberService.getMember(principal.getName());
 
         words = wordService.searchList(author, opt, key);
-        model.addAttribute("key", formData.getFirst("key"));
 
         model.addAttribute("list", words);
-        model.addAttribute("selEng", selEng);
-        model.addAttribute("selKor", selKor);
-        model.addAttribute("selNum", selNum);
-        model.addAttribute("selTag", selTag);
+		model.addAttribute("opt", opt);
+        model.addAttribute("key", key);
         model.addAttribute("path", path);
 
         return "thymeleaf/wordbook_list";
