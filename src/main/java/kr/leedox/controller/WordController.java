@@ -104,12 +104,12 @@ public class WordController {
         return "WordbookDetail";
     }
 
-    @GetMapping("/home")
+    @GetMapping("/wordhome")
     public String home(@AuthenticationPrincipal UserDetails user) {
         if (user != null) {
             logger.trace("user: {}", user.getUsername());
             logger.trace("auth: {}", user.getAuthorities());
-            return "thymeleaf/wordbook2";
+            return "redirect:/wordbook2";
         }
         return "redirect:/intro";
     }
