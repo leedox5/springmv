@@ -1,5 +1,8 @@
 <html layout:decorate="~{thymeleaf/layout}">
 <div layout:fragment="content" class="container my-2">
+    <div class="mt-1 mb-1">
+        <span th:text="${author.username}"></span>님 반갑습니다.
+    </div>
     <form th:action="@{/wordbook2}" method="post">
         <div class="input-group input-group-sm mb-2">
             <div class="input-group-prepend">
@@ -13,7 +16,15 @@
             <button  type="submit" class="btn btn-outline-secondary">Search</button>
         </div>
     </form>
-    <table class="table">
+    <div class="row ">
+        <div class="col-8">
+            <h6 class="small text-muted text-start mt-1" th:text="'단어수 : ' + ${list.size()}"></h6>
+        </div>
+        <div class="col-4 text-end">
+            <a th:href="@{/wordbook2/create}" class="btn btn-sm btn-primary">단어 추가</a>
+        </div>
+    </div>
+    <table class="table mt-1">
         <thead class="text-left table-dark">
         <tr>
             <th>단어</th>
@@ -30,8 +41,5 @@
         </tr>
         </tbody>
     </table>
-	<div class="text-end">
-        <a th:href="@{/wordbook2/create}" class="btn btn-sm btn-outline-secondary">추가</a>
-	</div>
 </div>
 

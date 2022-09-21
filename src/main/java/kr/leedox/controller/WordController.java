@@ -3,6 +3,7 @@ package kr.leedox.controller;
 import kr.leedox.entity.Member;
 import kr.leedox.entity.WordMeaning;
 import kr.leedox.entity.Wordbook;
+import kr.leedox.service.MemberAdapter;
 import kr.leedox.service.MemberService;
 import kr.leedox.service.WordMeaningService;
 import kr.leedox.service.WordService;
@@ -68,6 +69,7 @@ public class WordController {
         List<Wordbook> words = wordService.getListByAuthor(author);
         model.addAttribute("list", words);
         model.addAttribute("path","eng");
+        model.addAttribute("author", author);
         return "thymeleaf/word_list";
     }
 
@@ -93,7 +95,7 @@ public class WordController {
 		model.addAttribute("opt", opt);
         model.addAttribute("key", key);
         model.addAttribute("path", path);
-
+        model.addAttribute("author", author);
         return "thymeleaf/word_list";
     }
 
@@ -161,13 +163,16 @@ public class WordController {
         return "WordbookDetail";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping( value = {"/wordbook2/{id}", "/wordbook2/{id}/{opt}", "/wordbook2/{id}/{opt}/{key}"})
     public String getWordbook2(@PathVariable Integer id,
-                              @PathVariable(required = false) Optional<String> opt,
-                              @PathVariable(required = false) Optional<String> key, Model model) {
+                               @PathVariable(required = false) Optional<String> opt,
+                               @PathVariable(required = false) Optional<String> key,
+                               @AuthenticationPrincipal MemberAdapter author,
+                               Model model) {
         Wordbook wordbook = wordService.getWordbook(id);
         model.addAttribute("wordbook", wordbook);
-
+        model.addAttribute("author", author.getMember());
         String path = "";
 
         if (opt.isPresent()) {
