@@ -7,8 +7,12 @@ import kr.leedox.service.MemberService;
 import kr.leedox.service.WordMeaningService;
 import kr.leedox.service.WordService;
 import kr.leedox.wordbook.WordbookForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -23,6 +27,8 @@ import java.util.Optional;
 
 @Controller
 public class WordController {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     WordService wordService;
@@ -40,7 +46,6 @@ public class WordController {
         model.addAttribute("path","");
         return "WordbookList";
     }
-
 
     @PostMapping("/wordbook1")
     public String getList(Model model, Wordbook wordbook) {
@@ -97,6 +102,16 @@ public class WordController {
         Wordbook wordbook = wordService.getWordbook(id);
         model.addAttribute("wordbook", wordbook);
         return "WordbookDetail";
+    }
+
+    @GetMapping("/home")
+    public String home(@AuthenticationPrincipal UserDetails user) {
+        if (user != null) {
+            logger.trace("user: {}", user.getUsername());
+            logger.trace("auth: {}", user.getAuthorities());
+            return "thymeleaf/wordbook2";
+        }
+        return "redirect:/intro";
     }
 
     @GetMapping("/intro")
