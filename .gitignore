@@ -33,7 +33,6 @@ build/
 .vscode/
 /.jpb/
 /.mvn/
-<<<<<<< HEAD
 /bin/
 
 ### ETC ###
@@ -41,8 +40,4 @@ build/
 src/main/resources/application.properties
 src/main/java/kr/leedox/demo/BeanViewer.java
 src/main/java/META-INF/MANIFEST.MF
-=======
-
-src/main/resources/application.properties
 src/test/resources/application.properties
->>>>>>> fa9d3e5c47e552a7b04961f1c8a03284c770f892

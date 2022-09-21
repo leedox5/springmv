@@ -34,4 +34,9 @@ public class MemberService {
             throw new DataNotFoundException("Member was not found");
         }
     }
+
+	public boolean isExistEmail(String email) {
+		Optional<Member> member = memberRepository.findByemail(email);
+        return member.isPresent();
+	}
 }

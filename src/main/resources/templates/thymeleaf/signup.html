@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{thymeleaf/layout}">
+<html layout:decorate="~{thymeleaf/layout}">
 <div layout:fragment="content" class="container my-3">
     <div class="my-3 border-bottom">
         <div>
@@ -27,7 +23,7 @@
             <label for="password2" class="form-label">비밀번호 확인</label>
             <input type="password" th:field="*{password2}" class="form-control">
         </div>
-        <button type="submit" class="btn btn-primary">회원가입</button>
+        <button type="submit" class="btn btn-sm btn-primary">회원가입</button>
     </form>
 </div>
 </html>

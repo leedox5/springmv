@@ -101,12 +101,19 @@ public class WordController {
 
     @GetMapping("/intro")
     public String getIntro(Model model) {
-        Wordbook wordbook = wordService.getWordbook(7);
+        Wordbook wordbook = wordService.getWordbookByWord("10010");
         model.addAttribute("wordbook", wordbook);
         return "thymeleaf/intro";
     }
 
-    @GetMapping( value = {"/wordbook/{id}", "/wordbook/{id}/{opt}", "/wordbook/{id}/{opt}/{key}"})
+    @GetMapping("/welcome")
+    public String welcome(Model model) {
+        Wordbook wordbook = wordService.getWordbookByWord("10020");
+        model.addAttribute("wordbook", wordbook);
+        return "thymeleaf/intro";
+    }
+
+	@GetMapping( value = {"/wordbook/{id}", "/wordbook/{id}/{opt}", "/wordbook/{id}/{opt}/{key}"})
     public String getWordbook(@PathVariable Integer id,
                               @PathVariable(required = false) Optional<String> opt,
                               @PathVariable(required = false) Optional<String> key, Model model) {

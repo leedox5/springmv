@@ -28,7 +28,7 @@ public class WordService {
     }
 
     public Wordbook getWordbook(Integer id) {
-        Optional<Wordbook> optionalWordbook =wordRepository.findById(id);
+        Optional<Wordbook> optionalWordbook = wordRepository.findById(id);
         Wordbook wordbook = null;
 
         if(optionalWordbook.isPresent()) {
@@ -38,6 +38,16 @@ public class WordService {
 
         return wordbook;
     }
+
+	public Wordbook getWordbookByWord(String word) {
+		List<Wordbook> wordbookList = wordRepository.findByWord(word);
+
+		if(!wordbookList.isEmpty()) {
+			return wordbookList.get(0);
+		}
+
+        return null;
+	}
 
     public Wordbook saveWordbook(Wordbook wordbook) {
         wordbook.setAccess(wordbook.getAccess() + 1);

@@ -2,6 +2,7 @@ package kr.leedox.controller;
 
 import kr.leedox.entity.Member;
 import kr.leedox.entity.UserCreateForm;
+import kr.leedox.entity.Wordbook;
 import kr.leedox.repository.MemberRepository;
 import kr.leedox.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,12 @@ public class MemberController {
                     "2개의 패스워드가 일치하지 않습니다.");
             return "thymeleaf/signup";
         }
-
+        
+		if (memberService.isExistEmail(userCreateForm.getEmail())) {
+			bindingResult.rejectValue("email", "duplicateEmail", "이미 사용된 이메일입니다.");
+			return "thymeleaf/signup";
+		}
+		 
         Member member = new Member();
         member.setEmail(userCreateForm.getEmail());
         member.setUsername(userCreateForm.getUsername());
@@ -48,8 +54,9 @@ public class MemberController {
 
         memberService.insertMember(member);
 
-        return "redirect:/wordbook2";
+        return "redirect:/welcome";
     }
+
     @GetMapping("/demo1")
     public String hello() {
         return "thymeleaf/demo1";
