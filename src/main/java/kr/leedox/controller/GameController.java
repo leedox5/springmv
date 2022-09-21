@@ -41,7 +41,7 @@ public class GameController {
     @Autowired
     MatchService matchService;
 
-    @GetMapping("/")
+    @GetMapping("/gamehome")
     public String gameList(Model model) {
         /*
         for (int i = 1; i <= 5; i++) {

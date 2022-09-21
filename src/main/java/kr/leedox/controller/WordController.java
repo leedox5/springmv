@@ -104,6 +104,12 @@ public class WordController {
         return "WordbookDetail";
     }
 
+	@GetMapping("/")
+	public String getHome() {
+		Wordbook wordbook = wordService.getWordbookByWord("10030");
+		return wordbook.getMeaning1();
+	}
+
     @GetMapping("/wordhome")
     public String home(@AuthenticationPrincipal UserDetails user) {
         if (user != null) {
