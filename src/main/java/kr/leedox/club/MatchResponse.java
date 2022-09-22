@@ -15,8 +15,8 @@ public class MatchResponse {
     private Integer score2;
     public MatchResponse(String p1, String p2, String p3, Integer score1, Integer score2) {
         this.createDate = p1;
-        this.teamDesc1 = p2 + " " + score1;
-        this.teamDesc2 = p3 + " " + score2;
+        this.teamDesc1 = p2;
+        this.teamDesc2 = p3;
         this.score1 = score1;
         this.score2 = score2;
     }
