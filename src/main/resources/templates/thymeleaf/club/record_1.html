@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascrpt">
+$(document).ready(function() {
+    console.log("ready");
+    getName();
+    $("#btn1").click(function() {
+        alert("Clicked!");
+    });
+});
+
+getName: function() {
+    console.log("in getName function");
+    $("#sp1").text("선수1");
+}
+</script>
+</head>
+<body>
+<div class="mt-1 mb-1">
+    <span id="sp1"></span>님 반갑습니다.
+</div>
+<button id="btn1">클릭</button>
+
+</body>
+</html>

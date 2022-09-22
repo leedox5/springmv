@@ -15,4 +15,6 @@ public interface MatchRepository extends JpaRepository<Match, Integer> {
 
     @Transactional
     List<Match> deleteByGameId(Integer game_id);
+
+    List<Match> findByDescriptionContains(String username);
 }

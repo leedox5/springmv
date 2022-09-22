@@ -1,5 +1,6 @@
 package kr.leedox.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,22 +16,27 @@ public class Match {
     @GeneratedValue(generator = "SEQ_MATCH", strategy = GenerationType.SEQUENCE)
     private int id;
 
+    @JsonIgnore
     @ManyToOne(targetEntity = Game.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id")
     private Game game;
 
+    @JsonIgnore
     @ManyToOne(targetEntity = Player.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id_1")
     private Player player1;
 
+    @JsonIgnore
     @ManyToOne(targetEntity = Player.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id_2")
     private Player player2;
 
+    @JsonIgnore
     @ManyToOne(targetEntity = Player.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id_3")
     private Player player3;
 
+    @JsonIgnore
     @ManyToOne(targetEntity = Player.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id_4")
     private Player player4;
