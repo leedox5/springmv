@@ -6,6 +6,7 @@ import kr.leedox.repository.WordRepository;
 import kr.leedox.wordbook.WordbookForm;
 import kr.leedox.wordbook.WordbookSpcifications;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -113,6 +114,6 @@ public class WordService {
                 spec = spec.and(WordbookSpcifications.likeMeaning2(key));
 			}
         }
-        return wordRepository.findAll(spec);
+        return wordRepository.findAll(spec, Sort.by("updDate").descending());
     }
 }
