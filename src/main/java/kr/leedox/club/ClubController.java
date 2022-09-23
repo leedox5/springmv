@@ -2,6 +2,7 @@ package kr.leedox.club;
 
 import kr.leedox.common.ErrorResponse;
 import kr.leedox.entity.*;
+import kr.leedox.service.MemberAdapter;
 import kr.leedox.service.GameService;
 import kr.leedox.service.MatchService;
 import kr.leedox.service.PlayerService;
@@ -9,6 +10,7 @@ import kr.leedox.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -113,8 +116,8 @@ public class ClubController {
     }
 
     @PostMapping("/create")
-    public String createGame(Game game) {
-        Game newGame = new Game(game.getSubject(), "entec");
+    public String createGame(Game game, @AuthenticationPrincipal MemberAdapter author) {
+        Game newGame = new Game(game.getSubject(), author.getMember().getUsername());
         gameService.save(newGame);
         return "redirect:/club/meeting";
     }

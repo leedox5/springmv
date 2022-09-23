@@ -84,7 +84,7 @@ $.setGrid = function(rows) {
     $.each(rows, function(index, item) {
 
         row_tag  = "<tr>";
-        row_tag += "<td class='text-center'>" + item.result + "[3:6]" + "<br>" + item.createDate + "</td>" ;
+        row_tag += "<td class='text-center'>" + item.result + "[" + item.score1 + " : " + item.score2 + "]" + "<br>" + item.createDate + "</td>" ;
         row_tag += "<td class='text-center'>" + item.teamDesc1.replace(",","<br>")  + "</td>" ;
         row_tag += "<td class='text-center'>" + item.teamDesc2.replace(",","<br>")  + "</td>" ;
         row_tag += "</tr>";
