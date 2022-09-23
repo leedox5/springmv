@@ -24,6 +24,10 @@ public class WordService {
         return wordRepository.findTop10ByOrderByUpdDateDesc();
     }
 
+    public List<Wordbook> getListAll() {
+        return wordRepository.findAll();
+    }
+
     public List<Wordbook> getList(String word) {
         return wordRepository.findTop10ByWordStartsWithOrderByWordAsc(word);
     }
