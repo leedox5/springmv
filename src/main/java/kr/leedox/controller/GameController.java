@@ -9,8 +9,11 @@ import kr.leedox.entity.Player;
 import kr.leedox.service.GameService;
 import kr.leedox.service.MatchService;
 import kr.leedox.service.PlayerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -23,6 +26,7 @@ import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 public class GameController {
 
@@ -41,7 +45,7 @@ public class GameController {
     @Autowired
     MatchService matchService;
 
-    @GetMapping("/gamehome")
+    @GetMapping("/gamehome0")
     public String gameList(Model model) {
         /*
         for (int i = 1; i <= 5; i++) {
@@ -51,7 +55,17 @@ public class GameController {
         List<Game> gameList = gameService.getList();
 
         model.addAttribute("list", gameList);
-        return "list";
+        return "thymeleaf/club/meeting";
+    }
+
+    @GetMapping("/gamehome")
+    public String gameHome(@AuthenticationPrincipal UserDetails user) {
+        if (user != null) {
+            log.trace("user: {}", user.getUsername());
+            log.trace("auth: {}", user.getAuthorities());
+            return "redirect:/club/record";
+        }
+        return "redirect:/club/intro";
     }
 
     @GetMapping("/game/{id}")

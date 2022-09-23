@@ -1,25 +1,24 @@
 <html layout:decorate="~{thymeleaf/club/layout}">
 <div layout:fragment="content" class="container my-2">
-    <div class="mt-1 mb-1">
-        <span id="p1"></span>님 반갑습니다.
-    </div>
-    <div class="row ">
-        <div class="col-8">
-            <h6 id="p2" class="small text-muted text-start mt-1"></h6>
-        </div>
-        <div class="col-4 text-end">
-            <a th:href="@{/club/meeting}" class="btn btn-sm btn-primary">모임 참여</a>
+    <div class="btn-toolbar justify-content-end mb-1">
+        <div class="btn-group btn-group-sm">
+            <a th:href="@{/create}" class="btn btn-sm btn-primary">모임 추가</a>
         </div>
     </div>
     <table id="grid1" class="table mt-1">
         <thead class="text-center table-dark">
         <tr>
-            <th>결과</th>
-            <th>팀A</th>
-            <th>팀B</th>
+            <th>모임명</th>
+            <th>만든이</th>
         </tr>
         </thead>
         <tbody>
+        <tr th:each="game : ${list}" class="text-start">
+            <td class="text-start">
+                <a th:href="@{|/game/${game.id}|}" th:text="${game.subject}"></a>
+            </td>
+            <td th:text="${game.creator}"></td>
+        </tr>
         </tbody>
     </table>    
 </div>
@@ -27,42 +26,26 @@
 <!-- 스크립트 블럭 -->
 <script layout:fragment="script">
 var param = {};
-param.username = "[[${member.username}]]";
-/*
-param.username = "고호진";
-param.score = "12게임 6승 6패(since 2022.01.01)";
-*/
 $(document).ready(function() {
     console.log("ready");
-    $.getParam();
-    $("#btn1").click(function() {
-        //$.getGrid();
-    });
+    //$.getParam();
 });
 
 $.getParam = function() {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/club/score",
+        url: "/club/meeting",
         data: param,
         dataType: "json",
         success: function(data) {
             param = data;
-            //var json = JSON.stringify(data, null, 4);
-            /*
-            if(data.errorContent == "Y") {
-                location.reload();
-            } else {
-                //$("#err").html(data.messages[0]);
-			    alert(data.messages[0]);
-            }
-            */
+
             console.log(param);
             
-            $("#p1").text(param.member.username + "(" + param.member.email + ")");
-            $("#p2").text(param.score);
-            $.setGrid(param.matches);
+            //$("#p1").text(param.member.username + "(" + param.member.email + ")");
+            //$("#p2").text(param.score);
+            //$.setGrid(param.matches);
         },
         error: function(e) {
 		    console.log(e.responseText);

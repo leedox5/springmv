@@ -4,6 +4,7 @@ import kr.leedox.service.UserSecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -29,16 +30,17 @@ public class SecurityConfig {
     private final DataSource dataSource;
 
     @Bean
+    @Order(1)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().antMatchers("/**").permitAll()
+        http.antMatcher("/club/**").authorizeHttpRequests().antMatchers("/**").permitAll()
                 .and().csrf().ignoringAntMatchers("/club/**")
                 .and()
                       .formLogin()
-                      .loginPage("/login")
-                      .defaultSuccessUrl("/wordbook2")
+                      .loginPage("/club/login")
+                      .defaultSuccessUrl("/club/record")
                 .and().logout()
-                      .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                      .logoutSuccessUrl("/wordbook2")
+                      .logoutRequestMatcher(new AntPathRequestMatcher("/club/logout"))
+                      .logoutSuccessUrl("/club/intro")
                       .invalidateHttpSession(true)
                 .and().rememberMe()
                       .userDetailsService(userSecurityService)
@@ -46,6 +48,26 @@ public class SecurityConfig {
                 ;
         return http.build();
     }
+
+    @Bean
+    public SecurityFilterChain clubFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests().antMatchers("/**").permitAll()
+                .and().csrf().ignoringAntMatchers("/club/**")
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/wordbook2")
+                .and().logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/wordbook2")
+                .invalidateHttpSession(true)
+                .and().rememberMe()
+                .userDetailsService(userSecurityService)
+                .tokenRepository(tokenRepository());
+        ;
+        return http.build();
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
