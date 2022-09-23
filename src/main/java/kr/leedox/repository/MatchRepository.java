@@ -19,4 +19,8 @@ public interface MatchRepository extends JpaRepository<Match, Integer> {
     List<Match> findByDescriptionContains(String username);
 
     List<Match> findByDescriptionContainsOrderByIdDesc(String username);
+
+    List<Match> findByDescriptionContainsOrderByIdDescSeqAsc(String username);
+
+    List<Match> findByDescriptionContainsOrderByGameIdDescSeqAsc(String username);
 }

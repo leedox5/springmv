@@ -112,7 +112,7 @@ public class MatchService {
     public List<MatchResponse> getScoreMatches(Member member) {
         List<MatchResponse> matchResponses = new ArrayList<>();
 
-        List<Match> matches = matchRepository.findByDescriptionContainsOrderByIdDesc(member.getUsername());
+        List<Match> matches = matchRepository.findByDescriptionContainsOrderByGameIdDescSeqAsc(member.getUsername());
 
         for(Match match : matches) {
             if(match.getScore1() > 0 && match.getScore2() > 0) {

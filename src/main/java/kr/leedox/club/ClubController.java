@@ -1,11 +1,13 @@
 package kr.leedox.club;
 
+import kr.leedox.common.ErrorResponse;
 import kr.leedox.entity.*;
 import kr.leedox.service.GameService;
 import kr.leedox.service.MatchService;
 import kr.leedox.service.PlayerService;
 import kr.leedox.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,6 +53,38 @@ public class ClubController {
 
         model.addAttribute("list", gameList);
         return "thymeleaf/club/meeting";
+    }
+
+    @GetMapping("/meeting/modify/{id}")
+    public String modify(@PathVariable Integer id, Model model) {
+        Game game = gameService.getById(id);
+        model.addAttribute("game", game);
+        return "thymeleaf/club/meeting_form";
+    }
+
+    @PostMapping("/meeting/modify/{game_id}")
+    public String modifyMeeting(@PathVariable Integer game_id, Game gameForm) {
+        Game game = gameService.getById(game_id);
+        game.setSubject(gameForm.getSubject());
+        gameService.save(game);
+        return "redirect:/club/meeting/" + game_id;
+    }
+
+    /*
+    @GetMapping("/meeting/delete/{game_id}")
+    public String deleteMeeting(@PathVariable Integer game_id)  {
+        Game game = gameService.getById(game_id);
+        gameService.delete(game);
+        return "redirect:/club/meeting";
+    }
+    */
+
+    @GetMapping("/meeting/delete/{id}")
+    public ResponseEntity<?> saveMeaning(@PathVariable Integer id) {
+        Game game = gameService.getById(id);
+        gameService.delete(game);
+
+        return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
     }
 
     @GetMapping("/intro")
