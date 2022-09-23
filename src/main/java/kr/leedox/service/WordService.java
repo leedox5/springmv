@@ -91,7 +91,7 @@ public class WordService {
     }
 
     public List<Wordbook> getListByAuthor(Member author) {
-        return wordRepository.findByAuthor(author);
+        return wordRepository.findByAuthorOrderByUpdDateDesc(author);
     }
 
     public List<Wordbook> searchList(Member author, String opt, String key) {

@@ -29,4 +29,6 @@ public interface WordRepository extends JpaRepository<Wordbook, Integer>, JpaSpe
     List<Wordbook> findByMeaning2ContainingOrderByWordAsc(String key);
 
     List<Wordbook> findByAuthor(Member author);
+
+    List<Wordbook> findByAuthorOrderByUpdDateDesc(Member author);
 }
