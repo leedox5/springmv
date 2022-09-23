@@ -26,7 +26,7 @@ public class AdminController {
         List<Wordbook> wordbooks = wordService.getListAll();
         model.addAttribute("list", wordbooks);
         model.addAttribute("path", "eng");
-        model.addAttribute(("author", author.getMember());
+        model.addAttribute("author", author.getMember());
         return "thymeleaf/word_list";
     }
 }
