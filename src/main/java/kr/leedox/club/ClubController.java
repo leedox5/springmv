@@ -1,19 +1,24 @@
 package kr.leedox.club;
 
-import kr.leedox.entity.Game;
-import kr.leedox.entity.Member;
-import kr.leedox.entity.UserCreateForm;
-import kr.leedox.entity.Wordbook;
+import kr.leedox.entity.*;
 import kr.leedox.service.GameService;
+import kr.leedox.service.MatchService;
+import kr.leedox.service.PlayerService;
 import kr.leedox.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/club")
@@ -24,6 +29,12 @@ public class ClubController {
 
     @Autowired
     WordService wordService;
+
+    @Autowired
+    PlayerService playerService;
+
+    @Autowired
+    MatchService matchService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/record")
@@ -59,4 +70,106 @@ public class ClubController {
         return "thymeleaf/club/signup";
     }
 
+    @GetMapping("/create")
+    public String create(Model model) {
+        Game game = new Game();
+        game.setSubject(kr.leedox.CalendarUtil.formatNow("[yyyy.MM.dd]") + " 모임 A");
+        model.addAttribute("game", game);
+        return "thymeleaf/club/meeting_form";
+    }
+
+    @PostMapping("/create")
+    public String createGame(Game game) {
+        Game newGame = new Game(game.getSubject(), "entec");
+        gameService.save(newGame);
+        return "redirect:/club/meeting";
+    }
+
+    @GetMapping("/meeting/{id}")
+    public String game(@PathVariable Integer id, Model model) {
+        Optional<Game> optionalGame = gameService.findById(id);
+        Game game = null;
+        if(optionalGame.isPresent()) {
+            game = optionalGame.get();
+        }
+        model.addAttribute("game", game);
+        return "thymeleaf/club/detail";
+    }
+
+    @PostMapping("/player/create/{game_id}")
+    public RedirectView playerCreate(@PathVariable Integer game_id, @Valid Player player, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getAllErrors());
+        }
+        Game game = gameService.getById(game_id);
+        player.setGame(game);
+        player.setSeq(game.getPlayers().size() + 1);
+        playerService.save(player);
+        return new RedirectView("/club/meeting/" + game_id);
+    }
+
+    @GetMapping("/match/create/{game_id}")
+    public RedirectView matchCreate(@PathVariable Integer game_id) {
+        Game game = gameService.getById(game_id);
+        List<Player> players = (List<Player>) game.getPlayers();
+
+        int cnt = players.size();
+
+        switch (cnt) {
+            case 4 :
+                addMatch(game, 1, players.get(0), players.get(1), players.get(2), players.get(3));
+                addMatch(game, 2, players.get(0), players.get(2), players.get(1), players.get(3));
+                addMatch(game, 3, players.get(0), players.get(3), players.get(1), players.get(2));
+                break;
+            case 5 :
+                addMatch(game, 1, players.get(0), players.get(1), players.get(2), players.get(3));
+                addMatch(game, 2, players.get(0), players.get(2), players.get(1), players.get(4));
+                addMatch(game, 3, players.get(0), players.get(3), players.get(2), players.get(4));
+                addMatch(game, 4, players.get(0), players.get(4), players.get(1), players.get(3));
+                addMatch(game, 5, players.get(1), players.get(2), players.get(3), players.get(4));
+                break;
+            default:
+                System.out.println("Check Players!!!");
+        }
+
+        return new RedirectView("/club/meeting/" + game_id);
+    }
+
+    private void addMatch(Game game, int seq, Player p1,  Player p2, Player p3, Player p4) {
+        String desc = "";
+        Match match = new Match();
+        match.setGame(game);
+        match.setSeq(seq);
+        match.setPlayer1(p1);
+        match.setPlayer2(p2);
+        match.setPlayer3(p3);
+        match.setPlayer4(p4);
+        desc += Integer.toString(p1.getSeq()) + p1.getName() + "," + Integer.toString(p2.getSeq()) + p2.getName();
+        desc += ":";
+        desc += Integer.toString(p3.getSeq()) + p3.getName() + "," + Integer.toString(p4.getSeq()) + p4.getName();
+        match.setDescription(desc);
+        match.setMatchSeq1(matchService.getMatchSeq(p1));
+        match.setMatchSeq2(matchService.getMatchSeq(p2));
+        match.setMatchSeq3(matchService.getMatchSeq(p3));
+        match.setMatchSeq4(matchService.getMatchSeq(p4));
+        matchService.save(match);
+    }
+
+    @PostMapping("/match/save/{match_id}")
+    public RedirectView matchSave(@PathVariable Integer match_id, Match matchForm) {
+        Match match = matchService.getById(match_id);
+        match.setScore1(matchForm.getScore1());
+        match.setScore2(matchForm.getScore2());
+        matchService.save(match);
+
+        playerService.saveScore(match, matchForm.getScore1(), matchForm.getScore2());
+
+        Game game = match.getGame();
+
+        List<Player> players = (List<Player>) game.getPlayers();
+
+        playerService.saveRank(players);
+
+        return new RedirectView("/club/meeting/" + game.getId());
+    }
 }

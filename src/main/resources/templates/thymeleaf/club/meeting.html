@@ -2,7 +2,7 @@
 <div layout:fragment="content" class="container my-2">
     <div class="btn-toolbar justify-content-end mb-1">
         <div class="btn-group btn-group-sm">
-            <a th:href="@{/create}" class="btn btn-sm btn-primary">모임 추가</a>
+            <a th:href="@{/club/create}" class="btn btn-sm btn-primary">모임 추가</a>
         </div>
     </div>
     <table id="grid1" class="table mt-1">
@@ -15,7 +15,7 @@
         <tbody>
         <tr th:each="game : ${list}" class="text-start">
             <td class="text-start">
-                <a th:href="@{|/game/${game.id}|}" th:text="${game.subject}"></a>
+                <a th:href="@{|/club/meeting/${game.id}|}" th:text="${game.subject}"></a>
             </td>
             <td th:text="${game.creator}"></td>
         </tr>

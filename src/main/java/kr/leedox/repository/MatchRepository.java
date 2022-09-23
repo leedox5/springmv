@@ -17,4 +17,6 @@ public interface MatchRepository extends JpaRepository<Match, Integer> {
     List<Match> deleteByGameId(Integer game_id);
 
     List<Match> findByDescriptionContains(String username);
+
+    List<Match> findByDescriptionContainsOrderByIdDesc(String username);
 }
