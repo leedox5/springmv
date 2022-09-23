@@ -194,6 +194,7 @@ public class WordController {
     public String saveWordbook(@PathVariable Integer id,
                                @PathVariable( required = false) Optional<String> opt,
                                @PathVariable( required = false) Optional<String> key,
+                               @AuthenticationPrincipal MemberAdapter author,
                                Model model,
                                Wordbook wordbookForm) {
         Wordbook wordbookRepo = wordService.getWordbook(id);
@@ -205,6 +206,7 @@ public class WordController {
         wordbookRepo = wordService.saveWordbook(wordbookRepo);
 
         model.addAttribute("wordbook", wordbookRepo);
+        model.addAttribute("author", author.getMember());
 
         String path = "";
 
@@ -255,12 +257,14 @@ public class WordController {
     public String saveWordMeaning2(@PathVariable Integer id,
                                   @PathVariable(required = false) Optional<String> opt,
                                   @PathVariable(required = false) Optional<String> key,
+ 		                          @AuthenticationPrincipal MemberAdapter author,
                                   Model model,
                                   WordMeaning wordMeaningForm) {
         Wordbook wordbookRepo = wordService.getWordbook(id);
         wordMeaningService.save(wordbookRepo, wordMeaningForm);
 
         model.addAttribute("wordbook", wordbookRepo);
+        model.addAttribute("author", author.getMember());
 
         String path = "";
 
@@ -276,7 +280,7 @@ public class WordController {
 
         model.addAttribute("path", path);
 
-        return "thymeleaf/detail";
+        return "thymeleaf/word_detail";
     }
 
     @GetMapping(value = {"/wordbook/deletemeaning/{id}", "/wordbook/deletemeaning/{id}/{opt}", "/wordbook/deletemeaning/{id}/{opt}/{key}"})
