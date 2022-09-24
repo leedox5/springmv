@@ -41,7 +41,14 @@ public class ClubController {
     @Autowired
     MatchService matchService;
 
-    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/")
+    public String clubHome(Model model) {
+        Wordbook wordbook = wordService.getWordbookByWord("10050");
+        model.addAttribute("wordbook", wordbook);
+        return "thymeleaf/club/intro";
+    }
+	
+	@PreAuthorize("isAuthenticated()")
     @GetMapping("/record")
     public String getRecord(Model model) {
         Member member = new Member();
