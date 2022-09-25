@@ -117,7 +117,15 @@ public class ClubController {
     @GetMapping("/create")
     public String create(Model model) {
         Game game = new Game();
-        game.setSubject(kr.leedox.CalendarUtil.formatNow("[yyyy.MM.dd]") + " 모임 A");
+
+		String subject = kr.leedox.CalendarUtil.formatNow("[yyyy.MM.dd]") + " 모임 A";
+
+        List<Game> games = gameService.findBySubject(subject);
+        if(games.size() > 0) {
+			subject =  kr.leedox.CalendarUtil.formatNow("[yyyy.MM.dd]") + " 모임 B";    
+        }
+
+        game.setSubject(subject);
         model.addAttribute("game", game);
         return "thymeleaf/club/meeting_form";
     }

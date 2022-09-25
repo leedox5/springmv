@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface GameRepository extends JpaRepository<Game, Integer> {
     List<Game> findAllByOrderByIdDesc();
+	List<Game> findBySubject(String subject);
 }

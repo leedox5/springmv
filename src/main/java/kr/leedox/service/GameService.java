@@ -33,4 +33,8 @@ public class GameService {
     public void delete(Game game) {
         gameRepository.delete(game);
     }
+
+	public List<Game> findBySubject(String subject) {
+		return gameRepository.findBySubject(subject);
+	}
 }
