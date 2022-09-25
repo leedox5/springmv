@@ -7,6 +7,7 @@ import kr.leedox.service.GameService;
 import kr.leedox.service.MatchService;
 import kr.leedox.service.PlayerService;
 import kr.leedox.service.WordService;
+import kr.leedox.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,7 +42,10 @@ public class ClubController {
     @Autowired
     MatchService matchService;
 
-    @GetMapping("/")
+    @Autowired
+    private MemberService memberService;
+
+	@GetMapping("/")
     public String clubHome(Model model) {
         Wordbook wordbook = wordService.getWordbookByWord("10050");
         model.addAttribute("wordbook", wordbook);
@@ -112,6 +116,33 @@ public class ClubController {
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
         return "thymeleaf/club/signup";
+    }
+
+    @PostMapping("/signup")
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "thymeleaf/club/signup";
+        }
+
+        if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
+            bindingResult.rejectValue("password2", "passwordInCorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "thymeleaf/club/signup";
+        }
+        
+		if (memberService.isExistEmail(userCreateForm.getEmail())) {
+			bindingResult.rejectValue("email", "duplicateEmail", "이미 사용된 이메일입니다.");
+			return "thymeleaf/club/signup";
+		}
+		 
+        Member member = new Member();
+        member.setEmail(userCreateForm.getEmail());
+        member.setUsername(userCreateForm.getUsername());
+        member.setPassword(userCreateForm.getPassword1());
+
+        memberService.insertMember(member);
+
+        return "redirect:/club/";
     }
 
     @GetMapping("/create")
