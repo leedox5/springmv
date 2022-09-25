@@ -42,7 +42,7 @@
                 <td th:text="|${player.score04}@{:}${player.score14}|"></td>
                 <td>
                     <th:block th:if="${game.getMatches().isEmpty()}">
-                    <a th:href="|@{/club/player/delete/}${game.id}/${player.id}|" class="delete btn btn-sm btn-outline-secondary">삭제</a>
+                    <a href="#" class="delete btn btn-sm btn-outline-secondary" th:attr="data-uri='/club/player/delete/' + ${player.id}">삭제</a>
                     </th:block>
                 </td>
             </c:forEach>
@@ -157,7 +157,12 @@
 $(document).ready(function() {
     console.log("ready");
     //$.getParam();
+    $("#form1").submit(function(event) {
+        event.preventDefault();
+        $.ajax_submit();
+    });
 });
+
 const delete_elements = document.getElementsByClassName("delete");
 Array.from(delete_elements).forEach(function(element) {
     element.addEventListener('click', function() {
@@ -173,8 +178,11 @@ Array.from(delete_elements).forEach(function(element) {
                 success: function(data) {
                     var json = JSON.stringify(data, null, 4);
                     if(data.errorContent == "Y") {
-                        //location.reload();
-                        location.href = "/club/meeting";
+						if(loc.indexOf("player") > -1) {
+                            location.reload();
+						} else {
+                            location.href = "/club/meeting";
+						}
                     } else {
                         //$("#err").html(data.messages[0]);
 					    alert(data.messages[0]);
@@ -188,4 +196,30 @@ Array.from(delete_elements).forEach(function(element) {
         }
     });
 });
+
+$.ajax_submit = function() {
+	var form_data = {};
+	form_data.name = $("#name").val();
+
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url: "/club/player/create1/" + [[${game.id}]],
+		data: JSON.stringify(form_data),
+		dataType: "json",
+		success: function(data) {
+			var json = JSON.stringify(data, null, 4);
+			if(data.errorContent == "Y") {
+				location.reload();
+			} else {
+				$("#err").html(data.messages[0]);
+			}
+		},
+		error: function(e) {
+			$("#err").html(e.responseText);
+			console.log(e);
+		}
+	});
+}
+
 </script>

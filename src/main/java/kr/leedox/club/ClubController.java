@@ -152,6 +152,13 @@ public class ClubController {
         return new RedirectView("/club/meeting/" + game_id);
     }
 
+    @GetMapping("/player/ranking/{game_id}")
+    public RedirectView playerRanking(@PathVariable Integer game_id) {
+        Game game = gameService.getById(game_id);
+        playerService.saveRank((List<Player>) game.getPlayers());
+        return new RedirectView("/club/meeting/" + game_id);
+    }
+
     @GetMapping("/match/create/{game_id}")
     public RedirectView matchCreate(@PathVariable Integer game_id) {
         Game game = gameService.getById(game_id);

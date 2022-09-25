@@ -35,7 +35,7 @@ public class PlayerRestController {
     @Autowired
     WordMeaningService wordMeaningService;
 
-    @PostMapping("/player/create1/{game_id}")
+    @PostMapping("/club/player/create1/{game_id}")
     public ResponseEntity<?> createPlayer( @PathVariable Integer game_id, @Valid @RequestBody Player player, Errors errors) {
         if(errors.hasErrors()) {
             List<String> msg = errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList());
@@ -46,6 +46,12 @@ public class PlayerRestController {
         player.setSeq(game.getPlayers().size() + 1);
         playerService.save(player);
 
+        return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
+    }
+
+    @GetMapping("/club/player/delete/{player_id}")
+    public ResponseEntity<?> playerCreate(@PathVariable Integer player_id) {
+        playerService.delete(player_id);
         return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
     }
 
