@@ -65,9 +65,7 @@ public class MatchService {
         String sinceStr = "";
 
         for (int i = 0 ; i < matches.size() ; i++) {
-            if(i == 0) {
-                sinceStr = getSinceStr(matches.get(i).getCreateDate());
-            }
+            sinceStr = getSinceStr(matches.get(i).getCreateDate());
             cnt1++;
             matches.get(i).setCreateDate(getDateStr(matches.get(i).getCreateDate()));
             if(matches.get(i).getTeamDesc1().indexOf(username) > -1) {
