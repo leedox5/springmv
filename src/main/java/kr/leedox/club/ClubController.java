@@ -1,5 +1,6 @@
 package kr.leedox.club;
 
+import kr.leedox.CalendarUtil;
 import kr.leedox.common.ErrorResponse;
 import kr.leedox.entity.*;
 import kr.leedox.service.MemberAdapter;
@@ -139,6 +140,7 @@ public class ClubController {
         member.setEmail(userCreateForm.getEmail());
         member.setUsername(userCreateForm.getUsername());
         member.setPassword(userCreateForm.getPassword1());
+        member.setRegDate(CalendarUtil.formatNow("yyyyMMdd HHmmss"));
 
         memberService.insertMember(member);
 
@@ -262,4 +264,36 @@ public class ClubController {
 
         return new RedirectView("/club/meeting/" + game.getId());
     }
+
+    @GetMapping("/admin")
+    public String admin(Model model) {
+        List<Member> members = memberService.getAllMember();
+        model.addAttribute("list", members);
+        return "thymeleaf/club/admin";
+    }
+
+    @GetMapping("/member/{id}")
+    public String member(@PathVariable Integer id, Model model) {
+        Member member = memberService.getMember(id);
+        model.addAttribute("member", member);
+        return "thymeleaf/club/member";
+    }
+
+    @PostMapping("/member/reset/{id}")
+    public String reset(@PathVariable Integer id) {
+        Member member = memberService.getMember(id);
+        member.setPassword("12345678");
+
+        member = memberService.save(member);
+
+        return "redirect:/club/member/" + id;
+    }
+
+    @GetMapping("/account")
+    public String account(Principal principal, Model model) {
+        Member member = memberService.getMember(principal.getName());
+        model.addAttribute("member", member);
+        return "thymeleaf/club/account";
+    }
+
 }

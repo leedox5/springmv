@@ -1,0 +1,21 @@
+<html layout:decorate="~{thymeleaf/club/layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="my-3 border-bottom">
+        <div>
+            <h4>회원정보</h4>
+        </div>
+    </div>
+    <form th:action="|@{/club/member/reset/}${member.id}|" th:object="${member}" method="post">
+        <div th:replace="thymeleaf/errors :: formErrorsFragment"></div>
+        <div class="mb-2">
+            <label for="email" class="form-label">이메일</label>
+            <input type="email" th:field="*{email}" class="form-control">
+        </div>
+        <div class="mb-2">
+            <label for="username" class="form-label">이름</label>
+            <input type="text" th:field="*{username}" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-sm btn-primary">비밀번호 초기화</button>
+    </form>
+</div>
+</html>

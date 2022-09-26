@@ -1,0 +1,120 @@
+<html layout:decorate="~{thymeleaf/club/layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="my-3 border-bottom">
+        <div>
+            <h4>나의 계정</h4>
+        </div>
+    </div>
+    <form th:action="|@{/club/account/change/}${member.id}|" th:object="${member}" method="post">
+        <div id="err" class="alert alert-danger" role="alert">
+        </div>        
+        <div class="mb-2">
+            <label for="email" class="form-label">이메일</label>
+            <input id="email" type="email" th:field="*{email}" class="form-control">
+        </div>
+        <div class="mb-2">
+            <label for="username" class="form-label">이름</label>
+            <input id="username" type="text" th:field="*{username}" class="form-control">
+        </div>
+        <div class="mb-2">
+            <label for="password" class="form-label">현재 비밀번호</label>
+            <input id="pw1" type="password" class="form-control">
+        </div>
+        <div class="mb-2">
+            <label for="password1" class="form-label">새 비밀번호</label>
+            <input id="password1" type="password" class="form-control">
+        </div>
+        <div class="mb-2">
+            <label for="password2" class="form-label">새 비밀번호 확인</label>
+            <input id="password2" type="password" class="form-control">
+        </div>
+        <button id="btn1" class="btn btn-sm btn-primary">비밀번호 변경</button>
+    </form>
+</div>
+<script layout:fragment="script">
+$(document).ready(function() {
+    console.log("ready");
+    $("#err").hide();
+    $("#btn1").click(function() {
+        event.preventDefault();
+        $.chkPwd();
+    });
+});
+
+$.chkPwd = function() {
+   	var form_data = {};
+   	form_data.id = "[[${member.id}]]";
+   	form_data.email = $("#email").val();
+	form_data.password = $("#pw1").val();
+    console.log(form_data);
+    
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url: "/club/account/chkpw/" + [[${member.id}]],
+		data: JSON.stringify(form_data),
+		dataType: "json",
+		success: function(data) {
+		    console.log(data);
+			if(data.errorContent == "Y") {
+				//location.reload();
+				//alert(data.messages[0]);
+				$.chgPwd();
+			} else {
+			    chkpw_yn = "N";
+			    alert(data.messages[0]);
+				//$("#err").html(data.messages[0]);
+			}
+		},
+		error: function(e) {
+			$("#err").html(e.responseText);
+			console.log(e);
+		}
+	});    
+	
+} 
+
+$.chgPwd = function() {
+    var form_data = {};
+    form_data.email = $("#email").val();
+    form_data.username = $("#username").val();
+    form_data.password1 = $("#password1").val();
+    form_data.password2 = $("#password2").val();
+    console.log(form_data);
+    $("#err").empty();
+    $("#err").hide();
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url: "/club/account/chgpw/" + "[[${member.id}]]",
+		data: JSON.stringify(form_data),
+		dataType: "json",
+		success: function(data) {
+		    console.log(data);
+			if(data.errorContent == "Y") {
+				alert(data.messages[0]);
+				location.reload();
+			} else {
+			    //alert(data.messages[0]);
+				$("#err").html(data.messages[0]);
+			}
+		},
+		error: function(e) {
+		    var msgs = e.responseJSON;
+			console.log(msgs);
+			
+			$("#err").empty();
+			
+			if(msgs.length > 0) {
+			    $("#err").show();
+			}
+			
+			for(var i = 0 ; i < msgs.length ; i++) {
+			    $("#err").append("<div>" + msgs[i] + "</div>");
+			}
+		}
+	});    
+}
+
+
+</script>

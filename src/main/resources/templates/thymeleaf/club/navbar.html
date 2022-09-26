@@ -23,6 +23,12 @@
                 <li class="nav-item">
                     <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/club/signup}">회원가입</a>
                 </li>
+                <li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? true : false}" class="nav-item">
+                    <a class="nav-link" th:href="@{/club/admin}">ADMIN</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()" >
+                    <a class="nav-link" th:href="@{/club/account}">나의계정</a>
+                </li>
             </ul>
         </div>
     </div>
