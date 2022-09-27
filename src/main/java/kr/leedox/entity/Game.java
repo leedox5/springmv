@@ -105,4 +105,8 @@ public class Game {
     public Member getAuthor() {
         return author;
     }
+
+    public String getGameDate() {
+        return gameDate;
+    }
 }

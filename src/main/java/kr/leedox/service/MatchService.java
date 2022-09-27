@@ -100,6 +100,9 @@ public class MatchService {
         String dd = createDate.substring(6, 8);
         return yy + "." + mm + "." + dd ;
          */
+        if(createDate == null) {
+            return "";
+        }
         return createDate.substring(0, 10);
     }
 
@@ -110,6 +113,9 @@ public class MatchService {
         String dd = createDate.substring(6, 8);
         return yyyy + "." + mm + "." + dd ;
          */
+        if(createDate == null) {
+            return "";
+        }
         return createDate.substring(0, 10);
     }
 
@@ -125,7 +131,7 @@ public class MatchService {
                     String desc1 = match.getDescription().substring(0, pos);
                     String desc2 = match.getDescription().substring(pos + 1);
 
-                    MatchResponse matchResponse = new MatchResponse(match.getGame().getCreateDate(), desc1, desc2, match.getScore1(), match.getScore2());
+                    MatchResponse matchResponse = new MatchResponse(match.getGame().getGameDate(), desc1, desc2, match.getScore1(), match.getScore2());
                     matchResponses.add(matchResponse);
                 }
             }
