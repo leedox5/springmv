@@ -36,10 +36,10 @@
             <tr th:each="player : ${game.getPlayers()}"class="text-center">
                 <td th:text="${player.seq}"></td>
                 <td th:text="${player.name}"></td>
-                <td th:text="${player.score01} ? |${player.score01}@{:}${player.score11}| : ''"></td>
-                <td th:text="${player.score02} ? |${player.score02}@{:}${player.score12}| : ''"></td>
-                <td th:text="${player.score03} ? |${player.score03}@{:}${player.score13}| : ''"></td>
-                <td th:text="${player.score04} ? |${player.score04}@{:}${player.score14}| : ''"></td>
+                <td th:text="${#strings.isEmpty(player.score01)} ? '' : |${player.score01}@{:}${player.score11}|"></td>
+                <td th:text="${#strings.isEmpty(player.score02)} ? '' : |${player.score02}@{:}${player.score12}|"></td>
+                <td th:text="${#strings.isEmpty(player.score03)} ? '' : |${player.score03}@{:}${player.score13}|"></td>
+                <td th:text="${#strings.isEmpty(player.score04)} ? '' : |${player.score04}@{:}${player.score14}|"></td>
                 <td>
                     <th:block th:if="${game.getMatches().isEmpty()}">
                     <a href="#" class="delete btn btn-sm btn-outline-secondary" th:attr="data-uri='/club/player/delete/' + ${player.id}">삭제</a>
