@@ -78,9 +78,9 @@
             <tr class="text-center">
                 <td th:text="|@{[}${match.seq}@{]}${match.description}|"></td>
                 <td>
-                    <th:block th:if="${match.score1} > 0 or ${match.score2} > 0" th:text="|${match.score1}@{:}${match.score2}|">
+                    <th:block th:if="${not #strings.isEmpty(match.score1)}" th:text="|${match.score1}@{:}${match.score2}|">
                     </th:block>
-                    <th:block th:unless="${match.score1} > 0 or ${match.score2} > 0">
+                    <th:block th:unless="${not #strings.isEmpty(match.score1)}">
                         <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" th:attr="data-bs-target='#collap' + ${match.id}">입력</button>
                     </th:block>
                 </td>

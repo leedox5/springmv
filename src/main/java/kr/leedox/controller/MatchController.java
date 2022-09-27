@@ -26,7 +26,7 @@ public class MatchController {
     @Autowired
     PlayerService playerServce;
 
-    @GetMapping("/match/delete/{game_id}")
+    @GetMapping("/club/match/delete/{game_id}")
     public RedirectView matchDelete(@PathVariable Integer game_id) {
         matchService.deleteByGameId(game_id);
         Game game = gameService.getById(game_id);
@@ -35,7 +35,6 @@ public class MatchController {
             playerServce.resetResult(player);
         }
 
-
-        return new RedirectView("/game/" + game_id);
+        return new RedirectView("/club/meeting/" + game_id);
     }
 }

@@ -113,13 +113,15 @@ public class MatchService {
         List<Match> matches = matchRepository.findByDescriptionContainsOrderByGameIdDescSeqAsc(member.getUsername());
 
         for(Match match : matches) {
-            if(match.getScore1() > 0 && match.getScore2() > 0) {
-                int pos = match.getDescription().indexOf(":");
-                String desc1 = match.getDescription().substring(0, pos);
-                String desc2 = match.getDescription().substring(pos + 1);
+            if(match.getScore1() != null) {
+                if(match.getScore1() > 0 && match.getScore2() > 0) {
+                    int pos = match.getDescription().indexOf(":");
+                    String desc1 = match.getDescription().substring(0, pos);
+                    String desc2 = match.getDescription().substring(pos + 1);
 
-                MatchResponse matchResponse = new MatchResponse(match.getGame().getCreateDate(), desc1, desc2, match.getScore1(), match.getScore2());
-                matchResponses.add(matchResponse);
+                    MatchResponse matchResponse = new MatchResponse(match.getGame().getCreateDate(), desc1, desc2, match.getScore1(), match.getScore2());
+                    matchResponses.add(matchResponse);
+                }
             }
         }
         return matchResponses;
