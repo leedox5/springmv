@@ -15,6 +15,9 @@ public class Game {
     private String createDate;
     private String creator;
 
+    @Column(length = 20)
+    private String gameDate;
+
     @ManyToOne
     private Member author;
 
@@ -53,6 +56,7 @@ public class Game {
     public Game(String subject, Member member) {
         this.subject = subject;
         this.createDate = CalendarUtil.formatNow("yyyy-MM-dd HH:mm:ss");
+        this.gameDate = CalendarUtil.formatNow("yyyy-MM-dd HH:mm:ss");
         this.author = member;
     }
 
