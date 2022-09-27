@@ -122,7 +122,7 @@ public class MatchService {
     public List<MatchResponse> getScoreMatches(Member member) {
         List<MatchResponse> matchResponses = new ArrayList<>();
 
-        List<Match> matches = matchRepository.findByDescriptionContainsOrderByGameIdDescSeqAsc(member.getUsername());
+        List<Match> matches = matchRepository.findByDescriptionContainsOrderByMatchDateDescSeqAsc(member.getUsername());
 
         for(Match match : matches) {
             if(match.getScore1() != null) {
@@ -131,7 +131,7 @@ public class MatchService {
                     String desc1 = match.getDescription().substring(0, pos);
                     String desc2 = match.getDescription().substring(pos + 1);
 
-                    MatchResponse matchResponse = new MatchResponse(match.getGame().getGameDate(), desc1, desc2, match.getScore1(), match.getScore2());
+                    MatchResponse matchResponse = new MatchResponse(match.getMatchDate(), desc1, desc2, match.getScore1(), match.getScore2());
                     matchResponses.add(matchResponse);
                 }
             }

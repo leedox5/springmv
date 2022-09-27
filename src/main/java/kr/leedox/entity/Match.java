@@ -43,6 +43,9 @@ public class Match {
 
     private Integer seq;
 
+    @Column( length = 20)
+    private String matchDate;
+
     private String description;
     private Integer score1;
     private Integer score2;
