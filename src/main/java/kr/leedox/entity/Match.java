@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Match {
     @Id
     @GeneratedValue(generator = "SEQ_MATCH", strategy = GenerationType.SEQUENCE)
-    private int id;
+    private Integer id;
 
     @JsonIgnore
     @ManyToOne(targetEntity = Game.class, fetch = FetchType.LAZY)
@@ -41,30 +41,30 @@ public class Match {
     @JoinColumn(name = "player_id_4")
     private Player player4;
 
-    private int seq;
+    private Integer seq;
 
     private String description;
-    private int score1;
-    private int score2;
+    private Integer score1;
+    private Integer score2;
 
-    private int matchSeq1;
-    private int matchSeq2;
-    private int matchSeq3;
-    private int matchSeq4;
+    private Integer matchSeq1;
+    private Integer matchSeq2;
+    private Integer matchSeq3;
+    private Integer matchSeq4;
 
-    public int getScore2() {
+    public Integer getScore2() {
         return score2;
     }
 
-    public void setScore2(int score2) {
+    public void setScore2(Integer score2) {
         this.score2 = score2;
     }
 
-    public int getSeq() {
+    public Integer getSeq() {
         return seq;
     }
 
-    public void setSeq(int seq) {
+    public void setSeq(Integer seq) {
         this.seq = seq;
     }
 
@@ -76,19 +76,19 @@ public class Match {
         this.description = description;
     }
 
-    public int getScore1() {
+    public Integer getScore1() {
         return score1;
     }
 
-    public void setScore1(int score1) {
+    public void setScore1(Integer score1) {
         this.score1 = score1;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

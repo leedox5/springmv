@@ -1,10 +1,7 @@
 package kr.leedox.entity;
 
-import kr.leedox.entity.Game;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -16,29 +13,29 @@ public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
     @NotBlank(message="이름은 필수항목입니다.")
     private String name;
-    private int seq;
-    private int score01;
-    private int score11;
-    private int score02;
-    private int score12;
-    private int score03;
-    private int score13;
-    private int score04;
-    private int score14;
-    private int matchWin;
-    private int matchLose;
-    private int gameWin;
-    private int gameLose;
-    private int gameSum;
-    private int matchRank;
+    private Integer seq;
+    private Integer score01;
+    private Integer score11;
+    private Integer score02;
+    private Integer score12;
+    private Integer score03;
+    private Integer score13;
+    private Integer score04;
+    private Integer score14;
+    private Integer matchWin;
+    private Integer matchLose;
+    private Integer gameWin;
+    private Integer gameLose;
+    private Integer gameSum;
+    private Integer matchRank;
 
     public Player() {
     }
 
-    public Player(int id, String name, int seq, int score01, int score11, int score02, int score12, int score03, int score13, int score04, int score14, int matchWin, int matchLose, int gameWin, int gameLose, int gameSum, int matchRank, Game game) {
+    public Player(Integer id, String name, Integer seq, Integer score01, Integer score11, Integer score02, Integer score12, Integer score03, Integer score13, Integer score04, Integer score14, Integer matchWin, Integer matchLose, Integer gameWin, Integer gameLose, Integer gameSum, Integer matchRank, Game game) {
         this.id = id;
         this.name = name;
         this.seq = seq;
@@ -59,115 +56,115 @@ public class Player {
         this.game = game;
     }
 
-    public int getScore01() {
+    public Integer getScore01() {
         return score01;
     }
 
-    public void setScore01(int score01) {
+    public void setScore01(Integer score01) {
         this.score01 = score01;
     }
 
-    public int getScore11() {
+    public Integer getScore11() {
         return score11;
     }
 
-    public void setScore11(int score11) {
+    public void setScore11(Integer score11) {
         this.score11 = score11;
     }
 
-    public int getScore02() {
+    public Integer getScore02() {
         return score02;
     }
 
-    public void setScore02(int score02) {
+    public void setScore02(Integer score02) {
         this.score02 = score02;
     }
 
-    public int getScore12() {
+    public Integer getScore12() {
         return score12;
     }
 
-    public void setScore12(int score12) {
+    public void setScore12(Integer score12) {
         this.score12 = score12;
     }
 
-    public int getScore03() {
+    public Integer getScore03() {
         return score03;
     }
 
-    public void setScore03(int score03) {
+    public void setScore03(Integer score03) {
         this.score03 = score03;
     }
 
-    public int getScore13() {
+    public Integer getScore13() {
         return score13;
     }
 
-    public void setScore13(int score13) {
+    public void setScore13(Integer score13) {
         this.score13 = score13;
     }
 
-    public int getScore04() {
+    public Integer getScore04() {
         return score04;
     }
 
-    public void setScore04(int score04) {
+    public void setScore04(Integer score04) {
         this.score04 = score04;
     }
 
-    public int getScore14() {
+    public Integer getScore14() {
         return score14;
     }
 
-    public void setScore14(int score14) {
+    public void setScore14(Integer score14) {
         this.score14 = score14;
     }
 
-    public int getMatchWin() {
+    public Integer getMatchWin() {
         return matchWin;
     }
 
-    public void setMatchWin(int matchWin) {
+    public void setMatchWin(Integer matchWin) {
         this.matchWin = matchWin;
     }
 
-    public int getMatchLose() {
+    public Integer getMatchLose() {
         return matchLose;
     }
 
-    public void setMatchLose(int matchLose) {
+    public void setMatchLose(Integer matchLose) {
         this.matchLose = matchLose;
     }
 
-    public int getGameWin() {
+    public Integer getGameWin() {
         return gameWin;
     }
 
-    public void setGameWin(int gameWin) {
+    public void setGameWin(Integer gameWin) {
         this.gameWin = gameWin;
     }
 
-    public int getGameLose() {
+    public Integer getGameLose() {
         return gameLose;
     }
 
-    public void setGameLose(int gameLose) {
+    public void setGameLose(Integer gameLose) {
         this.gameLose = gameLose;
     }
 
-    public int getGameSum() {
+    public Integer getGameSum() {
         return gameSum;
     }
 
-    public void setGameSum(int gameSum) {
+    public void setGameSum(Integer gameSum) {
         this.gameSum = gameSum;
     }
 
-    public int getMatchRank() {
+    public Integer getMatchRank() {
         return matchRank;
     }
 
-    public void setMatchRank(int matchRank) {
+    public void setMatchRank(Integer matchRank) {
         this.matchRank = matchRank;
     }
 
@@ -175,11 +172,11 @@ public class Player {
     @JoinColumn(name = "game_id")
     private Game game;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -198,11 +195,11 @@ public class Player {
     public void setGame(Game game) {
         this.game = game;
     }
-    public int getSeq() {
+    public Integer getSeq() {
         return seq;
     }
 
-    public void setSeq(int seq) {
+    public void setSeq(Integer seq) {
         this.seq = seq;
     }
 
