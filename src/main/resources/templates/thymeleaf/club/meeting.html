@@ -16,6 +16,7 @@
         <tr th:each="game : ${list}" class="text-start">
             <td class="text-start">
                 <a th:href="@{|/club/meeting/${game.id}|}" th:text="${game.subject}"></a>
+				<span class="text-danger small ml-2" th:text="${game.getPlayers().size()}"></span>
             </td>
             <td class="text-start">
                 <span th:if="${game.author != null}" th:text="${game.author.username}"></span>
