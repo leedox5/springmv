@@ -19,7 +19,7 @@ public class GameService {
     }
 
     public List<Game> getList() {
-        return gameRepository.findAllByOrderByIdDesc();
+        return gameRepository.findAllByOrderByGameDateDesc();
     }
 
     public Game getById(Integer gameId) {
