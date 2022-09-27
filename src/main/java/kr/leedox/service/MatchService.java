@@ -90,7 +90,12 @@ public class MatchService {
                 }
             }
         }
-        return String.format("%d게임 %d승 %d패(since %s)", cnt1, cnt2, cnt3, sinceStr);
+        
+        if (cnt1 == 0) {
+            return "";
+        }
+
+        return String.format("%d게임 %d승 %d패(since %s) %.2f%%", cnt1, cnt2, cnt3, sinceStr, (double) cnt2 / (double) cnt1 * 100.0);
     }
 
     private String getDateStr(String createDate) {
