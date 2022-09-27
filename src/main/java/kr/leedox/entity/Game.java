@@ -44,7 +44,7 @@ public class Game {
         this.id = id;
         this.subject = subject;
         this.creator = creator;
-        this.createDate = CalendarUtil.formatNow("yyyyMMdd HHmmss");
+        this.createDate = CalendarUtil.formatNow("yyyy-MM-dd HH:mm:ss");
     }
 
     public int getId() {

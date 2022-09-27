@@ -94,17 +94,23 @@ public class MatchService {
     }
 
     private String getDateStr(String createDate) {
+        /*
         String yy = createDate.substring(2, 4);
         String mm = createDate.substring(4, 6);
         String dd = createDate.substring(6, 8);
         return yy + "." + mm + "." + dd ;
+         */
+        return createDate.substring(0, 10);
     }
 
     private String getSinceStr(String createDate) {
+        /*
         String yyyy = createDate.substring(0, 4);
         String mm = createDate.substring(4, 6);
         String dd = createDate.substring(6, 8);
         return yyyy + "." + mm + "." + dd ;
+         */
+        return createDate.substring(0, 10);
     }
 
     public List<MatchResponse> getScoreMatches(Member member) {
