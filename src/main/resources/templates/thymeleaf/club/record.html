@@ -3,20 +3,24 @@
     <div class="mt-1 mb-1">
         <span id="p1"></span>님 반갑습니다.
     </div>
-    <div class="mt-1 mb-1">
-        <h2>나의 기록</h2>
-    </div>
-    <div class="row ">
-        <div class="col-8">
-            <h6 id="p2" class="small text-muted text-start mt-1"></h6>
-        </div>
+	
+	<div class="row">
+		<div class="col-8">
+			<h2>나의 기록</h2>
+		</div>
         <div class="col-4 text-end">
             <a th:href="@{/club/meeting}" class="btn btn-sm btn-primary">모임 참여</a>
         </div>
-    </div>
+	</div>
+
+	<div>
+		<h6 id="p2" class="small text-muted text-start mt-1"></h6>
+	</div>
+
     <table id="grid1" class="table mt-1">
         <thead class="text-center table-dark">
         <tr>
+		    <th>NO</th>
             <th>결과</th>
             <th>팀A</th>
             <th>팀B</th>
@@ -87,6 +91,7 @@ $.setGrid = function(rows) {
     $.each(rows, function(index, item) {
 
         row_tag  = "<tr>";
+		row_tag += "<td class='text-end'>" + (index + 1) + "</td>";
         row_tag += "<td class='text-center'>" + item.result + "[" + item.score1 + " : " + item.score2 + "]" + "<br>" + item.createDate + "</td>" ;
         row_tag += "<td class='text-center'>" + item.teamDesc1.replace(",","<br>")  + "</td>" ;
         row_tag += "<td class='text-center'>" + item.teamDesc2.replace(",","<br>")  + "</td>" ;
