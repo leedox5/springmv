@@ -15,6 +15,9 @@ public class Game {
     private String createDate;
     private String creator;
 
+    @ManyToOne
+    private Member author;
+
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private Collection<Player> players;
 
@@ -45,6 +48,12 @@ public class Game {
         this.subject = subject;
         this.creator = creator;
         this.createDate = CalendarUtil.formatNow("yyyy-MM-dd HH:mm:ss");
+    }
+
+    public Game(String subject, Member member) {
+        this.subject = subject;
+        this.createDate = CalendarUtil.formatNow("yyyy-MM-dd HH:mm:ss");
+        this.author = member;
     }
 
     public int getId() {
@@ -87,5 +96,9 @@ public class Game {
                 ", createDate='" + createDate + '\'' +
                 ", creator='" + creator + '\'' +
                 '}';
+    }
+
+    public Member getAuthor() {
+        return author;
     }
 }

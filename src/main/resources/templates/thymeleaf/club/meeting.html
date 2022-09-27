@@ -17,7 +17,9 @@
             <td class="text-start">
                 <a th:href="@{|/club/meeting/${game.id}|}" th:text="${game.subject}"></a>
             </td>
-            <td th:text="${game.creator}"></td>
+            <td class="text-start">
+                <span th:if="${game.author != null}" th:text="${game.author.username}"></span>
+            </td>
         </tr>
         </tbody>
     </table>    

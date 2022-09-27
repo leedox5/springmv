@@ -165,7 +165,7 @@ public class ClubController {
 
     @PostMapping("/create")
     public String createGame(Game game, @AuthenticationPrincipal MemberAdapter author) {
-        Game newGame = new Game(game.getSubject(), author.getMember().getUsername());
+        Game newGame = new Game(game.getSubject(), author.getMember());
         gameService.save(newGame);
         return "redirect:/club/meeting";
     }
