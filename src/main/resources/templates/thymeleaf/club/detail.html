@@ -51,7 +51,7 @@
         <div class="input-group input-group-sm mb-3">
             <span class="input-group-text">Name</span>
             <input type="text" class="form-control" name="name" id="name" value="">
-            <button type="submit" class="btn btn-outline-secondary">Add</button>
+            <button type="button" class="btn btn-primary" id="liveAlertBtn">추가</button>
         </div>
         <div id="err"></div>
     </form>
@@ -165,12 +165,18 @@
     </table>
 </div>
 <script layout:fragment="script">
+const cnt_player = [[${game.getPlayers().size()}]] ;
 const cnt_match = [[${game.getMatches().size()}]] ;
 $(document).ready(function() {
     console.log("ready");
     //$.getParam();
     $("#form1").submit(function(event) {
         event.preventDefault();
+        if(cnt_player == 7) {
+            alert("최대 7명까지 가능합니다.", "warning");
+            return;
+        }
+        
         if(cnt_match > 0) {
             alert("대진표가 이미 생성되었습니다.");
             return;
@@ -220,23 +226,25 @@ $.ajax_submit = function() {
 	$.ajax({
 		type: "POST",
 		contentType: "application/json",
-		url: "/club/player/create1/" + [[${game.id}]],
+		url: "/club/player/create2/" + [[${game.id}]],
 		data: JSON.stringify(form_data),
 		dataType: "json",
 		success: function(data) {
-			var json = JSON.stringify(data, null, 4);
-			if(data.errorContent == "Y") {
+		    var result = data;
+			if(result.code == "Y") {
 				location.reload();
 			} else {
-				//$("#err").html(data.messages[0]);
-				alert(data.messages[0], 'warning');
+				alert(result.message, 'warning');
 			}
 		},
 		error: function(e) {
-			//$("#err").html(e.responseText);
+			console.log(e.responseJSON);
+			var result = e.responseJSON;
+			alert(result.message, "warning");
+			/*
 			var err = e.responseJSON;
 			alert(err.status + "\n" + err.error + "\n" + err.path, 'warning');
-			console.log(e.responseJSON);
+			*/
 		}
 	});
 }
@@ -257,9 +265,10 @@ const alert = (message, type) => {
 
 const alertTrigger = document.getElementById('liveAlertBtn')
 if (alertTrigger) {
-  alertTrigger.addEventListener('click', () => {
-    alert('Nice, you triggered this alert message!', 'success')
-  })
+    alertTrigger.addEventListener('click', () => {
+        //alert('Nice, you triggered this alert message!', 'success');
+        $.ajax_submit();
+    });
 }
 
 

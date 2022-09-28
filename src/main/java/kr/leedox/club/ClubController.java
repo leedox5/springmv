@@ -229,6 +229,15 @@ public class ClubController {
                 addMatch(game, 5, players.get(1), players.get(3), players.get(2), players.get(5));
                 addMatch(game, 6, players.get(0), players.get(5), players.get(2), players.get(4));
                 break;
+            case 7 :
+                addMatch(game, 1, players.get(0), players.get(1), players.get(2), players.get(3));
+                addMatch(game, 2, players.get(4), players.get(5), players.get(0), players.get(6));
+                addMatch(game, 3, players.get(2), players.get(4), players.get(1), players.get(3));
+                addMatch(game, 4, players.get(0), players.get(3), players.get(5), players.get(6));
+                addMatch(game, 5, players.get(1), players.get(2), players.get(4), players.get(6));
+                addMatch(game, 6, players.get(0), players.get(5), players.get(1), players.get(4));
+                addMatch(game, 7, players.get(3), players.get(5), players.get(2), players.get(6));
+                break;
             default:
                 System.out.println("Check Players!!!");
         }
@@ -253,6 +262,7 @@ public class ClubController {
         match.setMatchSeq2(matchService.getMatchSeq(p2));
         match.setMatchSeq3(matchService.getMatchSeq(p3));
         match.setMatchSeq4(matchService.getMatchSeq(p4));
+        match.setMatchDate(game.getGameDate());
         matchService.save(match);
     }
 
@@ -273,6 +283,18 @@ public class ClubController {
         playerService.saveRank(actPlayers);
 
         return new RedirectView("/club/meeting/" + game.getId());
+    }
+
+    @GetMapping("/match/delete/{game_id}")
+    public RedirectView matchDelete(@PathVariable Integer game_id) {
+        matchService.deleteByGameId(game_id);
+        Game game = gameService.getById(game_id);
+
+        for(Player player : game.getPlayers()) {
+            playerService.resetResult(player);
+        }
+
+        return new RedirectView("/club/meeting/" + game_id);
     }
 
     @GetMapping("/admin")

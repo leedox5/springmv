@@ -51,6 +51,29 @@ public class ClubRestController {
         return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
     }
 
+    @PostMapping("/player/create2/{game_id}")
+    public ResponseEntity<?> create2(@PathVariable Integer game_id, @Valid @RequestBody Player player, Errors errors) {
+        HashMap<String, String> result = new HashMap<>();
+
+        if(errors.hasErrors()) {
+            List<String> msg = errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList());
+            result.put("code", "N");
+            result.put("message", msg.get(0));
+            return ResponseEntity.ok(result);
+        }
+
+        if(!playerService.chkName(game_id, player)) {
+            result.put("code", "N");
+            result.put("message", "이미 등록된 이름입니다.");
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        }
+
+        playerService.save(game_id, player);
+        result.put("code", "Y");
+        result.put("message", "OK");
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @PostMapping("/score")
     public ResponseEntity<?> getScore(@AuthenticationPrincipal MemberAdapter author) {
         Score score = new Score(author.getMember());

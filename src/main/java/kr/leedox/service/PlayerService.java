@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
@@ -34,6 +35,20 @@ public class PlayerService {
         //player.setMatchWin(0);
         //player.setGameSum(0);
         save(player);
+    }
+
+    public boolean chkName(Integer game_id, Player player) {
+        Game game = gameRepository.getById(game_id);
+
+        List<Player> players = (List<Player>) game.getPlayers();
+
+        for (Player p : players) {
+            if(p.getName().equals(player.getName())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void getRank(List<Player> players) {
@@ -230,20 +245,20 @@ public class PlayerService {
     }
 
     public void resetResult(Player player) {
-        player.setScore01(0);
-        player.setScore11(0);
-        player.setScore02(0);
-        player.setScore12(0);
-        player.setScore03(0);
-        player.setScore13(0);
-        player.setScore04(0);
-        player.setScore14(0);
-        player.setMatchWin(0);
-        player.setMatchLose(0);
-        player.setGameWin(0);
-        player.setGameLose(0);
-        player.setGameSum(0);
-        player.setMatchRank(0);
+        player.setScore01(null);
+        player.setScore11(null);
+        player.setScore02(null);
+        player.setScore12(null);
+        player.setScore03(null);
+        player.setScore13(null);
+        player.setScore04(null);
+        player.setScore14(null);
+        player.setMatchWin(null);
+        player.setMatchLose(null);
+        player.setGameWin(null);
+        player.setGameLose(null);
+        player.setGameSum(null);
+        player.setMatchRank(null);
         playerRepository.save(player);
     }
 
@@ -267,4 +282,5 @@ public class PlayerService {
             }
         }
     }
+
 }
