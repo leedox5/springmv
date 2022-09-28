@@ -1,5 +1,7 @@
 package kr.leedox.service;
 
+import kr.leedox.entity.Game;
+import kr.leedox.repository.GameRepository;
 import kr.leedox.repository.PlayerRepository;
 import kr.leedox.entity.Match;
 import kr.leedox.entity.Player;
@@ -15,11 +17,23 @@ import java.util.List;
 public class PlayerService {
 
     @Autowired
+    GameRepository gameRepository;
+
+    @Autowired
     PlayerRepository playerRepository;
 
     public void save(Player player) {
         player.setName(player.getName().trim());
         playerRepository.save(player);
+    }
+
+    public void save(Integer gameId, Player player) {
+        Game game = gameRepository.getById(gameId);
+        player.setGame(game);
+        player.setSeq(game.getPlayers().size() + 1);
+        //player.setMatchWin(0);
+        //player.setGameSum(0);
+        save(player);
     }
 
     public void getRank(List<Player> players) {
@@ -86,7 +100,11 @@ public class PlayerService {
         player.setGameSum(win - lose);
     }
 
-    private int getMatchWin(int win, int lose) {
+    private Integer getMatchWin(Integer win, Integer lose) {
+        if(win == null) {
+            return 0;
+        }
+
         if( win > lose) {
             return 1;
         } else {
@@ -94,7 +112,11 @@ public class PlayerService {
         }
     }
 
-    private int getMatchLose(int win, int lose) {
+    private Integer getMatchLose(Integer win, Integer lose) {
+        if(win == null) {
+            return 0;
+        }
+
         if( win < lose) {
             return 1;
         } else {
@@ -115,8 +137,10 @@ public class PlayerService {
         matchLose += getMatchLose(player.getScore01(), player.getScore11());
         matchLose += getMatchLose(player.getScore02(), player.getScore12());
 
-        int gameWin = player.getScore01() + player.getScore02();
-        int gameLose = player.getScore11() + player.getScore12();
+        //int gameWin = player.getScore01() + player.getScore02();
+        //int gameLose = player.getScore11() + player.getScore12();
+        Integer gameWin = calcGameWin(player);
+        Integer gameLose = calcGameLose(player);
 
         player.setMatchWin(matchWin);
         player.setMatchLose(matchLose);
@@ -141,14 +165,34 @@ public class PlayerService {
         matchLose += getMatchLose(player.getScore02(), player.getScore12());
         matchLose += getMatchLose(player.getScore03(), player.getScore13());
 
-        int gameWin = player.getScore01() + player.getScore02() + player.getScore03();
-        int gameLose = player.getScore11() + player.getScore12() + player.getScore13() ;
+        //int gameWin = player.getScore01() + player.getScore02() + player.getScore03();
+        //int gameLose = player.getScore11() + player.getScore12() + player.getScore13() ;
+        Integer gameWin = calcGameWin(player);
+        Integer gameLose = calcGameLose(player);
 
         player.setMatchWin(matchWin);
         player.setMatchLose(matchLose);
         player.setGameWin(gameWin);
         player.setGameLose(gameLose);
         player.setGameSum(gameWin - gameLose);
+    }
+
+    private Integer calcGameWin(Player player) {
+        Integer sum = 0;
+        sum += player.getScore01() == null ? 0 : player.getScore01();
+        sum += player.getScore02() == null ? 0 : player.getScore02();
+        sum += player.getScore03() == null ? 0 : player.getScore03();
+        sum += player.getScore04() == null ? 0 : player.getScore04();
+        return sum;
+    }
+
+    private Integer calcGameLose(Player player) {
+        Integer sum = 0;
+        sum += player.getScore11() == null ? 0 : player.getScore11();
+        sum += player.getScore12() == null ? 0 : player.getScore12();
+        sum += player.getScore13() == null ? 0 : player.getScore13();
+        sum += player.getScore14() == null ? 0 : player.getScore14();
+        return sum;
     }
 
     private void setScore4(Player player, int win, int lose) {
@@ -168,8 +212,10 @@ public class PlayerService {
         matchLose += getMatchLose(player.getScore03(), player.getScore13());
         matchLose += getMatchLose(player.getScore04(), player.getScore14());
 
-        int gameWin = player.getScore01() + player.getScore02() + player.getScore03() + player.getScore04();
-        int gameLose = player.getScore11() + player.getScore12() + player.getScore13() + player.getScore14() ;
+        //int gameWin = player.getScore01() + player.getScore02() + player.getScore03() + player.getScore04();
+        //int gameLose = player.getScore11() + player.getScore12() + player.getScore13() + player.getScore14() ;
+        Integer gameWin = calcGameWin(player);
+        Integer gameLose = calcGameLose(player);
 
         player.setMatchWin(matchWin);
         player.setMatchLose(matchLose);

@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-
+    <div id="msg"></div>
     <table class="table">
         <thead class="text-center table-dark">
             <tr>
@@ -228,14 +228,39 @@ $.ajax_submit = function() {
 			if(data.errorContent == "Y") {
 				location.reload();
 			} else {
-				$("#err").html(data.messages[0]);
+				//$("#err").html(data.messages[0]);
+				alert(data.messages[0], 'warning');
 			}
 		},
 		error: function(e) {
-			$("#err").html(e.responseText);
-			console.log(e);
+			//$("#err").html(e.responseText);
+			var err = e.responseJSON;
+			alert(err.status + "\n" + err.error + "\n" + err.path, 'warning');
+			console.log(e.responseJSON);
 		}
 	});
 }
+
+const msgHolder = document.getElementById("msg");
+
+const alert = (message, type) => {
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = [
+        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+        `   <div>${message}</div>`,
+        `    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>`,
+        `</div>`
+    ].join('');
+    
+    msgHolder.append(wrapper);
+}
+
+const alertTrigger = document.getElementById('liveAlertBtn')
+if (alertTrigger) {
+  alertTrigger.addEventListener('click', () => {
+    alert('Nice, you triggered this alert message!', 'success')
+  })
+}
+
 
 </script>

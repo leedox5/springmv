@@ -26,6 +26,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/club")
@@ -220,6 +221,14 @@ public class ClubController {
                 addMatch(game, 4, players.get(0), players.get(4), players.get(1), players.get(3));
                 addMatch(game, 5, players.get(1), players.get(2), players.get(3), players.get(4));
                 break;
+            case 6 :
+                addMatch(game, 1, players.get(0), players.get(1), players.get(2), players.get(3));
+                addMatch(game, 2, players.get(0), players.get(4), players.get(3), players.get(5));
+                addMatch(game, 3, players.get(1), players.get(2), players.get(4), players.get(5));
+                addMatch(game, 4, players.get(0), players.get(3), players.get(1), players.get(4));
+                addMatch(game, 5, players.get(1), players.get(3), players.get(2), players.get(5));
+                addMatch(game, 6, players.get(0), players.get(5), players.get(2), players.get(4));
+                break;
             default:
                 System.out.println("Check Players!!!");
         }
@@ -260,7 +269,8 @@ public class ClubController {
 
         List<Player> players = (List<Player>) game.getPlayers();
 
-        playerService.saveRank(players);
+        List<Player> actPlayers = players.stream().filter(t -> t.getMatchWin() != null).collect(Collectors.toList());
+        playerService.saveRank(actPlayers);
 
         return new RedirectView("/club/meeting/" + game.getId());
     }

@@ -78,6 +78,7 @@ public class WordController {
         return "Hello, POST";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/wordbook2")
     public String getListOpt(Model model, @RequestParam MultiValueMap<String, String> formData, Principal principal) {
         List<Wordbook> words = null;

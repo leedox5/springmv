@@ -4,17 +4,16 @@ import kr.leedox.common.ErrorResponse;
 import kr.leedox.controller.WordController;
 import kr.leedox.entity.Game;
 import kr.leedox.entity.Member;
+import kr.leedox.entity.Player;
 import kr.leedox.entity.UserCreateForm;
-import kr.leedox.service.GameService;
-import kr.leedox.service.MatchService;
-import kr.leedox.service.MemberAdapter;
-import kr.leedox.service.MemberService;
+import kr.leedox.service.*;
 import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,10 +22,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/club")
 public class ClubRestController {
+
+    @Autowired
+    PlayerService playerService;
 
     @Autowired
     MatchService matchService;
@@ -36,6 +39,17 @@ public class ClubRestController {
 
     @Autowired
     MemberService memberService;
+
+    @PostMapping("/player/create1/{game_id}")
+    public ResponseEntity<?> createPlayer(@PathVariable Integer game_id, @Valid @RequestBody Player player, Errors errors) {
+        if(errors.hasErrors()) {
+            List<String> msg = errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList());
+            return ResponseEntity.ok(new ErrorResponse("404", "N", msg));
+        }
+        playerService.save(game_id, player);
+
+        return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
+    }
 
     @PostMapping("/score")
     public ResponseEntity<?> getScore(@AuthenticationPrincipal MemberAdapter author) {
