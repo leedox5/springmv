@@ -43,7 +43,7 @@ public class PlayerService {
         List<Player> players = (List<Player>) game.getPlayers();
 
         for (Player p : players) {
-            if(p.getName().equals(player.getName())) {
+            if(p.getName().equals(player.getName().trim())) {
                 return false;
             }
         }
