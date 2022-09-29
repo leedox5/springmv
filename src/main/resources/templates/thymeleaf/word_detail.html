@@ -43,29 +43,39 @@
     </div>
 
     <div th:each="wordMeaning : ${wordbook.getWordMeanings()}">
-        <div th:id="'collap' + ${wordMeaning.id}" th:class="'collapse show mulcol' + ${wordMeaning.id}">
-            <div class="card mt-1" >
-                <div class="card-body">
-                    <span style="white-space: pre-line;" th:text="${wordMeaning.meaning}"></span>
-                </div>
-                <div class="card-footer text-end comment">
-                    <a th:href="@{|.mulcol${wordMeaning.id}|}" role="button" data-bs-toggle="collapse" class="small">수정</a>
-                    <a href="#" class="small delete" th:attr="data-uri='/meaning/delete/' + ${wordMeaning.id}">삭제</a>
-                </div>
-            </div>
-        </div>
-        <div th:class="'collapse mulcol' + ${wordMeaning.id}" id="comment">
-            <form class="my-2" th:action="@{|/wordbook2/savemeaning/${wordbook.id}/${path}|}" th:object="${wordMeaning}" method="post">
-                <input type="hidden" name="id" id="id" th:value="${wordMeaning.id}">
-                <div class="mb-2">
-                    <textarea  name="meaning" id="meaning" class="form-control" rows="4">[[${wordMeaning.meaning}]]</textarea>
-                </div>
-                <div class="text-end">
-                    <button type="submit" class="btn btn-sm btn-outline-primary">저장</button>
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol' + ${wordMeaning.id}">취소</button>
-                </div>
-            </form>
-        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" th:text="|학습일 :  ${#strings.substring(wordMeaning.updDate,0,10)}|">
+                 </button>
+             </h2>
+             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                 <div class="accordion-body">
+					<div th:id="'collap' + ${wordMeaning.id}" th:class="'collapse show mulcol' + ${wordMeaning.id}">
+						<div class="card mt-1" >
+							<div class="card-body">
+								<span style="white-space: pre-line;" th:text="${wordMeaning.meaning}"></span>
+							</div>
+							<div class="card-footer text-end comment">
+								<a th:href="@{|.mulcol${wordMeaning.id}|}" role="button" data-bs-toggle="collapse" class="small">수정</a>
+								<a href="#" class="small delete" th:attr="data-uri='/meaning/delete/' + ${wordMeaning.id}">삭제</a>
+							</div>
+						</div>
+					</div>
+					<div th:class="'collapse mulcol' + ${wordMeaning.id}" id="comment">
+						<form class="my-2" th:action="@{|/wordbook2/savemeaning/${wordbook.id}/${path}|}" th:object="${wordMeaning}" method="post">
+							<input type="hidden" name="id" id="id" th:value="${wordMeaning.id}">
+							<div class="mb-2">
+								<textarea  name="meaning" id="meaning" class="form-control" rows="4">[[${wordMeaning.meaning}]]</textarea>
+							</div>
+							<div class="text-end">
+								<button type="submit" class="btn btn-sm btn-outline-primary">저장</button>
+								<button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol' + ${wordMeaning.id}">취소</button>
+							</div>
+						</form>
+					</div>
+                  </div>
+              </div>
+        </div>	    
     </div>
 
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
