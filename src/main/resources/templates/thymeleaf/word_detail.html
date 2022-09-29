@@ -44,11 +44,11 @@
 
     <div th:each="wordMeaning : ${wordbook.getWordMeanings()}">
         <div class="accordion-item">
-            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" th:text="|학습일 :  ${#strings.substring(wordMeaning.updDate,0,10)}|">
+            <h2 class="accordion-header" th:id="'acc' + ${wordMeaning.id}">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#acc-collapse' + ${wordMeaning.id}" aria-expanded="true" th:text="|학습일 :  ${#strings.substring(wordMeaning.updDate,0,10)}|">
                  </button>
              </h2>
-             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+             <div th:id="'acc-collapse' + ${wordMeaning.id}" class="accordion-collapse collapse show" th:attr="aria-labelledby='acc-heading' + ${wordMeaning.id}">
                  <div class="accordion-body">
 					<div th:id="'collap' + ${wordMeaning.id}" th:class="'collapse show mulcol' + ${wordMeaning.id}">
 						<div class="card mt-1" >
