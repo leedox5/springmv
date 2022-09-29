@@ -267,6 +267,15 @@ const alertTrigger = document.getElementById('liveAlertBtn')
 if (alertTrigger) {
     alertTrigger.addEventListener('click', () => {
         //alert('Nice, you triggered this alert message!', 'success');
+        if(cnt_player == 7) {
+            alert("최대 7명까지 가능합니다.", "warning");
+            return;
+        }
+        
+        if(cnt_match > 0) {
+            alert("대진표가 이미 생성되었습니다.", "warning");
+            return;
+        }
         $.ajax_submit();
     });
 }

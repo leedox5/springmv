@@ -6,6 +6,19 @@
             <label for="subject">제목</label>
             <input type="text" class="form-control" name="subject" id="subject" th:value="${game.getSubject()}">
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+		<div class="text-end">
+            <button type="submit" class="btn btn-sm btn-primary">저장</button>
+            <button id="btn1" type="button" class="btn btn-sm btn-primary">취소</button>
+		</div>
     </form>
 </div>
+<script layout:fragment="script">
+
+const btn1 = document.getElementById('btn1')
+if (btn1) {
+    btn1.addEventListener('click', () => {
+		window.location.href = "/club/meeting";
+    });
+}
+
+</script>
