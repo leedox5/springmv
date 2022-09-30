@@ -1,5 +1,6 @@
 package kr.leedox.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,9 +30,11 @@ public class Wordbook {
     private int access;
     private Integer meaningCount;
 
+    @JsonIgnore
     @ManyToOne
     private Member author;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "wordbook", cascade = CascadeType.ALL)
     private Collection<WordMeaning> wordMeanings;
 }

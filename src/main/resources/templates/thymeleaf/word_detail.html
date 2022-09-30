@@ -8,11 +8,7 @@
             <h2 th:text="${wordbook.word}"></h2>
         </div>
         <div class="col-8 text-end">
-			<form th:action="@{/wordbook2}" method="post">
-				<input  type="hidden" name="opt" id="opt" th:value="${opt.isEmpty()} ? '' : ${opt}">
-				<input  type="hidden" name="key" id="key" th:value="${key.isEmpty()} ? '' : ${key}">
-				<button  type="submit" class="btn btn-sm btn-outline-primary">목록으로</button>
-			</form>
+			<button id="btn1" type="button" class="btn btn-sm btn-outline-primary">목록으로</button>
         </div>
     </div>
     <h6 class="small text-muted text-end mt-1" th:text="'조회수 : ' + ${wordbook.access}"></h6>
@@ -89,6 +85,10 @@
     </div>
 </div>
 <script layout:fragment="script" type='text/javascript'>
+const param = {};
+param.opt = "[[${opt}]]";
+param.key = "[[${key}]]";
+
 const delete_elements = document.getElementsByClassName("delete");
 Array.from(delete_elements).forEach(function(element) {
     element.addEventListener('click', function() {
@@ -156,5 +156,15 @@ Array.from(delete_elements).forEach(function(element) {
             }
         });
 	});
+
+const btn1 = document.getElementById("btn1");
+
+if (btn1) {
+    btn1.addEventListener('click', () => {
+        const loc = `/wordbook/list/${param.opt}/${param.key}`;
+        console.log(loc);
+        window.location.href = loc;
+    });
+}
 
 </script>

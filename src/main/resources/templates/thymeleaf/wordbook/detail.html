@@ -1,0 +1,219 @@
+<html layout:decorate="~{thymeleaf/layout}">
+<div layout:fragment="content" class="container my-2">
+    <div class="mt-1 mb-1">
+        <span id="username"></span>님 반갑습니다.
+    </div>
+    <div class="row border-bottom">
+        <div class="col-4">
+            <h2 id="word"></h2>
+        </div>
+        <div class="col-8 text-end">
+			<button id="btn1" type="button" class="btn btn-sm btn-outline-primary">목록으로</button>
+        </div>
+    </div>
+    <h6 class="small text-muted text-end mt-1">조회수 : <span id="access"></span></h6>
+
+    <div id="collap24" class="collapse show mulcol024">
+        <div class="card mt-1" >
+            <div class="card-body">
+                <span style="white-space: pre-line;" id="meaning1"></span>
+            </div>
+            <div class="card-footer text-end comment">
+                <a href=".mulcol024" role="button" data-bs-toggle="collapse" class="small">수정</a>
+            </div>
+        </div>
+    </div>
+    <div class="collapse mulcol024" id="comment">
+        <form class="my-2" action="/wordbook2/save/24/eng" method="post"><input type="hidden" name="_csrf" value="1bc203ba-aeed-4526-8cd3-6c1551bb98c1"/>
+            <div class="mb-1">
+                <input type="text" class="form-control" name="word" id="word1" value="10090">
+            </div>
+            <div class="mb-1">
+                <textarea  name="meaning1" id="meaning11" class="form-control" rows="4"></textarea>
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-sm btn-outline-primary">저장</button>
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" data-bs-target=".mulcol024">취소</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="div1">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="HEADING_ID">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" aria-expanded="true" data-bs-target="#COLLAPSE_ID">학습일 :  UPD_DATE</button>
+            </h2>
+            <div id="COLLAPSE_ID" class="accordion-collapse collapse show" aria-labelledby="HEADING_ID">
+                <div class="accordion-body">
+					<div id="collapTOGGLE_ID" class="collapse show mulcolTOGGLE_ID">
+						<div class="card mt-1" >
+							<div class="card-body">
+								<span style="white-space: pre-line;">MEANING</span>
+							</div>
+							<div class="card-footer text-end comment">
+								<a href=".mulcolTOGGLE_ID" role="button" data-bs-toggle="collapse" class="small">수정</a>
+								<a href="#" class="small delete" data-uri="/meaning/delete/56">삭제</a>
+							</div>
+						</div>
+					</div>
+					<div class="collapse mulcolTOGGLE_ID" id="comment">
+						<form class="my-2" action="/wordbook2/savemeaning/24/eng" method="post"><input type="hidden" name="_csrf" value="1bc203ba-aeed-4526-8cd3-6c1551bb98c1"/>
+							<input type="hidden" name="id" id="id" value="56">
+							<div class="mb-2">
+								<textarea  name="meaning" id="meaning" class="form-control" rows="4">MEANING</textarea>
+							</div>
+							<div class="text-end">
+								<button type="submit" class="btn btn-sm btn-outline-primary">저장</button>
+								<button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" data-bs-target=".mulcolTOGGLE_ID">취소</button>
+							</div>
+						</form>
+					</div>
+                </div>
+            </div>
+        </div>	    
+    </div>
+
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <div class="mt-1 mb-2">
+        <textarea  name="meaning11" id="meaning11" class="form-control" rows="4"></textarea>
+    </div>
+    <div class="text-end">
+        <button id="btn2" class="btn btn-sm btn-outline-primary">메모등록</button>
+    </div>
+</div>
+<th:block layout:fragment="script">
+<script th:src="@{/js/wordbook/list.js}"></script>
+<script type="text/javascript">
+const delete_elements = document.getElementsByClassName("delete");
+Array.from(delete_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            //location.href = this.dataset.uri;
+		    var form_data = {};
+			var loc = this.dataset.uri;
+            $.ajax({
+                type: "GET",
+                contentType: "application/json",
+                url: loc,
+                data: null,
+                dataType: "json",
+                success: function(data) {
+                    var json = JSON.stringify(data, null, 4);
+                    if(data.errorContent == "Y") {
+                        location.reload();
+                    } else {
+                        //$("#err").html(data.messages[0]);
+					    alert(data.messages[0]);
+                    }
+                },
+                error: function(e) {
+				    alert(e.responseText);
+                    console.log(e);
+                }
+            });
+        }
+    });
+});
+
+$("#btn2").click(function(event) {
+	event.preventDefault();
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    var form_data = {};
+	form_data.meaning = $("#meaning11").val();
+	console.log(form_data);
+	var wid = 24;
+	console.log(wid);
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/wordbook/savemeaning1/" + wid,
+        data: JSON.stringify(form_data),
+        dataType: "json",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success: function(data) {
+            var json = JSON.stringify(data, null, 4);
+            if(data.errorContent == "Y") {
+                location.reload();
+            } else {
+                //$("#err").html(data.messages[0]);
+				alert(data.messages[0]);
+            }
+        },
+        error: function(e) {
+            //$("#err").html(e.responseText);
+			alert(e.responseText);
+            console.log(e);
+        }
+    });
+});
+
+
+
+// 데이터를 가져온후 
+const afterGetData = (res) => {
+    if(res.status == 200) {
+        data = res.data;
+        console.log(data);
+        $("#username").text(data.username);
+        
+        $("#word"    ).text(data.words[0].word    );
+        $("#word1"   ).val (data.words[0].word    );
+        
+        $("#access"  ).text(data.words[0].access  );
+        
+        $("#meaning1").text(data.words[0].meaning1);
+        $("#meaning11").val(data.words[0].meaning1);
+        dispData(data.wordMeanings);
+    } else {
+        alert(res.message);
+    }
+}
+
+const dispData = (rows) => {
+    var tag = $("#div1").html();
+    $("#div1").empty();
+    $.each(rows, function(index, item) {
+        tag1 = tag.replaceAll("HEADING_ID", "header" + item.id);
+        tag1 = tag1.replaceAll("COLLAPSE_ID", "collapse" + item.id);
+        tag1 = tag1.replaceAll("TOGGLE_ID", item.id);
+        tag1 = tag1.replaceAll("UPD_DATE" , item.updDate);
+        tag1 = tag1.replaceAll("MEANING"  , item.meaning);
+        console.log(tag1);
+        $("#div1").append(tag1);
+    });
+}
+
+// [목록으로]
+const btn1 = document.getElementById("btn1");
+
+if (btn1) {
+    btn1.addEventListener('click', () => {
+        if(path) {
+            window.location.href = "/wordbook/words/" + path;
+        } else {
+            window.location.href = "/wordbook/words";
+        }
+    });
+}
+
+// START
+const id = [[${id}]];
+const path = "[[${path}]]";
+
+const loc = `/data/words/${id}`;
+
+$(function() {
+    console.log(loc);
+    $.getData(loc, afterGetData);
+    //dispData(["1","2"]);
+});
+
+</script>
+</th:block>

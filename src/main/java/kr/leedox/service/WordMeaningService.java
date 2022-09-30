@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,6 +45,9 @@ public class WordMeaningService {
         return wordMeaning;
     }
 
+    public List<WordMeaning> getWordMeanings(Wordbook wordbook) {
+        return wordMeaningRepository.findByWordbook(wordbook);
+    }
     public void delete(WordMeaning wordMeaning) {
         wordMeaningRepository.delete(wordMeaning);
     }

@@ -1,5 +1,6 @@
 package kr.leedox.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class WordMeaning {
     private String crtDate;
     private String updDate;
 
+    @JsonIgnore
     @ManyToOne(targetEntity = Wordbook.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "wordbook_id")
     private Wordbook wordbook;

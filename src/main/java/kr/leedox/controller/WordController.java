@@ -90,7 +90,7 @@ public class WordController {
 
         Member author = memberService.getMember(principal.getName());
 
-        words = wordService.searchList(author, opt, key);
+        words = wordService.searchList(author, Optional.of(opt), Optional.ofNullable(key));
 
         model.addAttribute("list", words);
 		model.addAttribute("opt", opt);

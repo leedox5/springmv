@@ -99,23 +99,26 @@ public class WordService {
         return wordRepository.findByAuthorOrderByUpdDateDesc(author);
     }
 
-    public List<Wordbook> searchList(Member author, String opt, String key) {
+    public List<Wordbook> searchList(Member author, Optional<String> opt, Optional<String> key) {
         Specification<Wordbook> spec = Specification.where(WordbookSpcifications.equalToAuthor(author));
-        if("eng".equals(opt)) {
-            if(!key.isEmpty()) {
-                spec = spec.and(WordbookSpcifications.likeWord(key));
+
+        String option = opt.isPresent() ? opt.get() : "";
+
+        if("eng".equals(option)) {
+            if(key.isPresent()) {
+                spec = spec.and(WordbookSpcifications.likeWord(key.get()));
             }
-        } else if("kor".equals(opt)) {
-            if(!key.isEmpty()) {
-                spec = spec.and(WordbookSpcifications.likeMeaning1(key));
+        } else if("kor".equals(option)) {
+            if(key.isPresent()) {
+                spec = spec.and(WordbookSpcifications.likeMeaning1(key.get()));
             }
-        } else if("num".equals(opt)) {
-			if(!key.isEmpty()) {
-                spec = spec.and(WordbookSpcifications.greaterThanSeq(key));
+        } else if("num".equals(option)) {
+			if(key.isPresent()) {
+                spec = spec.and(WordbookSpcifications.greaterThanSeq(key.get()));
 			}
-        } else if("tag".equals(opt)) {
-			if(!key.isEmpty()) {
-                spec = spec.and(WordbookSpcifications.likeMeaning2(key));
+        } else if("tag".equals(option)) {
+			if(key.isPresent()) {
+                spec = spec.and(WordbookSpcifications.likeMeaning2(key.get()));
 			}
         }
         return wordRepository.findAll(spec, Sort.by("updDate").descending());
