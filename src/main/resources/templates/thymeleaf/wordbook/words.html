@@ -1,0 +1,16 @@
+<html layout:decorate="~{thymeleaf/layout}">
+<div layout:fragment="content" class="container my-2">
+    <div class="mt-1 mb-1">
+        <span id="username"></span>님 반갑습니다.
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+<script>
+
+$(function() {
+    window.location.replace("/words.html");
+});
+
+</script>
+</th:block>

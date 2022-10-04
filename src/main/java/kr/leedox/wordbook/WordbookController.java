@@ -29,7 +29,7 @@ public class WordbookController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
     public String home() {
-        return "/words.html";
+        return "thymeleaf/wordbook/words";
     }
 
     @GetMapping(value = {"/words", "/words/{opt}", "/words/{opt}/{key}"})
