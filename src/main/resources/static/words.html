@@ -147,6 +147,8 @@ const afterGetData = (res) => {
 const detail = (id) => {
     console.log("WORD ID:" + id);
 
+	$("#search").hide();
+
     $("#main").load("/wordbook/word/" + id);
 
     if(typeof $.chkDetail === "undefined") {
