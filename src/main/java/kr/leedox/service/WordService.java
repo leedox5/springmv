@@ -147,7 +147,7 @@ public class WordService {
                 spec = spec.and(WordbookSpcifications.likeMeaning2(key.get()));
             }
         }
-        return wordRepository.findAll(spec, Sort.by("updDate").descending());
+        return wordRepository.findAll(spec, Sort.by("word").ascending());
     }
 
 }
