@@ -1,0 +1,81 @@
+    <div class="row border-bottom">
+        <div class="col-4">
+            <h2 id="word"></h2>
+        </div>
+        <div class="col-8 text-end">
+			<button id="btn_d1" type="button" class="btn btn-sm btn-outline-primary">목록으로</button>
+        </div>
+    </div>
+    <h6 class="small text-muted text-end mt-1">조회수 : <span id="access"></span></h6>
+
+    <div id="collap24" class="collapse show mulcol024">
+        <div class="card mt-1" >
+            <div class="card-body">
+                <span style="white-space: pre-line;" id="meaning1"></span>
+            </div>
+            <div class="card-footer text-end comment">
+                <a href=".mulcol024" role="button" data-bs-toggle="collapse" class="small">수정</a>
+            </div>
+        </div>
+    </div>
+    <div class="collapse mulcol024" id="comment">
+        <form id="form1" class="my-2" action="" method="post">
+            <input type="hidden" id="word_id">
+            <div class="mb-1">
+                <input type="text" class="form-control" name="word" id="word1" value="10090">
+            </div>
+            <div class="mb-1">
+                <textarea  name="meaning1" id="meaning11" class="form-control" rows="4"></textarea>
+            </div>
+            <div id="div10"></div>
+            <div class="text-end">
+                <button id="btn_save1" type="button" class="btn btn-sm btn-outline-primary">저장</button>
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" data-bs-target=".mulcol024">취소</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="div1">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="HEADING_ID">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" aria-expanded="true" data-bs-target="#COLLAPSE_ID">학습일 :  UPD_DATE</button>
+            </h2>
+            <div id="COLLAPSE_ID" class="accordion-collapse collapse show" aria-labelledby="HEADING_ID">
+                <div class="accordion-body">
+					<div id="collapTOGGLE_ID" class="collapse show mulcolTOGGLE_ID">
+						<div class="card mt-1" >
+							<div class="card-body">
+								<span style="white-space: pre-line;">MEANING</span>
+							</div>
+							<div class="card-footer text-end comment">
+								<a href=".mulcolTOGGLE_ID" role="button" data-bs-toggle="collapse" class="small">수정</a>
+								<a href="#" class="small delete" data-uri="/meaning/delete/56">삭제</a>
+							</div>
+						</div>
+					</div>
+					<div class="collapse mulcolTOGGLE_ID" id="comment">
+						<form class="my-2" action="/wordbook2/savemeaning/24/eng" method="post"><input type="hidden" name="_csrf" value="1bc203ba-aeed-4526-8cd3-6c1551bb98c1"/>
+							<input type="hidden" name="id" id="id" value="56">
+							<div class="mb-2">
+								<textarea  name="meaning" id="meaning" class="form-control" rows="4">MEANING</textarea>
+							</div>
+							<div class="text-end">
+								<button type="submit" class="btn btn-sm btn-outline-primary">저장</button>
+								<button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" data-bs-target=".mulcolTOGGLE_ID">취소</button>
+							</div>
+						</form>
+					</div>
+                </div>
+            </div>
+        </div>	    
+    </div>
+
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <div class="mt-1 mb-2">
+        <textarea  name="meaning11" id="meaning111" class="form-control" rows="4"></textarea>
+    </div>
+    <div class="text-end">
+        <button id="btn2" class="btn btn-sm btn-outline-primary">메모등록</button>
+    </div>

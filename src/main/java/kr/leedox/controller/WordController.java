@@ -40,6 +40,7 @@ public class WordController {
     @Autowired
     MemberService memberService;
 
+    /*
     @GetMapping("/wordbook")
     public String getList(Model model) {
         List<Wordbook> words = wordService.getList();
@@ -47,6 +48,7 @@ public class WordController {
         model.addAttribute("path","");
         return "WordbookList";
     }
+    */
 
     @PostMapping("/wordbook1")
     public String getList(Model model, Wordbook wordbook) {
@@ -140,6 +142,7 @@ public class WordController {
         return "thymeleaf/intro";
     }
 
+    /*
 	@GetMapping( value = {"/wordbook/{id}", "/wordbook/{id}/{opt}", "/wordbook/{id}/{opt}/{key}"})
     public String getWordbook(@PathVariable Integer id,
                               @PathVariable(required = false) Optional<String> opt,
@@ -163,6 +166,7 @@ public class WordController {
 
         return "WordbookDetail";
     }
+    */
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping( value = {"/wordbook2/{id}", "/wordbook2/{id}/{opt}", "/wordbook2/{id}/{opt}/{key}"})
@@ -314,11 +318,13 @@ public class WordController {
         return "WordbookForm";
     }
 
+    /*
     @PostMapping("/wordbook/create")
     public RedirectView createGame(Wordbook wordbook) {
         wordService.create(wordbook);
         return new RedirectView("/wordbook");
     }
+    */
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/wordbook2/create")

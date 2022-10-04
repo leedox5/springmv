@@ -1,0 +1,48 @@
+    <div class="row border-bottom">
+        <div class="col-4">
+            <h2 th:text="${wordbook.meaning1}"></h2>
+        </div>
+        <div class="col-8 text-end">
+			<a th:href="@{/wordbook2}" class="btn btn-sm btn-primary">시작하기</a>
+        </div>
+    </div>
+
+    <div th:class="'collapse mulcol0' + ${wordbook.id}" id="comment">
+        <form class="my-2" th:action="@{|/wordbook2/save/${wordbook.id}/${path}|}" th:object="${wordbook}" method="post">
+            <div class="mb-1">
+                <input type="text" class="form-control" name="word" id="word" th:field="*{word}">
+            </div>
+            <div class="mb-1">
+                <input type="text" class="form-control" name="seq" id="seq" th:field="*{seq}">
+            </div>
+            <div class="mb-1">
+                <textarea  name="meaning1" id="meaning1" class="form-control" rows="4">[[${wordbook.meaning1}]]</textarea>
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-sm btn-outline-primary">등록</button>
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol0' + ${wordbook.id}">취소</button>
+            </div>
+        </form>
+    </div>
+
+    <div th:each="wordMeaning : ${wordbook.getWordMeanings()}">
+        <div th:id="'collap' + ${wordMeaning.id}" th:class="'collapse show mulcol' + ${wordMeaning.id}">
+            <div class="card mt-1" >
+                <div class="card-body">
+                    <span style="white-space: pre-line;" th:text="${wordMeaning.meaning}"></span>
+                </div>
+            </div>
+        </div>
+        <div th:class="'collapse mulcol' + ${wordMeaning.id}" id="comment">
+            <form class="my-2" th:action="@{|/wordbook2/savemeaning/${wordbook.id}/${path}|}" th:object="${wordMeaning}" method="post">
+                <input type="hidden" name="id" id="id" th:value="${wordMeaning.id}">
+                <div class="mb-2">
+                    <textarea  name="meaning" id="meaning" class="form-control" rows="4">[[${wordMeaning.meaning}]]</textarea>
+                </div>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">등록</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol' + ${wordMeaning.id}">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>

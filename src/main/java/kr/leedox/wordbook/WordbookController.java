@@ -5,6 +5,7 @@ import kr.leedox.entity.Wordbook;
 import kr.leedox.service.MemberService;
 import kr.leedox.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,12 @@ public class WordbookController {
 
     @Autowired
     WordService wordService;
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/")
+    public String home() {
+        return "/words.html";
+    }
 
     @GetMapping(value = {"/words", "/words/{opt}", "/words/{opt}/{key}"})
     public String words(@PathVariable(required = false) Optional<String> opt,
@@ -65,7 +72,7 @@ public class WordbookController {
         }
         model.addAttribute("path", path);
 
-        return "thymeleaf/wordbook/detail";
+        return "thymeleaf/wordbook/detail_div";
     }
 
     @GetMapping(value = {"/list", "/list/{opt}", "/list/{opt}/{key}"})
@@ -92,5 +99,17 @@ public class WordbookController {
         model.addAttribute("author", author);
 
         return "thymeleaf/word_list";
+    }
+
+    @GetMapping("/intro")
+    public String getIntro(Model model) {
+        Wordbook wordbook = wordService.getWordbookByWord("10010");
+        model.addAttribute("wordbook", wordbook);
+        return "thymeleaf/intro_div";
+    }
+
+    @GetMapping("/add")
+    public String add() {
+        return "thymeleaf/wordbook/create";
     }
 }

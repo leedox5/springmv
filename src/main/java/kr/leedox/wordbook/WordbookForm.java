@@ -15,4 +15,6 @@ public class WordbookForm {
 
     @NotEmpty(message = "설명은 필수항목입니다.")
     private String meaning1;
+
+    private Integer seq;
 }

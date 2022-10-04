@@ -46,6 +46,15 @@ public class WordbookSpcifications {
         };
     }
 
+    public static Specification<Wordbook> equalToSeq(Integer seq) {
+        return new Specification<Wordbook>() {
+            @Override
+            public Predicate toPredicate(Root<Wordbook> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.equal(root.get("seq"), seq);
+            }
+        };
+    }
+
     public static Specification<Wordbook> likeMeaning2(String key) {
         return new Specification<Wordbook>() {
             @Override
