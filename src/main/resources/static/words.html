@@ -78,6 +78,29 @@
         
         </tbody>
     </table>
+    <!-- 페이징처리 시작 -->
+    <div>
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link"
+                    href="?page=0">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page=0">1</a>
+            </li>
+            <li class="page-item active">
+                <a class="page-link" href="?page=1">2</a>
+            </li>
+            <li class="page-item disabled">
+                <a class="page-link" href="?page=2">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->        
 </div>
 
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
@@ -131,9 +154,9 @@ const afterGetData = (res) => {
     if(res.status == 200) {
         data = res.data;
         console.log(data);
-        $("#username").text(data.username);
-        setOpts(data.opts, data.selOpt);
-        setGrid(data.words);
+        //$("#username").text(data.username);
+        //setOpts(data.opts, data.selOpt);
+        setGrid(data.content);
     } else {
         console.log(res);
         if(res.message == "LOGIN") {
@@ -295,7 +318,7 @@ $(function() {
     if(path) {
         $.getData("/data/search/" + path, afterGetData);
     } else {
-        $.getData("/data/words", afterGetData);
+        $.getData("/data/wordspage/0", afterGetData);
     }
 
 

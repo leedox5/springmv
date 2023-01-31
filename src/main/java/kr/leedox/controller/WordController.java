@@ -11,6 +11,7 @@ import kr.leedox.wordbook.WordbookForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -66,11 +67,16 @@ public class WordController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/wordbook2")
-    public String getList2(Model model, Principal principal) {
+    public String getList2(Model model, @RequestParam(value = "page", defaultValue = "0") Integer page
+                                      , @RequestParam(value = "opt", defaultValue = "eng") String opt
+                                      , @RequestParam(value = "key", defaultValue = "") String key
+                                      , Principal principal) {
         Member author = memberService.getMember(principal.getName());
-        List<Wordbook> words = wordService.getListByAuthor(author);
+        Page<Wordbook> words = wordService.getListByAuthorPaging(author, page);
         model.addAttribute("list", words);
-        model.addAttribute("path","eng");
+        model.addAttribute("page", page);
+        model.addAttribute("opt", opt);
+        model.addAttribute("key", key);
         model.addAttribute("author", author);
         return "thymeleaf/word_list";
     }
@@ -171,26 +177,17 @@ public class WordController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping( value = {"/wordbook2/{id}", "/wordbook2/{id}/{opt}", "/wordbook2/{id}/{opt}/{key}"})
     public String getWordbook2(@PathVariable Integer id,
-                               @PathVariable(required = false) Optional<String> opt,
-                               @PathVariable(required = false) Optional<String> key,
+                               @RequestParam(value = "page", defaultValue = "0") Integer page,
+                               @RequestParam(value = "opt", defaultValue = "eng") String opt,
+                               @RequestParam(value = "key", defaultValue = "") String key,
                                @AuthenticationPrincipal MemberAdapter author,
                                Model model) {
         Wordbook wordbook = wordService.getWordbook(id);
         model.addAttribute("wordbook", wordbook);
         model.addAttribute("author", author.getMember());
-        String path = "";
-
-        if (opt.isPresent()) {
-            model.addAttribute("opt", opt.get());
-            path = opt.get();
-        }
-
-        if (key.isPresent()) {
-            model.addAttribute("key", key.get());
-            path += "/" + key.get();
-        }
-
-        model.addAttribute("path", path);
+        model.addAttribute("page", page);
+        model.addAttribute("opt", opt);
+        model.addAttribute("key", key);
 
         return "thymeleaf/word_detail";
     }

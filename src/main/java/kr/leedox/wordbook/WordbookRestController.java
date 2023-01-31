@@ -9,6 +9,7 @@ import kr.leedox.service.MemberService;
 import kr.leedox.service.WordMeaningService;
 import kr.leedox.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,6 +52,14 @@ public class WordbookRestController {
         } catch(Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
         }
+    }
+
+    @GetMapping("/wordspage/{page}")
+    public ResponseEntity<?> getPage(Principal principal, @PathVariable Integer page) {
+        Member member = memberService.getMember(principal.getName());
+        Page<Wordbook> paging = wordService.getListByAuthorPaging(member, page);
+        //WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), null, null, (List<Wordbook>) paging, null);
+        return ResponseHandler.generateResponse("OK", HttpStatus.OK, paging);
     }
 
     @GetMapping("/words")
