@@ -71,8 +71,11 @@ public class WordController {
                                       , @RequestParam(value = "opt", defaultValue = "eng") String opt
                                       , @RequestParam(value = "key", defaultValue = "") String key
                                       , Principal principal) {
+        Page<Wordbook> words = null;
         Member author = memberService.getMember(principal.getName());
-        Page<Wordbook> words = wordService.getListByAuthorPaging(author, page);
+        //Page<Wordbook> words = wordService.getListByAuthorPaging(author, page);
+        words = wordService.searchListPaging(author, Optional.of(opt), Optional.ofNullable(key), page);
+
         model.addAttribute("list", words);
         model.addAttribute("page", page);
         model.addAttribute("opt", opt);
@@ -89,7 +92,7 @@ public class WordController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/wordbook2")
     public String getListOpt(Model model, @RequestParam MultiValueMap<String, String> formData, Principal principal) {
-        List<Wordbook> words = null;
+        Page<Wordbook> words = null;
 
         String opt = formData.getFirst("opt");
         String key = formData.getFirst("key");
@@ -98,12 +101,12 @@ public class WordController {
 
         Member author = memberService.getMember(principal.getName());
 
-        words = wordService.searchList(author, Optional.of(opt), Optional.ofNullable(key));
+        words = wordService.searchListPaging(author, Optional.of(opt), Optional.ofNullable(key), 0);
 
         model.addAttribute("list", words);
 		model.addAttribute("opt", opt);
         model.addAttribute("key", key);
-        model.addAttribute("path", path);
+        model.addAttribute("page", 0);
         model.addAttribute("author", author);
         return "thymeleaf/word_list";
     }
