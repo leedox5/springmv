@@ -34,7 +34,7 @@
         <tbody>
             <tr th:each="player : ${game.getPlayers()}"class="text-center">
                 <td th:text="${player.seq}"></td>
-                <td th:text="${player.name}"></td>
+                <td th:text="${player.name}" class="text-start"></td>
                 <td th:text="${#strings.isEmpty(player.score01)} ? '' : |${player.score01}@{:}${player.score11}|"></td>
                 <td th:text="${#strings.isEmpty(player.score02)} ? '' : |${player.score02}@{:}${player.score12}|"></td>
                 <td th:text="${#strings.isEmpty(player.score03)} ? '' : |${player.score03}@{:}${player.score13}|"></td>
@@ -81,7 +81,7 @@
         <tbody>
             <th:block th:each="match : ${game.getMatches()}">
             <tr class="text-center">
-                <td th:text="|@{[}${match.seq}@{]}${match.description}|"></td>
+                <td th:text="|@{[}${match.seq}@{]}${match.description}|" class="text-start"></td>
                 <td>
                     <th:block th:if="${not #strings.isEmpty(match.score1)}" th:text="|${match.score1}@{:}${match.score2}|">
                     </th:block>
@@ -152,7 +152,7 @@
         <tbody>
             <th:block th:each="player : ${game.getPlayers()}">
             <tr class="text-center">
-                <td th:text="${player.name}">     </td>
+                <td th:text="${player.name}" class="text-start">     </td>
                 <td th:text="${player.matchWin}"> </td>
                 <td th:text="${player.matchLose}"></td>
                 <td th:text="${player.gameWin}">  </td>
