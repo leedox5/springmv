@@ -9,6 +9,7 @@ import kr.leedox.service.MemberService;
 import kr.leedox.service.WordMeaningService;
 import kr.leedox.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,8 +38,32 @@ public class WordbookRestController {
     @Autowired
     WordMeaningService wordMeaningService;
 
-    @GetMapping( value = {"/words", "/words/{id}"})
-    public ResponseEntity<?> get(Principal principal, @PathVariable(required = false) Optional<Integer> id) {
+    @GetMapping("/words/{id}")
+    public ResponseEntity<?> get(Principal principal, @PathVariable Integer id) {
+        try {
+            if(principal == null) {
+                throw new Exception("LOGIN");
+            }
+            Wordbook wordbook = wordService.getWordbook(id);
+            List<Wordbook> words = new ArrayList<>();
+            words.add(wordbook);
+            WordbookResponse wordbookResponse = new WordbookResponse(null, null, null, words, (List<WordMeaning>) wordbook.getWordMeanings());
+            return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
+        } catch(Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+        }
+    }
+
+    @GetMapping("/wordspage/{page}")
+    public ResponseEntity<?> getPage(Principal principal, @PathVariable Integer page) {
+        Member member = memberService.getMember(principal.getName());
+        Page<Wordbook> paging = wordService.getListByAuthorPaging(member, page);
+        //WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), null, null, (List<Wordbook>) paging, null);
+        return ResponseHandler.generateResponse("OK", HttpStatus.OK, paging);
+    }
+
+    @GetMapping("/words")
+    public ResponseEntity<?> get(Principal principal) {
         try {
             if(principal == null) {
                 throw new Exception("LOGIN");
@@ -50,19 +75,9 @@ public class WordbookRestController {
             opts.add(new SearchOption("kor", "의미"));
 
             List<Wordbook> words = wordService.getListByAuthor(member);
-            WordbookResponse wordbookResponse = null;
-
-            if(id.isPresent()) {
-                List<Wordbook> filteredWordbook = words.stream().filter(x -> x.getId() == id.get()).collect(Collectors.toList());
-                List<WordMeaning> wordMeanings = wordMeaningService.getWordMeanings(filteredWordbook.get(0));
-
-                wordbookResponse = new WordbookResponse(member.getUsername(), opts, "eng", filteredWordbook, wordMeanings);
-            } else {
-                wordbookResponse = new WordbookResponse(member.getUsername(), opts, "eng", words, null);
-            }
+            WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), opts, "eng", words, null);
 
             return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
-
         } catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
         }

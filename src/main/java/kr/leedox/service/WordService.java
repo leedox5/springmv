@@ -6,8 +6,12 @@ import kr.leedox.repository.WordRepository;
 import kr.leedox.wordbook.WordbookForm;
 import kr.leedox.wordbook.WordbookSpcifications;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -100,6 +104,38 @@ public class WordService {
         return wordRepository.findByAuthorOrderByUpdDateDesc(author);
     }
 
+    public Page<Wordbook> getListByAuthorPaging(Member member, Integer page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return wordRepository.findByAuthorOrderByUpdDateDesc(member, pageable);
+    }
+
+    public Page<Wordbook> searchListPaging(Member author, Optional<String> opt, Optional<String> key, Integer page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("updDate").descending());
+
+        Specification<Wordbook> spec = Specification.where(WordbookSpcifications.equalToAuthor(author));
+
+        String option = opt.isPresent() ? opt.get() : "";
+
+        if("eng".equals(option)) {
+            if(key.isPresent()) {
+                spec = spec.and(WordbookSpcifications.likeWord(key.get()));
+            }
+        } else if("kor".equals(option)) {
+            if(key.isPresent()) {
+                spec = spec.and(WordbookSpcifications.likeMeaning1(key.get()));
+            }
+        } else if("num".equals(option)) {
+            if(key.isPresent()) {
+                spec = spec.and(WordbookSpcifications.greaterThanSeq(key.get()));
+            }
+        } else if("tag".equals(option)) {
+            if(key.isPresent()) {
+                spec = spec.and(WordbookSpcifications.likeMeaning2(key.get()));
+            }
+        }
+        return wordRepository.findAll(spec, pageable);
+    }
+
     public List<Wordbook> searchList(Member author, Optional<String> opt, Optional<String> key) {
         Specification<Wordbook> spec = Specification.where(WordbookSpcifications.equalToAuthor(author));
 
@@ -148,6 +184,11 @@ public class WordService {
             }
         }
         return wordRepository.findAll(spec, Sort.by("word").ascending());
+    }
+
+    public Page<Wordbook> getPage(Integer page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return wordRepository.findAll(pageable);
     }
 
 }

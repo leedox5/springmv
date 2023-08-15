@@ -18,7 +18,7 @@
     </form>
     <div class="row ">
         <div class="col-8">
-            <h6 class="small text-muted text-start mt-1" th:text="'단어수 : ' + ${list.size()}"></h6>
+            <h6 class="small text-muted text-start mt-1" th:text="'단어수 : ' + ${list.totalElements}"></h6>
         </div>
         <div class="col-4 text-end">
             <a th:href="@{/wordbook2/create}" class="btn btn-sm btn-primary">단어 추가</a>
@@ -35,11 +35,37 @@
 
         <tr th:each="wordbook : ${list}" class="text-start">
             <td class="text-start">
-                <a th:href="@{|/wordbook2/${wordbook.id}/${path}|}" th:text="${wordbook.word}"></a>
+                <a th:href="@{|/wordbook2/${wordbook.id}?page=${page}&opt=${opt}&key=${key}|}" th:text="${wordbook.word}"></a>
             </td>
             <td th:text="${wordbook.meaning1}"></td>
         </tr>
         </tbody>
     </table>
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!list.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!list.hasPrevious} ? 'disabled'">
+                <a class="page-link"
+                    th:href="@{|?page=${list.number-1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, list.totalPages-1)}"
+                th:classappend="${page == list.number} ? 'active'" 
+                class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!list.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${list.number+1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->    
 </div>
-
+<script layout:fragment="script" type='text/javascript'>
+var param = {};
+param.opt = "[[${opt}]]";
+console.log(param);
+</script>
