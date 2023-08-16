@@ -171,6 +171,7 @@ public class ClubController {
         return "redirect:/club/meeting";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/meeting/{id}")
     public String game(@PathVariable Integer id, Model model) {
         Optional<Game> optionalGame = gameService.findById(id);
