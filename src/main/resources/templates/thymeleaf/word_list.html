@@ -50,10 +50,11 @@
                     <span>이전</span>
                 </a>
             </li>
-            <li th:each="page: ${#numbers.sequence(0, list.totalPages-1)}"
-                th:classappend="${page == list.number} ? 'active'" 
+            <li th:each="page: ${#numbers.sequence(1, list.totalPages)}"
+                th:if="${page >= list.number - 1 and page <= list.number + 3}"
+                th:classappend="${page == list.number + 1 } ? 'active'"
                 class="page-item">
-                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page - 1}|}"></a>
             </li>
             <li class="page-item" th:classappend="${!list.hasNext} ? 'disabled'">
                 <a class="page-link" th:href="@{|?page=${list.number+1}|}">
