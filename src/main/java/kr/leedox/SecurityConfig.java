@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .and()
                       .formLogin()
                       .loginPage("/club/login")
-                      .defaultSuccessUrl("/club/record")
+                      .defaultSuccessUrl("/club/stat")
                 .and().logout()
                       .logoutRequestMatcher(new AntPathRequestMatcher("/club/logout"))
                       .logoutSuccessUrl("/club/intro")
