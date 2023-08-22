@@ -7,6 +7,9 @@ import kr.leedox.repository.MatchRepository;
 import kr.leedox.entity.Match;
 import kr.leedox.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -142,6 +145,11 @@ public class MatchService {
             }
         }
         return matchResponses;
+    }
+
+    public Page<Match> getScoreMatches(Member member, int page) {
+        Pageable pageable = PageRequest.of(page, 5);
+        return matchRepository.findByDescriptionContainsAndScore1NotNullOrderByMatchDateDescSeqAsc(pageable, member.getUsername());
     }
 
     public void save(Match match) {

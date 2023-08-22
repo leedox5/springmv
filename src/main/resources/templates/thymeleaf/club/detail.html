@@ -3,7 +3,7 @@
 	<div class="text-start">
 		<h3 th:text="${game.subject}"></h3>
 	</div>
-    <div class="row border-bottom">
+    <div class="row border-bottom" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? true : false}">
 		<div class="col-8 text-start mt-2 mb-2">
 			<form th:action="@{/club/meeting}" method="get">
 				<button  type="submit" class="btn btn-sm btn-outline-secondary">목록으로</button>
@@ -47,20 +47,22 @@
             </c:forEach>
         </tbody>
     </table>
-    <form id="form1" th:action="|@{/club/player/create/}${game.id}|" method="post">
-        <div class="input-group input-group-sm mb-3">
-            <span class="input-group-text">Name</span>
-            <input type="text" class="form-control" name="name" id="name" value="">
-            <button type="button" class="btn btn-primary" id="liveAlertBtn">추가</button>
-        </div>
-        <div id="err"></div>
-    </form>
+    <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? true : false}">
+        <form id="form1" th:action="|@{/club/player/create/}${game.id}|" method="post">
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text">Name</span>
+                <input type="text" class="form-control" name="name" id="name" value="">
+                <button type="button" class="btn btn-primary" id="liveAlertBtn">추가</button>
+            </div>
+            <div id="err"></div>
+        </form>
+    </th:block>
     <div class="row border-bottom">
         <div class="col-8">
             <h5 class="py-1">대진표</h5>
         </div>
         <div class="col-4 text-end">
-			<div class="btn-toolbar justify-content-end">
+			<div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? true : false}" class="btn-toolbar justify-content-end">
 				<div th:if="${game.getMatches().isEmpty()}" class="btn-group btn-group-sm">
 					<a th:href="|@{/club/match/create/}${game.id}|" class="btn btn-outline-secondary">대진표 생성</a>
 				</div>
@@ -79,7 +81,12 @@
             </tr>
         </thead>
         <tbody>
-            <th:block th:each="match : ${game.getMatches()}">
+            <tr sec:authorize="isAnonymous()">
+                <td colspan="3">
+                    로그인후 확인해 보세요
+                </td>
+            </tr>
+            <th:block sec:authorize="isAuthenticated()" th:each="match : ${game.getMatches()}">
             <tr class="text-center">
                 <td th:text="|@{[}${match.seq}@{]}${match.description}|" class="text-start"></td>
                 <td>
@@ -91,7 +98,7 @@
                 </td>
             </tr>
 
-            <tr>
+            <tr th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? true : false}" >
                 <td colspan="3">
                     <div th:id="'collap' + ${match.id}" class="collapse">
                         <form th:action="|@{/club/match/save/}${match.id}|" method="post">
@@ -131,7 +138,7 @@
 		<div class="col-8 text-start mb-1">
             <h5>집계</h5>
 		</div>
-        <div class="col-4 text-end mb-1">
+        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? true : false}"  class="col-4 text-end mb-1">
 			<div class="text-end">
 				<a th:href="@{|/club/player/ranking/${game.id}|}" class="btn btn-sm btn-outline-secondary">집계</a>
 			</div>
@@ -150,7 +157,12 @@
             </tr>
         </thead>
         <tbody>
-            <th:block th:each="player : ${game.getPlayers()}">
+            <tr sec:authorize="isAnonymous()">
+                <td colspan="7">
+                    로그인후 확인해 보세요
+                </td>
+            </tr>
+            <th:block sec:authorize="isAuthenticated()" th:each="player : ${game.getPlayers()}">
             <tr class="text-center">
                 <td th:text="${player.name}" class="text-start">     </td>
                 <td th:text="${player.matchWin}"> </td>

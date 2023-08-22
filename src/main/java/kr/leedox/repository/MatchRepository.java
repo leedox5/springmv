@@ -2,6 +2,8 @@ package kr.leedox.repository;
 
 import kr.leedox.entity.Match;
 import kr.leedox.entity.Player;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,4 +27,6 @@ public interface MatchRepository extends JpaRepository<Match, Integer> {
     List<Match> findByDescriptionContainsOrderByGameIdDescSeqAsc(String username);
 
     List<Match> findByDescriptionContainsOrderByMatchDateDescSeqAsc(String username);
+    Page<Match> findByDescriptionContainsOrderByMatchDateDescSeqAsc(Pageable pageable, String username);
+    Page<Match> findByDescriptionContainsAndScore1NotNullOrderByMatchDateDescSeqAsc(Pageable pageable, String username);
 }

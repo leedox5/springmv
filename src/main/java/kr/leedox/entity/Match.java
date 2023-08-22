@@ -55,6 +55,20 @@ public class Match {
     private Integer matchSeq3;
     private Integer matchSeq4;
 
+    @Transient
+    private String desc1;
+
+    @Transient
+    private String desc2;
+
+    @Transient
+    private String desc3;
+
+    @Transient
+    private String desc4;
+    @Transient
+    private String stat;
+
     public Integer getScore2() {
         return score2;
     }
@@ -133,5 +147,55 @@ public class Match {
 
     public void setPlayer4(Player player4) {
         this.player4 = player4;
+    }
+
+    public String getDesc1() {
+        int pos = this.description.indexOf(":");
+        String str = this.description.substring(0, pos);
+
+        return str.split(",")[0];
+    }
+
+    public String getDesc2() {
+        int pos = this.description.indexOf(":");
+        String str = this.description.substring(0, pos);
+
+        return str.split(",")[1];
+    }
+
+    public String getDesc3() {
+        int pos = this.description.indexOf(":");
+        String str = this.description.substring(pos + 1);
+
+        return str.split(",")[0];
+    }
+
+    public String getDesc4() {
+        int pos = this.description.indexOf(":");
+        String str = this.description.substring(pos + 1);
+
+        return str.split(",")[1];
+    }
+
+    public String getStat(String username) {
+
+        if(score1 == null) {
+            return "X";
+        }
+
+        if(getDesc1().contains(username) || getDesc2().contains(username)) {
+            if(score1 > score2) {
+                return "승";
+            } else {
+                return "패";
+            }
+        } else if(getDesc3().contains(username) || getDesc4().contains(username)) {
+            if(score1 < score2) {
+                return "승";
+            } else {
+                return "패";
+            }
+        }
+        return "X";
     }
 }

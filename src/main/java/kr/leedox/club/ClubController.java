@@ -175,7 +175,6 @@ public class ClubController {
         return "redirect:/club/meeting";
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/meeting/{id}")
     public String game(@PathVariable Integer id, Model model) {
         Optional<Game> optionalGame = gameService.findById(id);
@@ -333,4 +332,17 @@ public class ClubController {
         return "thymeleaf/club/account";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/stat")
+    public String stat(@AuthenticationPrincipal MemberAdapter author, Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Score score = new Score(author.getMember());
+        score.setMatches(matchService.getScoreMatches(author.getMember()));
+        score.setScore(matchService.getScore(score.getMatches(), score.getMember().getUsername()));
+
+        Page<Match> stats = this.matchService.getScoreMatches(author.getMember(), page);
+
+        model.addAttribute("score", score);
+        model.addAttribute("stats", stats);
+        return "thymeleaf/club/stat";
+    }
 }

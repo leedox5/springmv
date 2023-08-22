@@ -1,0 +1,133 @@
+<html layout:decorate="~{thymeleaf/club/layout}">
+<div layout:fragment="content" class="container my-2">
+    <div class="mt-1 mb-1">
+        <span id="p1" th:text="${score.member.username}"></span>님 반갑습니다.
+    </div>
+	
+	<div class="row">
+		<div class="col-8">
+			<h2>나의 기록</h2>
+		</div>
+        <div class="col-4 text-end" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? true : false}">
+            <a th:href="@{/club/meeting}" class="btn btn-sm btn-primary">모임 참여</a>
+        </div>
+	</div>
+
+	<div>
+		<h6 id="p2" class="small text-muted text-start mt-1" th:text="${score.score}"></h6>
+	</div>
+
+    <table id="grid1" class="table mt-1">
+        <thead class="text-center table-dark">
+        <tr>
+		    <th>NO</th>
+            <th>결과</th>
+            <th>팀A</th>
+            <th>팀B</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="match, i : ${stats}">
+            <td class="text-end" th:text="${i.count}"></td>
+            <td class="text-center" th:inline="text">
+                [[${match.getStat(score.member.username)}]] [[${match.score1}]] : [[${match.score2}]]<br>[[${match.matchDate.substring(0, 10)}]]
+            </td>
+            <td class="text-start" th:inline="text">
+                [[${match.desc1}]]<br>[[${match.desc2}]]
+            </td>
+            <td class="text-start" th:inline="text">
+                [[${match.desc3}]]<br>[[${match.desc4}]]
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${!stats.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!stats.hasPrevious} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${stats.number - 1}|}">
+                    <span>◀</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(1, stats.totalPages)}"
+                th:if="${page >= stats.number-1 and page <= stats.number+3}"
+                th:classappend="${page == stats.number+1} ? 'active'" class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page-1}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!stats.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${stats.number + 1}|}">
+                    <span>▶</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 스크립트 블럭 -->
+<script layout:fragment="script">
+var param = {};
+/*
+param.username = "고호진";
+param.score = "12게임 6승 6패(since 2022.01.01)";
+*/
+$(document).ready(function() {
+    console.log("ready");
+    //$.getParam();
+    $("#btn1").click(function() {
+        //$.getGrid();
+    });
+});
+
+$.getParam = function() {
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/club/score",
+        data: param,
+        dataType: "json",
+        success: function(data) {
+            param = data;
+            //var json = JSON.stringify(data, null, 4);
+            /*
+            if(data.errorContent == "Y") {
+                location.reload();
+            } else {
+                //$("#err").html(data.messages[0]);
+			    alert(data.messages[0]);
+            }
+            */
+            console.log(param);
+            
+            $("#p1").text(param.member.username);
+            $("#p2").text(param.score);
+            $.setGrid(param.matches);
+        },
+        error: function(e) {
+		    console.log(e.responseText);
+        }
+    });
+}
+
+$.setGrid = function(rows) {
+    /*
+    var rows = [
+        ["22.09.18" , "고호진,진현범 3", "염동연,신성묵 4", "패"]
+       ,["22.09.18" , "고호진,진현범 3", "염동연,신성묵 4", "패"]
+       ,["22.09.18" , "고호진,진현범 3", "염동연,신성묵 4", "패"]
+    ];
+    */
+
+    var rowtag = "";
+    
+    $.each(rows, function(index, item) {
+
+        row_tag  = "<tr>";
+		row_tag += "<td class='text-end'>" + (index + 1) + "</td>";
+        row_tag += "<td class='text-center'>" + item.result + "[" + item.score1 + " : " + item.score2 + "]" + "<br>" + item.createDate + "</td>" ;
+        row_tag += "<td class='text-center'>" + item.teamDesc1.replace(",","<br>")  + "</td>" ;
+        row_tag += "<td class='text-center'>" + item.teamDesc2.replace(",","<br>")  + "</td>" ;
+        row_tag += "</tr>";
+	
+        $("#grid1>tbody").append(row_tag);
+    });
+}
+</script>
