@@ -1,0 +1,100 @@
+<html layout:decorate="~{thymeleaf/club/layout}">
+<div layout:fragment="content" class="container-fluid my-2">
+    <div class="btn-toolbar justify-content-end mb-1">
+        <div class="btn-group btn-group-sm">
+            <a th:href="@{/club/create}" class="btn btn-sm btn-primary">모임 추가</a>
+        </div>
+    </div>
+    <table id="grid1" class="table mt-1">
+        <thead class="text-left table-dark">
+        <tr>
+            <th>모임명</th>
+            <th>만든이</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="game : ${paging}" class="text-start">
+            <td class="text-start">
+                <a th:href="@{|/club/meeting/${game.id}|}" th:text="${game.subject}"></a>
+                <span class="text-danger small ml-2" th:text="${game.getPlayers().size()}"></span>
+            </td>
+            <td class="text-start">
+                <span th:if="${game.author != null}" th:text="${game.author.username}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+           <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+               <a class="page-link" th:href="@{|?page=${paging.number - 1}|}">
+                   <span>◀</span>
+               </a>
+           </li>
+            <li th:each="page: ${#numbers.sequence(1, paging.totalPages)}"
+                th:if="${page >= paging.number-1 and page <= paging.number+3}"
+                th:classappend="${page == paging.number+1} ? 'active'" class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page-1}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${paging.number + 1}|}">
+                    <span>▶</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 스크립트 블럭 -->
+<script layout:fragment="script">
+var param = {};
+$(document).ready(function() {
+    console.log("ready");
+    //$.getParam();
+});
+
+$.getParam = function() {
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/club/meeting",
+        data: param,
+        dataType: "json",
+        success: function(data) {
+            param = data;
+
+            console.log(param);
+            
+            //$("#p1").text(param.member.username + "(" + param.member.email + ")");
+            //$("#p2").text(param.score);
+            //$.setGrid(param.matches);
+        },
+        error: function(e) {
+		    console.log(e.responseText);
+        }
+    });
+}
+
+$.setGrid = function(rows) {
+    /*
+    var rows = [
+        ["22.09.18" , "고호진,진현범 3", "염동연,신성묵 4", "패"]
+       ,["22.09.18" , "고호진,진현범 3", "염동연,신성묵 4", "패"]
+       ,["22.09.18" , "고호진,진현범 3", "염동연,신성묵 4", "패"]
+    ];
+    */
+
+    var rowtag = "";
+    
+    $.each(rows, function(index, item) {
+
+        row_tag  = "<tr>";
+        row_tag += "<td class='text-center'>" + item.result + "[3:6]" + "<br>" + item.createDate + "</td>" ;
+        row_tag += "<td class='text-center'>" + item.teamDesc1.replace(",","<br>")  + "</td>" ;
+        row_tag += "<td class='text-center'>" + item.teamDesc2.replace(",","<br>")  + "</td>" ;
+        row_tag += "</tr>";
+	
+        $("#grid1>tbody").append(row_tag);
+    });
+}
+</script>

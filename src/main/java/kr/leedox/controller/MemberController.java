@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 public class MemberController {
@@ -46,11 +48,19 @@ public class MemberController {
 			bindingResult.rejectValue("email", "duplicateEmail", "이미 사용된 이메일입니다.");
 			return "thymeleaf/signup";
 		}
-		 
+
+        /* ---
         Member member = new Member();
         member.setEmail(userCreateForm.getEmail());
         member.setUsername(userCreateForm.getUsername());
         member.setPassword(userCreateForm.getPassword1());
+        --- */
+        Member member = Member.builder()
+              .email(userCreateForm.getUsername())
+              .username(userCreateForm.getUsername())
+              .password(userCreateForm.getPassword1())
+              .regDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+              .build();
 
         memberService.insertMember(member);
 

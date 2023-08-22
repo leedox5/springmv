@@ -147,6 +147,9 @@ public class WordController {
     @GetMapping("/welcome")
     public String welcome(Model model) {
         Wordbook wordbook = wordService.getWordbookByWord("10020");
+        if(wordbook == null) {
+            return "thymeleaf/login";
+        }
         model.addAttribute("wordbook", wordbook);
         return "thymeleaf/intro";
     }

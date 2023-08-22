@@ -1,6 +1,7 @@
 package kr.leedox.service;
 
 import kr.leedox.entity.Member;
+import kr.leedox.entity.WordMeaning;
 import kr.leedox.entity.Wordbook;
 import kr.leedox.repository.WordRepository;
 import kr.leedox.wordbook.WordbookForm;
@@ -23,6 +24,9 @@ import java.util.Optional;
 public class WordService {
     @Autowired
     WordRepository wordRepository;
+
+    @Autowired
+    WordMeaningService wordMeaningService;
 
     public List<Wordbook> getList() {
         return wordRepository.findTop10ByOrderByUpdDateDesc();
@@ -49,13 +53,26 @@ public class WordService {
     }
 
 	public Wordbook getWordbookByWord(String word) {
+        Wordbook wordbook = null;
+
 		List<Wordbook> wordbookList = wordRepository.findByWord(word);
 
-		if(!wordbookList.isEmpty()) {
-			return wordbookList.get(0);
-		}
-
-        return null;
+		if(wordbookList.isEmpty()) {
+            WordbookForm form = new WordbookForm();
+            form.setWord("10050");
+            form.setMeaning1("소개");
+            form.setSeq(0);
+            Member member = new Member();
+            member.setId(1);
+            this.create(form, member);
+            wordbook = wordRepository.findByWord(word).get(0);
+            WordMeaning wordMeaning = new WordMeaning();
+            wordMeaning.setMeaning("Welcome to T-Matches");
+            wordMeaningService.save(wordbook, wordMeaning);
+            return wordbook;
+		} else {
+            return wordbookList.get(0);
+        }
 	}
 
     public Wordbook saveWordbook(Wordbook wordbook) {
