@@ -42,7 +42,7 @@ public class GameService {
 	}
 
     public Page<Game> getList(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 8);
         return this.gameRepository.findAllByOrderByGameDateDesc(pageable);
     }
 }
