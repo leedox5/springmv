@@ -82,8 +82,8 @@
         </thead>
         <tbody>
             <tr sec:authorize="isAnonymous()">
-                <td colspan="3">
-                    로그인후 확인해 보세요
+                <td colspan="2" class="text-center">
+                    <a href="/club/login">로그인</a>후 확인해 보세요
                 </td>
             </tr>
             <th:block sec:authorize="isAuthenticated()" th:each="match : ${game.getMatches()}">
@@ -93,7 +93,7 @@
                     <th:block th:if="${not #strings.isEmpty(match.score1)}" th:text="|${match.score1}@{:}${match.score2}|">
                     </th:block>
                     <th:block th:unless="${not #strings.isEmpty(match.score1)}">
-                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" th:attr="data-bs-target='#collap' + ${match.id}">입력</button>
+                        <button th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? true : false}" type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" th:attr="data-bs-target='#collap' + ${match.id}">입력</button>
                     </th:block>
                 </td>
             </tr>
@@ -158,8 +158,8 @@
         </thead>
         <tbody>
             <tr sec:authorize="isAnonymous()">
-                <td colspan="7">
-                    로그인후 확인해 보세요
+                <td colspan="7" class="text-center">
+                    <a href="/club/login">로그인</a>후 확인해 보세요
                 </td>
             </tr>
             <th:block sec:authorize="isAuthenticated()" th:each="player : ${game.getPlayers()}">
