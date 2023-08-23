@@ -28,7 +28,7 @@
         </thead>
         <tbody>
         <tr th:each="match, i : ${stats}">
-            <td class="text-end" th:text="${i.count}"></td>
+            <td class="text-end" th:text="${stats.number * 5 + i.count}"></td>
             <td class="text-center" th:inline="text">
                 [[${match.getStat(score.member.username)}]] [[${match.score1}]] : [[${match.score2}]]<br>[[${match.matchDate.substring(0, 10)}]]
             </td>
