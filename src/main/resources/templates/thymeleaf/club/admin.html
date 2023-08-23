@@ -8,18 +8,18 @@
     <table id="grid1" class="table mt-1">
         <thead class="text-left table-dark">
         <tr>
+            <th>번호</th>
             <th>이메일</th>
             <th>이름</th>
-            <th>가입일</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="member : ${list}" class="text-start">
+            <td th:text="${member.id}" class="text-end"></td>
             <td class="text-start">
                 <a th:href="@{|/club/member/${member.id}|}" th:text="${member.email}"></a>
             </td>
             <td th:text="${member.username}"></td>
-            <td th:text="${#strings.substring(member.regDate, 0, 8)}"></td>
         </tr>
         </tbody>
     </table>    
