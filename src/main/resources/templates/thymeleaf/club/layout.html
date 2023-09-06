@@ -10,11 +10,12 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
     <!-- sbb CSS -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-    <title>앙투카 테니스 클럽</title>
+    <title>T-Matches</title>
 </head>
 <body>
 <!-- 네비게이션바 -->
 <nav th:replace="thymeleaf/club/navbar :: navbarFragment"></nav>
+<div th:replace="thymeleaf/club/header :: headerFragment"></div>
 <!-- 기본 템플릿 안에 삽입될 내용 Start -->
 <th:block layout:fragment="content"></th:block>
 <!-- 기본 템플릿 안에 삽입될 내용 End -->

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>헤더</title>
+</head>
+<body>
+<div th:fragment="headerFragment" class="border-bottom text-end mt-1 mb-1">
+    <span sec:authorize="isAuthenticated()" th:text="'[' + ${#authentication.getPrincipal().getMember().getUsername() + ']님 반갑습니다.'}"></span>
+</div>
+</body>
+</html>

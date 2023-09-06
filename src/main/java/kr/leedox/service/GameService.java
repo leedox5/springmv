@@ -45,4 +45,9 @@ public class GameService {
         Pageable pageable = PageRequest.of(page, 8);
         return this.gameRepository.findAllByOrderByGameDateDesc(pageable);
     }
+
+    public boolean chkPlayer(Integer id) {
+        Game game = getById(id);
+        return game.getPlayers().isEmpty();
+    }
 }

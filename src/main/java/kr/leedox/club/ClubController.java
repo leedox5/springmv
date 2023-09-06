@@ -102,6 +102,11 @@ public class ClubController {
 
     @GetMapping("/meeting/delete/{id}")
     public ResponseEntity<?> saveMeaning(@PathVariable Integer id) {
+
+        if(!gameService.chkPlayer(id)) {
+            return ResponseEntity.ok(new ErrorResponse("200", "N", "선수가 등록되어 있습니다."));
+        }
+
         Game game = gameService.getById(id);
         gameService.delete(game);
 

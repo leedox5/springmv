@@ -93,12 +93,12 @@
                     <th:block th:if="${not #strings.isEmpty(match.score1)}" th:text="|${match.score1}@{:}${match.score2}|">
                     </th:block>
                     <th:block th:unless="${not #strings.isEmpty(match.score1)}">
-                        <button th:if="${#strings.contains(match.description, #authentication.getPrincipal().getMember().getUsername())}" type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" th:attr="data-bs-target='#collap' + ${match.id}">입력</button>
+                        <button th:if="${#authorization.expression('hasRole(''ROLE_GOLD'')') ? true : false}" type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" th:attr="data-bs-target='#collap' + ${match.id}">입력</button>
                     </th:block>
                 </td>
             </tr>
 
-            <tr th:if="${#strings.contains(match.description, #authentication.getPrincipal().getMember().getUsername())}" >
+            <tr th:if="${#authorization.expression('hasRole(''ROLE_GOLD'')') ? true : false}" >
                 <td colspan="3">
                     <div th:id="'collap' + ${match.id}" class="collapse">
                         <form th:action="|@{/club/match/save/}${match.id}|" method="post">
@@ -219,7 +219,7 @@ Array.from(delete_elements).forEach(function(element) {
 						}
                     } else {
                         //$("#err").html(data.messages[0]);
-					    alert(data.messages[0]);
+					    alert(data.messages[0], "warning");
                     }
                 },
                 error: function(e) {
