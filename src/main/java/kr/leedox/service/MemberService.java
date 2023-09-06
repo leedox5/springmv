@@ -47,7 +47,9 @@ public class MemberService {
     }
 
     public Member getMember(String name) {
-        chkAdminUser(name);
+        if("leedox@naver.com".equals(name)) {
+            chkAdminUser(name);
+        }
         Optional<Member> member = memberRepository.findByemail(name);
         if(member.isPresent()) {
             Member _member = member.get();
