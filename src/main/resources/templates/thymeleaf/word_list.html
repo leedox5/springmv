@@ -1,8 +1,5 @@
 <html layout:decorate="~{thymeleaf/layout}">
 <div layout:fragment="content" class="container my-2">
-    <div class="mt-1 mb-1">
-        <span th:text="${author.username}"></span>님 반갑습니다.
-    </div>
     <form th:action="@{/wordbook2}" method="post">
         <div class="input-group input-group-sm mb-2">
             <div class="input-group-prepend">

@@ -6,7 +6,7 @@
 </head>
 <body>
 <div th:fragment="headerFragment" class="border-bottom text-end mt-1 mb-1">
-    <span sec:authorize="isAuthenticated()" th:text="'[' + ${#authentication.getPrincipal().getMember().getUsername() + ']님 환영합니다.'}"></span>
+    <span sec:authorize="isAuthenticated()" th:text="'[' + ${#authentication.getPrincipal().getMember().getUsername() + ']님 환영합니다!'}"></span>
 </div>
 </body>
 </html>
