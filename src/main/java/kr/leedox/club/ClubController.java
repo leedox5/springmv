@@ -3,12 +3,7 @@ package kr.leedox.club;
 import kr.leedox.CalendarUtil;
 import kr.leedox.common.ErrorResponse;
 import kr.leedox.entity.*;
-import kr.leedox.service.MemberAdapter;
-import kr.leedox.service.GameService;
-import kr.leedox.service.MatchService;
-import kr.leedox.service.PlayerService;
-import kr.leedox.service.WordService;
-import kr.leedox.service.MemberService;
+import kr.leedox.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +17,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,6 +43,9 @@ public class ClubController {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    RoleService roleService;
+
 	@GetMapping("/")
     public String clubHome(Model model) {
         Wordbook wordbook = wordService.getWordbookByWord("10050");
@@ -56,7 +57,7 @@ public class ClubController {
     @GetMapping("/record")
     public String getRecord(Model model) {
         Member member = new Member();
-        member.setUsername("선수1");
+        //member.setUsername("선수1");
         model.addAttribute("member", member);
         return "thymeleaf/club/record";
     }
@@ -141,9 +142,10 @@ public class ClubController {
 			return "thymeleaf/club/signup";
 		}
 		 
-        Member member = new Member();
-        member.setEmail(userCreateForm.getEmail());
-        member.setUsername(userCreateForm.getUsername());
+        Member member = Member.builder()
+                              .email(userCreateForm.getEmail())
+                              .username(userCreateForm.getUsername())
+                              .build();
         member.setPassword(userCreateForm.getPassword1());
         member.setRegDate(CalendarUtil.formatNow("yyyyMMdd HHmmss"));
 
@@ -311,16 +313,30 @@ public class ClubController {
     @GetMapping("/member/{id}")
     public String member(@PathVariable Integer id, Model model) {
         Member member = memberService.getMember(id);
+
+        List<Role> userRoles = new ArrayList<>();
+        for(Authority authority : member.getAuthorities()) {
+            userRoles.add(authority.getRole());
+        }
+        member.setRoles(userRoles);
+
+        List<Role> roles = roleService.getAllRoles();
         model.addAttribute("member", member);
+        model.addAttribute("roles", roles);
+        model.addAttribute("userRoles", userRoles);
         return "thymeleaf/club/member";
     }
 
     @PostMapping("/member/reset/{id}")
     public String reset(@PathVariable Integer id) {
-        Member member = memberService.getMember(id);
-        member.setPassword("12345678");
+        Member member = memberService.resetPassword(id);
 
-        member = memberService.save(member);
+        return "redirect:/club/admin";
+    }
+
+    @PostMapping("/member/save/{id}")
+    public String save(@ModelAttribute("member") Member member, @PathVariable Integer id) {
+        memberService.save(id, member.getUsername(), member.getRoles());
 
         return "redirect:/club/member/" + id;
     }

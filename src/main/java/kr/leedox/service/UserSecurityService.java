@@ -20,13 +20,17 @@ import java.util.Optional;
 @Service
 public class UserSecurityService implements UserDetailsService {
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Member> _member = this.memberRepository.findByemail(email);
+        //Optional<Member> _member = this.memberRepository.findByemail(email);
+        Member member = this.memberService.getMember(email);
+        /*
         if(_member.isEmpty()) {
             throw new UsernameNotFoundException("사용자를 찾을수 없습니다.");
         }
         Member member = _member.get();
+        */
         /*
         List<GrantedAuthority> authorities = new ArrayList<>();
         if("leedox@naver.com".equals(email)) {

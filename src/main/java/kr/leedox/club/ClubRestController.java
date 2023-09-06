@@ -114,8 +114,10 @@ public class ClubRestController {
         }
 
         Member member = memberService.getMember(id);
+        /* ---
         member.setEmail(userCreateForm.getEmail());
         member.setUsername(userCreateForm.getUsername());
+        --- */
         member.setPassword(userCreateForm.getPassword1());
 
         memberService.save(member);

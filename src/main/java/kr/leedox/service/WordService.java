@@ -26,6 +26,8 @@ public class WordService {
     WordRepository wordRepository;
 
     @Autowired
+    MemberService memberService;
+    @Autowired
     WordMeaningService wordMeaningService;
 
     public List<Wordbook> getList() {
@@ -62,8 +64,7 @@ public class WordService {
             form.setWord("10050");
             form.setMeaning1("소개");
             form.setSeq(0);
-            Member member = new Member();
-            member.setId(1);
+            Member member = memberService.getMember(1);
             this.create(form, member);
             wordbook = wordRepository.findByWord(word).get(0);
             WordMeaning wordMeaning = new WordMeaning();

@@ -10,4 +10,10 @@ class MemberTest {
         Member member = Member.builder().email("leedox@naver.com").build();
         assertEquals("leedox@naver.com", member.getEmail());
     }
+
+    @Test
+    void authTest() {
+        //given
+        Authority authority = Authority.builder().build();
+    }
 }

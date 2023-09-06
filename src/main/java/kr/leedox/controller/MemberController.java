@@ -58,9 +58,10 @@ public class MemberController {
         Member member = Member.builder()
               .email(userCreateForm.getUsername())
               .username(userCreateForm.getUsername())
-              .password(userCreateForm.getPassword1())
-              .regDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
               .build();
+
+        member.setPassword(userCreateForm.getPassword1());
+        member.setRegDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
         memberService.insertMember(member);
 

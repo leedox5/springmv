@@ -1,6 +1,6 @@
 <html layout:decorate="~{thymeleaf/club/layout}">
 <div layout:fragment="content" class="container-fluid my-2">
-    <div class="btn-toolbar justify-content-end mb-1" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? true : false}">
+    <div class="btn-toolbar justify-content-end mb-1" th:if="${#authorization.expression('hasRole(''ROLE_GOLD'')') ? true : false}">
         <div class="btn-group btn-group-sm">
             <a th:href="@{/club/create}" class="btn btn-sm btn-primary">모임 추가</a>
         </div>

@@ -1,11 +1,17 @@
 <html layout:decorate="~{thymeleaf/club/layout}">
 <div layout:fragment="content" class="container my-3">
-    <div class="my-3 border-bottom">
-        <div>
+    <div class="row border-bottom">
+        <div class="col-6">
             <h4>회원정보</h4>
         </div>
+        <div class="col-6 text-end" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? true : false}">
+            <form th:action="|@{/club/member/reset/}${member.id}|" th:object="${member}" method="post">
+                <button type="submit" class="btn btn-sm btn-primary">비밀번호 초기화</button>
+            </form>
+        </div>
     </div>
-    <form th:action="|@{/club/member/reset/}${member.id}|" th:object="${member}" method="post">
+
+    <form th:action="|@{/club/member/save/}${member.id}|" th:object="${member}" method="post">
         <div th:replace="thymeleaf/errors :: formErrorsFragment"></div>
         <div class="mb-2">
             <label for="email" class="form-label">이메일</label>
@@ -15,7 +21,20 @@
             <label for="username" class="form-label">이름</label>
             <input type="text" th:field="*{username}" class="form-control">
         </div>
-        <button type="submit" class="btn btn-sm btn-primary">비밀번호 초기화</button>
+        <div class="mb-2">
+            <label for="username" class="form-label">업데이트</label>
+            <input type="text" th:field="*{regDate}" class="form-control">
+        </div>
+        <div class="mb-2">
+            <h6>사용 권한</h6>
+        </div>
+        <div th:each="role : ${roles}">
+            <input type="checkbox" th:field="*{roles}" th:value="${role.id}" class="form-check-input">
+            <label th:for="${#ids.prev('roles')}" th:text="${role.name}" class="form-check-label"></label>
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-sm btn-primary">저장</button>
+        </div>
     </form>
 </div>
 </html>
