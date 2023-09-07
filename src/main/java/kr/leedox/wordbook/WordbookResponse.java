@@ -5,6 +5,7 @@ import kr.leedox.entity.Wordbook;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -17,4 +18,5 @@ public class WordbookResponse {
     private String selOpt;
     private List<Wordbook> words;
     private List<WordMeaning> wordMeanings;
+    private Page<Wordbook> paging;
 }

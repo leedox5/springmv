@@ -2,8 +2,14 @@ $.chkCreate = function() {
     console.log("Hello, this is create.js!");
 }
 
-$("form").on("submit", function(e) {
+/*
+$("#form10").on("submit", function(e) {
+    alert("Hello!");
     event.preventDefault();
+});
+*/
+
+$("form").on("submit", function(e) {
     /*
     if($("input").first().val() == "") {
         $("#msg").text("단어는 필수!!").show().fadeOut(3000);
@@ -48,7 +54,9 @@ $("form").on("submit", function(e) {
             alert("Request Error!");
         }
     });
+    event.preventDefault();
 });
+
 /*
 $(document).on("click", "#btn_save", function(event) {
     if($("input").first().val() == "") {

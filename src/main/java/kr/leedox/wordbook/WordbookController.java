@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +75,28 @@ public class WordbookController {
         }
         model.addAttribute("path", path);
 
+        return "thymeleaf/wordbook/detail";
+    }
+
+    @GetMapping(value = {"/worddiv/{id}", "/worddiv/{id}/{opt}", "/worddiv/{id}/{opt}/{key}"})
+    public String wordDiv(@PathVariable Integer id,
+                       @PathVariable(required = false) Optional<String> opt,
+                       @PathVariable(required = false) Optional<String> key, Model model) {
+        model.addAttribute("id", id);
+
+        String path = "";
+
+        if (opt.isPresent()) {
+            model.addAttribute("opt", opt.get());
+            path = opt.get();
+        }
+
+        if (key.isPresent()) {
+            model.addAttribute("key", key.get());
+            path += "/" + key.get();
+        }
+        model.addAttribute("path", path);
+
         return "thymeleaf/wordbook/detail_div";
     }
 
@@ -112,4 +137,16 @@ public class WordbookController {
     public String add() {
         return "thymeleaf/wordbook/create";
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/add")
+    public String createWordbook(@Valid WordbookForm wordbookForm, BindingResult bindingResult, Principal principal) {
+        if(bindingResult.hasErrors()) {
+            return "thymeleaf/wordbook/create";
+        }
+        Member member = memberService.getMember(principal.getName());
+        wordService.create(wordbookForm, member);
+        return "redirect:/wordbook";
+    }
+
 }

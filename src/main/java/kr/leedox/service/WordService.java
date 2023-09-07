@@ -57,24 +57,48 @@ public class WordService {
 	public Wordbook getWordbookByWord(String word) {
         Wordbook wordbook = null;
 
+        if("10010".equals(word)) {
+            checkInitData(word, "소개");
+            checkDetailData(word, "Welcome to W-Book");
+        }
+
+        if("10030".equals(word)) {
+            checkInitData(word, "redirect:/wordbook/");
+        }
+
+        if("10050".equals(word)) {
+            checkInitData(word, "소개");
+            checkDetailData(word, "Welcome to T-Matches");
+        }
+
 		List<Wordbook> wordbookList = wordRepository.findByWord(word);
 
-		if(wordbookList.isEmpty()) {
-            WordbookForm form = new WordbookForm();
-            form.setWord("10050");
-            form.setMeaning1("소개");
-            form.setSeq(0);
-            Member member = memberService.getMember(1);
-            this.create(form, member);
-            wordbook = wordRepository.findByWord(word).get(0);
-            WordMeaning wordMeaning = new WordMeaning();
-            wordMeaning.setMeaning("Welcome to T-Matches");
-            wordMeaningService.save(wordbook, wordMeaning);
-            return wordbook;
-		} else {
-            return wordbookList.get(0);
-        }
+        return wordbookList.get(0);
 	}
+
+    private void checkDetailData(String word, String detail) {
+        Wordbook wordbook = wordRepository.findByWord(word).get(0);
+        List<WordMeaning> wordMeanings = wordMeaningService.getWordMeanings(wordbook);
+        if(wordMeanings.isEmpty()) {
+            WordMeaning wordMeaning = new WordMeaning();
+            wordMeaning.setMeaning(detail);
+            wordMeaningService.save(wordbook, wordMeaning);
+        }
+    }
+
+    private void checkInitData(String word, String meaning) {
+        List<Wordbook> wordbookList = wordRepository.findByWord(word);
+        if(wordbookList.isEmpty()) {
+            WordbookForm form = new WordbookForm();
+            form.setWord(word);
+            form.setMeaning1(meaning);
+            form.setSeq(0);
+
+            Member member = memberService.getMember("leedox@naver.com");
+
+            create(form, member);
+        }
+    }
 
     public Wordbook saveWordbook(Wordbook wordbook) {
         wordbook.setAccess(wordbook.getAccess() + 1);
@@ -130,7 +154,13 @@ public class WordService {
     public Page<Wordbook> searchListPaging(Member author, Optional<String> opt, Optional<String> key, Integer page) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by("updDate").descending());
 
-        Specification<Wordbook> spec = Specification.where(WordbookSpcifications.equalToAuthor(author));
+        Specification<Wordbook> spec = null;
+
+        if(author == null) {
+            spec = Specification.where(WordbookSpcifications.equalToSeq(-1));
+        } else {
+            spec = Specification.where(WordbookSpcifications.equalToAuthor(author));
+        }
 
         String option = opt.isPresent() ? opt.get() : "";
 

@@ -53,7 +53,7 @@ const afterGetDetail = (res) => {
         data = res.data;
         console.log(data);
 
-        $("#username").text(data.username);
+        //$("#username").text(data.username);
 
         $("#word_id").val(data.words[0].id);
 

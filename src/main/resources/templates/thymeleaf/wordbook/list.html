@@ -1,8 +1,5 @@
 <html layout:decorate="~{thymeleaf/layout}">
 <div layout:fragment="content" class="container my-2">
-    <div class="mt-1 mb-1">
-        <span id="username"></span>님 반갑습니다.
-    </div>
     <div class="input-group input-group-sm mb-2">
         <div class="input-group-prepend">
             <select class="form-select" name="opt" id="opt"></select>
@@ -74,7 +71,6 @@ const afterGetData = (res) => {
     if(res.status == 200) {
         data = res.data;
         console.log(data);
-        $("#username").text(data.username);
         setOpts(data.opts, data.selOpt);
         setGrid(data.words);
     } else {

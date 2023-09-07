@@ -47,7 +47,7 @@ public class WordbookRestController {
             Wordbook wordbook = wordService.getWordbook(id);
             List<Wordbook> words = new ArrayList<>();
             words.add(wordbook);
-            WordbookResponse wordbookResponse = new WordbookResponse(null, null, null, words, (List<WordMeaning>) wordbook.getWordMeanings());
+            WordbookResponse wordbookResponse = new WordbookResponse(null, null, null, words, (List<WordMeaning>) wordbook.getWordMeanings(), null);
             return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
         } catch(Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
@@ -58,8 +58,16 @@ public class WordbookRestController {
     public ResponseEntity<?> getPage(Principal principal, @PathVariable Integer page) {
         Member member = memberService.getMember(principal.getName());
         Page<Wordbook> paging = wordService.getListByAuthorPaging(member, page);
-        //WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), null, null, (List<Wordbook>) paging, null);
-        return ResponseHandler.generateResponse("OK", HttpStatus.OK, paging);
+        paging.getContent();
+        WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), getOpts(), "eng", paging.getContent(), null, paging);
+        return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
+    }
+
+    private List<SearchOption> getOpts() {
+        List<SearchOption> opts = new ArrayList<SearchOption>();
+        opts.add(new SearchOption("eng", "단어"));
+        opts.add(new SearchOption("kor", "의미"));
+        return opts;
     }
 
     @GetMapping("/words")
@@ -70,12 +78,8 @@ public class WordbookRestController {
             }
             Member member = memberService.getMember(principal.getName());
 
-            List<SearchOption> opts = new ArrayList<SearchOption>();
-            opts.add(new SearchOption("eng", "단어"));
-            opts.add(new SearchOption("kor", "의미"));
-
             List<Wordbook> words = wordService.getListByAuthor(member);
-            WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), opts, "eng", words, null);
+            WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), getOpts(), "eng", words, null, null);
 
             return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
         } catch (Exception e) {
@@ -87,13 +91,12 @@ public class WordbookRestController {
     public ResponseEntity<?> search(@PathVariable(required = false) Optional<String> opt,
                                     @PathVariable(required = false) Optional<String> key, Model model, Principal principal) {
         Member member = memberService.getMember(principal.getName());
-        List<Wordbook> words = wordService.searchList(member, opt, key);
 
-        List<SearchOption> opts = new ArrayList<SearchOption>();
-        opts.add(new SearchOption("eng", "단어"));
-        opts.add(new SearchOption("kor", "의미"));
+        // [2023.09.07] paging 처리
+        //List<Wordbook> words = wordService.searchList(member, opt, key);
+        Page<Wordbook> paging = wordService.searchListPaging(member, opt, key, 0);
 
-        WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), opts, opt.isPresent() ? opt.get() : "eng", words, null);
+        WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), getOpts(), opt.isPresent() ? opt.get() : "eng", paging.getContent(), null, paging);
         return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
     }
 
@@ -101,13 +104,10 @@ public class WordbookRestController {
     public ResponseEntity<?> search1(@PathVariable(required = false) Optional<String> opt,
                                     @PathVariable(required = false) Optional<String> key, Model model, Principal principal) {
         Member member = memberService.getMember(principal.getName());
-        List<Wordbook> words = wordService.searchList(opt, key);
+        //List<Wordbook> words = wordService.searchList(opt, key);
+        Page<Wordbook> paging = wordService.searchListPaging(null, opt, key, 0);
 
-        List<SearchOption> opts = new ArrayList<SearchOption>();
-        opts.add(new SearchOption("eng", "단어"));
-        opts.add(new SearchOption("kor", "의미"));
-
-        WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), opts, opt.isPresent() ? opt.get() : "eng", words, null);
+        WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), getOpts(), opt.isPresent() ? opt.get() : "eng", paging.getContent(), null, paging);
         return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
     }
 
@@ -119,7 +119,7 @@ public class WordbookRestController {
             }
             Member member = memberService.getMember(principal.getName());
             wordService.create(wordbook, member);
-            WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), null, null, null, null);
+            WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), null, null, null, null, null);
             return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
         } catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
@@ -158,7 +158,7 @@ public class WordbookRestController {
 
         model.addAttribute("path", path);
 
-        WordbookResponse wordbookResponse = new WordbookResponse(author.getMember().getUsername(), null, null, null, null);
+        WordbookResponse wordbookResponse = new WordbookResponse(author.getMember().getUsername(), null, null, null, null, null);
         return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
     }
 
