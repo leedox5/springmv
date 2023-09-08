@@ -44,11 +44,15 @@
     </div>
 </nav>
 <!-- 헤더 -->
-<div class="border-bottom text-end mt-1 mb-1">
-    <span id="username"></span>
-</div>
-<div class="container my-2">
-    <h5 id="tit" class="my-3 border-bottom pb-2">내단어장</h5>
+<div id="header" class="container my-2">
+    <div class="row border-bottom">
+        <div class="col-8">
+            <span id="tit"></span>
+        </div>
+        <div class="col-4 text-end">
+            <span id="username"></span>
+        </div>
+    </div>
 </div>
 <div id="top" class="container my-2">
     <div id="search" class="input-group input-group-sm mb-2">
@@ -270,8 +274,10 @@ $(document).on("click", "#btn1", function() {
 
     if(search_type == "MY") {
         var loc = `/data/search/0/${opt}`;
+        $("#tit").text("내단어장");
     } else {
         var loc = `/data/search1/0/${opt}`;
+        $("#tit").text("오픈단어장");
     }
 
     path = opt;
@@ -312,9 +318,11 @@ const link1 = document.getElementById("link1");
 
 if (link1) {
     link1.addEventListener('click', () => {
-        var loc = `/data/search`;
+        var loc = `/data/search/0`;
         $("#tit").text("내단어장");
         search_type = "MY";
+
+        console.log(loc);
 
         $("#main").load("/cont1.html", function(responseTxt, statusTxt, xhr) {
             if(statusTxt == "success") {
@@ -397,6 +405,7 @@ $(function() {
     } else {
         loc = "/data/wordspage/" + page
     }
+    $("#tit").text("내단어장");
 
     $("#main").load("/cont1.html", function(responseTxt, statusTxt, xhr) {
         if(statusTxt == "success") {
