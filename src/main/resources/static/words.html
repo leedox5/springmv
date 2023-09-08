@@ -173,14 +173,20 @@ const afterGetData = (res) => {
              prevTag += `   <li class="page-item disabled"> `;
         } else {
              prevTag += `   <li class="page-item"> `;
+             prevTag += `        <a class="page-link" href="?page=${paging.number - 1}"><span>◀</span></a> `;
         }
-        prevTag +=      `        <a class="page-link" href="?page=${paging.number - 1}"><span>◀</span></a> `;
         prevTag +=      `    </li>`;
 
         $(".pagination").append(prevTag);
 
         var pageTag = "";
         for(var i = 0 ; i < paging.totalPages ; i++) {
+            if(i < paging.number - 2) {
+                continue;
+            }
+            if( i > paging.number + 2) {
+                continue;
+            }
             if(i == paging.number) {
                 pageTag += `<li class="page-item active">`;
             } else {
@@ -196,8 +202,8 @@ const afterGetData = (res) => {
             nextTag += `    <li class="page-item disabled">`;
         } else {
             nextTag += `    <li class="page-item">`;
+            nextTag += `        <a class="page-link" href="?page=${paging.number + 1}"><span>▶</span></a>`;
         }
-        nextTag +=     `        <a class="page-link" href="?page=${paging.number + 1}"><span>▶</span></a>`;
         nextTag +=     `    </li>`;
 
         $(".pagination").append(nextTag);
