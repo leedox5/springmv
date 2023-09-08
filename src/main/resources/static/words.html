@@ -269,9 +269,9 @@ $(document).on("click", "#btn1", function() {
     var key = $("#key").val();
 
     if(search_type == "MY") {
-        var loc = `/data/search/${opt}`;
+        var loc = `/data/search/0/${opt}`;
     } else {
-        var loc = `/data/search1/${opt}`;
+        var loc = `/data/search1/0/${opt}`;
     }
 
     path = opt;
@@ -345,10 +345,11 @@ if (link2) {
 
 const getPageData = (page) => {
     if(search_type == "OPEN") {
-        var loc = `/data/search1/${page}`;
+        var loc = `/data/search1/${page}/${path}`;
     } else {
-        var loc = `/data/search/${page}`;
+        var loc = `/data/search/${page}/${path}`;
     }
+    console.log(loc);
     $("#main").load("/cont1.html", function(responseTxt, statusTxt, xhr) {
         if(statusTxt == "success") {
             $.getData(loc, afterGetData);

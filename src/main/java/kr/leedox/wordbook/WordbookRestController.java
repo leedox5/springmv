@@ -122,14 +122,15 @@ public class WordbookRestController {
         }
     }
 
-    @GetMapping( value = {"/search", "/search/{opt}", "/search/{opt}/{key}"})
-    public ResponseEntity<?> search(@PathVariable(required = false) Optional<String> opt,
+    @GetMapping( value = {"/search/{page}", "/search/{page}/{opt}", "/search/{page}/{opt}/{key}"})
+    public ResponseEntity<?> search(@PathVariable(required = false) Optional<Integer> page,
+                                    @PathVariable(required = false) Optional<String> opt,
                                     @PathVariable(required = false) Optional<String> key, Model model, Principal principal) {
         Member member = memberService.getMember(principal.getName());
 
         // [2023.09.07] paging 처리
         //List<Wordbook> words = wordService.searchList(member, opt, key);
-        Page<Wordbook> paging = wordService.searchListPaging(member, opt, key, 0);
+        Page<Wordbook> paging = wordService.searchListPaging(member, opt, key, page.orElse(0));
 
         WordbookResponse wordbookResponse = WordbookResponse.builder()
                 .username(member.getUsername())
@@ -145,7 +146,7 @@ public class WordbookRestController {
 
     @GetMapping( value = {"/search1/{page}", "/search1/{page}/{opt}", "/search1/{page}/{opt}/{key}"})
     public ResponseEntity<?> search1(@PathVariable(required = false) Optional<Integer> page, @PathVariable(required = false) Optional<String> opt,
-                                    @PathVariable(required = false) Optional<String> key, Model model, Principal principal) {
+                                     @PathVariable(required = false) Optional<String> key, Model model, Principal principal) {
         Member member = memberService.getMember(principal.getName());
         //List<Wordbook> words = wordService.searchList(opt, key);
         Page<Wordbook> paging = wordService.searchListPaging(null, opt, key, page.orElse(0));

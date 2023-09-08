@@ -3,7 +3,6 @@ $.getCheck = function() {
 }
 
 $.getData = function(loc, callback) {
-    console.log(loc);
     $.ajax({
         type: "GET",
         contentType: "application/json",
