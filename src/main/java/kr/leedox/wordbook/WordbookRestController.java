@@ -143,12 +143,12 @@ public class WordbookRestController {
         return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
     }
 
-    @GetMapping( value = {"/search1", "/search1/{opt}", "/search1/{opt}/{key}"})
-    public ResponseEntity<?> search1(@PathVariable(required = false) Optional<String> opt,
+    @GetMapping( value = {"/search1/{page}", "/search1/{page}/{opt}", "/search1/{page}/{opt}/{key}"})
+    public ResponseEntity<?> search1(@PathVariable(required = false) Optional<Integer> page, @PathVariable(required = false) Optional<String> opt,
                                     @PathVariable(required = false) Optional<String> key, Model model, Principal principal) {
         Member member = memberService.getMember(principal.getName());
         //List<Wordbook> words = wordService.searchList(opt, key);
-        Page<Wordbook> paging = wordService.searchListPaging(null, opt, key, 0);
+        Page<Wordbook> paging = wordService.searchListPaging(null, opt, key, page.orElse(0));
 
         WordbookResponse wordbookResponse = WordbookResponse.builder()
                 .username(member.getUsername())

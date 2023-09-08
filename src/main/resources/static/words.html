@@ -173,8 +173,8 @@ const afterGetData = (res) => {
              prevTag += `   <li class="page-item disabled"> `;
         } else {
              prevTag += `   <li class="page-item"> `;
-             prevTag += `        <a class="page-link" href="?page=${paging.number - 1}"><span>◀</span></a> `;
         }
+        prevTag += `        <a class="page-link" href="javascript:void(0);" onClick="return getPageData('${paging.number - 1}');">◀</a> `;
         prevTag +=      `    </li>`;
 
         $(".pagination").append(prevTag);
@@ -192,7 +192,9 @@ const afterGetData = (res) => {
             } else {
                 pageTag += `<li class="page-item">`;
             }
-            pageTag += `    <a class="page-link" href="?page=${i}">${i}</a>`;
+            //pageTag += `    <a class="page-link" href="?page=${i}">${i}</a>`;
+            pageTag += `    <a class="page-link" href="javascript:void(0);" onClick="return getPageData('${i}');">${i}</a> `;
+
             pageTag += `</li>`;
         }
         $(".pagination").append(pageTag);
@@ -202,8 +204,8 @@ const afterGetData = (res) => {
             nextTag += `    <li class="page-item disabled">`;
         } else {
             nextTag += `    <li class="page-item">`;
-            nextTag += `        <a class="page-link" href="?page=${paging.number + 1}"><span>▶</span></a>`;
         }
+        nextTag += `        <a class="page-link" href="javascript:void(0);" onClick="return getPageData('${paging.number + 1}');">▶</a> `;
         nextTag +=     `    </li>`;
 
         $(".pagination").append(nextTag);
@@ -327,17 +329,30 @@ const link2 = document.getElementById("link2");
 
 if (link2) {
     link2.addEventListener('click', () => {
-        var loc = `/data/search1`;
+        var loc = `/data/search1/0`;
 
         $("#tit").text("오픈단어장");
         search_type = "OPEN";
 
-        $.getData(loc, afterGetData);
+        //$.getData(loc, afterGetData);
         $("#main").load("/cont1.html", function(responseTxt, statusTxt, xhr) {
             if(statusTxt == "success") {
                 $.getData(loc, afterGetData);
             }
         });
+    });
+}
+
+const getPageData = (page) => {
+    if(search_type == "OPEN") {
+        var loc = `/data/search1/${page}`;
+    } else {
+        var loc = `/data/search/${page}`;
+    }
+    $("#main").load("/cont1.html", function(responseTxt, statusTxt, xhr) {
+        if(statusTxt == "success") {
+            $.getData(loc, afterGetData);
+        }
     });
 }
 
