@@ -273,10 +273,10 @@ $(document).on("click", "#btn1", function() {
     var key = $("#key").val();
 
     if(search_type == "MY") {
-        var loc = `/data/search/0/${opt}`;
+        var loc = `/data/search/${curPage}/${opt}`;
         $("#tit").text("내단어장");
     } else {
-        var loc = `/data/search1/0/${opt}`;
+        var loc = `/data/search1/${curPage}/${opt}`;
         $("#tit").text("오픈단어장");
     }
 
@@ -352,6 +352,7 @@ if (link2) {
 }
 
 const getPageData = (page) => {
+	curPage = page;
     if(search_type == "OPEN") {
         var loc = `/data/search1/${page}/${path}`;
     } else {
@@ -369,6 +370,7 @@ var data = {};
 var opt = "";
 var key = "";
 var path = "";
+var curPage = "0";
 
 var search_type = "MY";
 
