@@ -1,11 +1,12 @@
     <div class="row border-bottom">
-        <div class="col-4">
-            <h2 id="word"></h2>
+        <div class="col-8">
+            <h4 id="word"></h4>
         </div>
-        <div class="col-8 text-end">
+        <div class="col-4 text-end mb-1">
 			<button id="btn_d1" type="button" class="btn btn-sm btn-outline-primary">목록으로</button>
         </div>
     </div>
+
     <h6 class="small text-muted text-end mt-1">조회수 : <span id="access"></span></h6>
 
     <div id="collap24" class="collapse show mulcol024">
@@ -15,6 +16,7 @@
             </div>
             <div class="card-footer text-end comment">
                 <a href=".mulcol024" role="button" data-bs-toggle="collapse" class="small">수정</a>
+                <a href="#" class="small delete" data-uri="/data/word/delete/">삭제</a>
             </div>
         </div>
     </div>
@@ -49,13 +51,13 @@
 							</div>
 							<div class="card-footer text-end comment">
 								<a href=".mulcolTOGGLE_ID" role="button" data-bs-toggle="collapse" class="small">수정</a>
-								<a href="#" class="small delete" data-uri="/meaning/delete/56">삭제</a>
+								<a href="#" class="small delete" data-uri="/data/meaning/delete/TOGGLE_ID">삭제</a>
 							</div>
 						</div>
 					</div>
 					<div class="collapse mulcolTOGGLE_ID" id="comment">
-						<form class="my-2" action="/wordbook2/savemeaning/24/eng" method="post"><input type="hidden" name="_csrf" value="1bc203ba-aeed-4526-8cd3-6c1551bb98c1"/>
-							<input type="hidden" name="id" id="id" value="56">
+						<form id="formTOGGLE_ID" class="my-2" action="/data/meaning/save/TOGGLE_ID" method="post">
+							<input type="hidden" name="id" id="id" value="TOGGLE_ID">
 							<div class="mb-2">
 								<textarea  name="meaning" id="meaning" class="form-control" rows="4">MEANING</textarea>
 							</div>
@@ -74,7 +76,7 @@
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 
     <div class="mt-1 mb-2">
-        <textarea  name="meaning11" id="meaning111" class="form-control" rows="4"></textarea>
+        <textarea  name="memo" id="memo" class="form-control" rows="4"></textarea>
     </div>
     <div class="text-end">
         <button id="btn2" class="btn btn-sm btn-outline-primary">메모등록</button>

@@ -32,6 +32,109 @@ $(document).on("click", "#btn_d1", function() {
     });
 });
 
+$(document).on("click", ".delete", function(e) {
+    if(confirm("정말로 삭제하시겠습니까?")) {
+        var loc = e.target.dataset.uri;
+        var wordbook_id = $("#word_id").val();
+
+        if(loc == "/data/word/delete/") {
+            loc += wordbook_id;
+        }
+        console.log(loc);
+
+        $.ajax({
+            type: "GET",
+            contentType: "application/json",
+            url: loc,
+            data: null,
+            dataType: "json",
+            success: function(data) {
+                console.log(data);
+                if(loc.indexOf("meaning") > -1) {
+                    detail(wordbook_id);
+                } else {
+                    $("#btn_d1").trigger("click");
+                }
+            },
+            error: function(e) {
+                console.log(e.responseText);
+            }
+        });
+    }
+});
+
+// 메모수정
+$(document).on("submit", "form", function(e) {
+    e.preventDefault();
+    console.log($(this).serializeArray());
+
+    const url = e.target.action;
+    console.log(url);
+
+    const data = Object.fromEntries(new FormData(e.target).entries());
+    console.log(data);
+
+    var wordbook_id = $("#word_id").val();
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: url,
+        data: JSON.stringify(data),
+        dataType: "json",
+        beforeSend: function(jqXHR, settings) {
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var token = $("meta[name='_csrf']").attr("content");
+            jqXHR.setRequestHeader(header, token);
+        },
+        success: function(res) {
+            console.log(res);
+            detail(wordbook_id);
+        },
+        error: function(e) {
+            console.log(e.responseText)
+        }
+    });
+});
+
+// 메모등록
+$(document).on("click", "#btn2", function() {
+    var form_data = {};
+    form_data.meaning = $("#memo").val();
+
+    var id = $("#word_id").val();
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/data/savemeaning/" + id,
+        data: JSON.stringify(form_data),
+        dataType: "json",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success: function(data) {
+            var json = JSON.stringify(data, null, 4);
+            if(data.errorContent == "Y") {
+                //location.reload();
+                detail(id);
+            } else {
+                //$("#err").html(data.messages[0]);
+				alert(data.messages[0]);
+            }
+        },
+        error: function(e) {
+            //$("#err").html(e.responseText);
+			alert(e.responseText);
+            console.log(e);
+        }
+    });
+
+});
+
 // 의미 출력
 const dispData = (rows) => {
     var tag = $("#div1").html();

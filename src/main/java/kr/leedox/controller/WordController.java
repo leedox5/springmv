@@ -20,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -296,7 +295,7 @@ public class WordController {
                                     @PathVariable(required = false) Optional<String> opt,
                                     @PathVariable(required = false) Optional<String> key,
                                     Model model) {
-        WordMeaning wordMeaning = wordMeaningService.getWordbook(id);
+        WordMeaning wordMeaning = wordMeaningService.getWordMeaning(id);
         wordMeaningService.delete(wordMeaning);
         model.addAttribute("wordbook", wordMeaning.getWordbook());
 

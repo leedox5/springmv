@@ -1,5 +1,6 @@
 package kr.leedox.wordbook;
 
+import kr.leedox.common.ErrorResponse;
 import kr.leedox.entity.Member;
 import kr.leedox.entity.WordMeaning;
 import kr.leedox.entity.Wordbook;
@@ -12,16 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -47,7 +47,12 @@ public class WordbookRestController {
             Wordbook wordbook = wordService.getWordbook(id);
             List<Wordbook> words = new ArrayList<>();
             words.add(wordbook);
-            WordbookResponse wordbookResponse = new WordbookResponse(null, null, null, words, (List<WordMeaning>) wordbook.getWordMeanings(), null);
+
+            WordbookResponse wordbookResponse = WordbookResponse.builder()
+                    .words(words)
+                    .wordMeanings((List<WordMeaning>) wordbook.getWordMeanings())
+                    .build();
+            //WordbookResponse wordbookResponse = new WordbookResponse(null, null, null, words, (List<WordMeaning>) wordbook.getWordMeanings(), null);
             return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
         } catch(Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
@@ -59,8 +64,29 @@ public class WordbookRestController {
         Member member = memberService.getMember(principal.getName());
         Page<Wordbook> paging = wordService.getListByAuthorPaging(member, page);
         paging.getContent();
-        WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), getOpts(), "eng", paging.getContent(), null, paging);
+
+        WordbookResponse wordbookResponse = WordbookResponse.builder()
+                .username(member.getUsername())
+                .opts(getOpts())
+                .selOpt("eng")
+                .words(paging.getContent())
+                .paging(paging)
+                .cols(getCols())
+                .build();
+        //WordbookResponse wordbookResponse1 = new WordbookResponse(member.getUsername(), getOpts(), "eng", paging.getContent(), null, paging);
         return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
+    }
+
+    private List<Cols> getCols() {
+        Cols cols1 = new Cols("id", "ID", true, "text-end");
+        Cols cols2 = new Cols("word", "단어", true, "text-start");
+        Cols cols3 = new Cols("meaning1", "의미", true, "text-start");
+
+        List<Cols> cols =  List.of(cols1, cols2, cols3);
+
+        Wordbook wordbook = wordService.getWordbookByWord("202309.001");
+
+        return wordMeaningService.chkCols(wordbook, cols);
     }
 
     private List<SearchOption> getOpts() {
@@ -79,7 +105,16 @@ public class WordbookRestController {
             Member member = memberService.getMember(principal.getName());
 
             List<Wordbook> words = wordService.getListByAuthor(member);
-            WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), getOpts(), "eng", words, null, null);
+
+            WordbookResponse wordbookResponse = WordbookResponse.builder()
+                    .username(member.getUsername())
+                    .opts(getOpts())
+                    .selOpt("eng")
+                    .words(words)
+                    .cols(getCols())
+                    .build();
+
+            //WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), getOpts(), "eng", words, null, null);
 
             return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
         } catch (Exception e) {
@@ -96,7 +131,15 @@ public class WordbookRestController {
         //List<Wordbook> words = wordService.searchList(member, opt, key);
         Page<Wordbook> paging = wordService.searchListPaging(member, opt, key, 0);
 
-        WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), getOpts(), opt.isPresent() ? opt.get() : "eng", paging.getContent(), null, paging);
+        WordbookResponse wordbookResponse = WordbookResponse.builder()
+                .username(member.getUsername())
+                .opts(getOpts())
+                .selOpt(opt.isPresent() ? opt.get() : "eng")
+                .words(paging.getContent())
+                .paging(paging)
+                .cols(getCols())
+                .build();
+        //WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), getOpts(), opt.isPresent() ? opt.get() : "eng", paging.getContent(), null, paging);
         return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
     }
 
@@ -107,7 +150,16 @@ public class WordbookRestController {
         //List<Wordbook> words = wordService.searchList(opt, key);
         Page<Wordbook> paging = wordService.searchListPaging(null, opt, key, 0);
 
-        WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), getOpts(), opt.isPresent() ? opt.get() : "eng", paging.getContent(), null, paging);
+        WordbookResponse wordbookResponse = WordbookResponse.builder()
+                .username(member.getUsername())
+                .opts(getOpts())
+                .selOpt(opt.isPresent() ? opt.get() : "eng")
+                .words(paging.getContent())
+                .paging(paging)
+                .cols(getCols())
+                .build();
+
+        //WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), getOpts(), opt.isPresent() ? opt.get() : "eng", paging.getContent(), null, paging);
         return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
     }
 
@@ -119,7 +171,12 @@ public class WordbookRestController {
             }
             Member member = memberService.getMember(principal.getName());
             wordService.create(wordbook, member);
-            WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), null, null, null, null, null);
+
+            WordbookResponse wordbookResponse = WordbookResponse.builder()
+                    .username(member.getUsername())
+                    .build();
+
+            //WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), null, null, null, null, null);
             return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
         } catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
@@ -158,8 +215,50 @@ public class WordbookRestController {
 
         model.addAttribute("path", path);
 
-        WordbookResponse wordbookResponse = new WordbookResponse(author.getMember().getUsername(), null, null, null, null, null);
+        WordbookResponse wordbookResponse = WordbookResponse.builder()
+                .username(author.getMember().getUsername())
+                .build();
+
+        //WordbookResponse wordbookResponse = new WordbookResponse(author.getMember().getUsername(), null, null, null, null, null);
         return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
     }
 
+    @PostMapping("/savemeaning/{wordbook_id}")
+    public ResponseEntity<?> saveMeaning( @PathVariable Integer wordbook_id, @Valid @RequestBody WordMeaning wordMeaning, Errors errors) {
+        if(errors.hasErrors()) {
+            List<String> msg = errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList());
+            return ResponseEntity.ok(new ErrorResponse("404", "N", msg));
+        }
+        Wordbook wordbookRepo = wordService.getWordbook(wordbook_id);
+        wordMeaningService.save(wordbookRepo, wordMeaning);
+
+        return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
+    }
+
+
+    @PostMapping("/meaning/save/{id}")
+    public ResponseEntity<?> meaningSave( @PathVariable Integer id, @Valid @RequestBody WordMeaning wordMeaning, Errors errors) {
+        if(errors.hasErrors()) {
+            List<String> msg = errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList());
+            return ResponseEntity.ok(new ErrorResponse("404", "N", msg));
+        }
+        wordMeaningService.save(wordMeaning);
+
+        return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
+    }
+
+    @GetMapping("/meaning/delete/{id}")
+    public ResponseEntity<?> saveMeaning( @PathVariable Integer id) {
+        WordMeaning wordMeaning = wordMeaningService.getWordMeaning(id);
+        wordMeaningService.delete(wordMeaning);
+
+        return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
+    }
+
+    @GetMapping("/word/delete/{id}")
+    public ResponseEntity<?> deleteWord( @PathVariable Integer id) {
+        wordService.delete(id);
+
+        return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
+    }
 }

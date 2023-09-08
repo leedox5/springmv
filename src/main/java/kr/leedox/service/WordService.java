@@ -71,6 +71,9 @@ public class WordService {
             checkDetailData(word, "Welcome to T-Matches");
         }
 
+        if("202309.001".equals(word)) {
+            checkInitData(word, "컬럼정의");
+        }
 		List<Wordbook> wordbookList = wordRepository.findByWord(word);
 
         return wordbookList.get(0);
@@ -239,4 +242,8 @@ public class WordService {
         return wordRepository.findAll(pageable);
     }
 
+    public void delete(Integer id) {
+        Wordbook wordbook = getWordbook(id);
+        wordRepository.delete(wordbook);
+    }
 }

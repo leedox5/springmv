@@ -40,24 +40,4 @@ public class PlayerRestController {
         playerService.delete(player_id);
         return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
     }
-
-    @PostMapping("/wordbook/savemeaning1/{wordbook_id}")
-    public ResponseEntity<?> saveMeaning( @PathVariable Integer wordbook_id, @Valid @RequestBody WordMeaning wordMeaning, Errors errors) {
-        if(errors.hasErrors()) {
-            List<String> msg = errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList());
-            return ResponseEntity.ok(new ErrorResponse("404", "N", msg));
-        }
-        Wordbook wordbookRepo = wordService.getWordbook(wordbook_id);
-        wordMeaningService.save(wordbookRepo, wordMeaning);
-
-        return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
-    }
-
-    @GetMapping("/meaning/delete/{id}")
-    public ResponseEntity<?> saveMeaning( @PathVariable Integer id) {
-        WordMeaning wordMeaning = wordMeaningService.getWordbook(id);
-        wordMeaningService.delete(wordMeaning);
-
-		return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
-    }
 }
