@@ -291,6 +291,15 @@ $(document).on("click", "#btn1", function() {
     $.getData(loc, afterGetData);
 });
 
+$(document).on("change", "#opt", function() {
+	curPage = "0";
+});
+
+$(document).on("change", "#key", function() {
+	console.log(curPage);
+	curPage = "0";
+});
+
 // 추가
 $(document).on("click", "#btn_add", function() {
     $("#tit").text("단어 등록");
