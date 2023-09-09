@@ -59,7 +59,7 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/words.html")
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/wordbook2")
+                .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .and().rememberMe()
                 .userDetailsService(userSecurityService)
