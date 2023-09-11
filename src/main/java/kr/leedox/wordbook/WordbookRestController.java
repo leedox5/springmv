@@ -61,20 +61,26 @@ public class WordbookRestController {
 
     @GetMapping("/wordspage/{page}")
     public ResponseEntity<?> getPage(Principal principal, @PathVariable Integer page) {
-        Member member = memberService.getMember(principal.getName());
-        Page<Wordbook> paging = wordService.getListByAuthorPaging(member, page);
-        paging.getContent();
+        try {
+            if(principal == null) {
+                throw new Exception("LOGIN");
+            }
+            Member member = memberService.getMember(principal.getName());
+            Page<Wordbook> paging = wordService.getListByAuthorPaging(member, page);
+            paging.getContent();
 
-        WordbookResponse wordbookResponse = WordbookResponse.builder()
-                .username(member.getUsername())
-                .opts(getOpts())
-                .selOpt("eng")
-                .words(paging.getContent())
-                .paging(paging)
-                .cols(getCols())
-                .build();
-        //WordbookResponse wordbookResponse1 = new WordbookResponse(member.getUsername(), getOpts(), "eng", paging.getContent(), null, paging);
-        return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
+            WordbookResponse wordbookResponse = WordbookResponse.builder()
+                    .username(member.getUsername())
+                    .opts(getOpts())
+                    .selOpt("eng")
+                    .words(paging.getContent())
+                    .paging(paging)
+                    .cols(getCols())
+                    .build();
+            return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
+        } catch(Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+        }
     }
 
     private List<Cols> getCols() {
