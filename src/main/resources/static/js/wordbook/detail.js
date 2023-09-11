@@ -1,6 +1,6 @@
 $.chkDetail = function(id) {
     console.log("Hello, this is detail.js! id==>" + id);
-    $("#div1").hide();
+    //$("#div1").hide();
     var loc = `/data/words/${id}`
     $.getData(loc, afterGetDetail);
 }
@@ -26,7 +26,7 @@ $(document).on("click", "#btn_d1", function() {
     $("#main").load("/cont1.html", function(responseTxt, statusTxt, xhr) {
         if(statusTxt == "success") {
             //$.getData(loc, afterGetData);
-            $("#search").show();
+            $("#top").show();
             $("#btn1").trigger("click");
         }
     });
@@ -148,7 +148,7 @@ const dispData = (rows) => {
         console.log(tag1);
         $("#div1").append(tag1);
     });
-    $("#div1").show();
+    $("#main").show();
 }
 
 // 데이터를 가져온후
@@ -192,7 +192,7 @@ const afterGetDetail = (res) => {
 
         dispData(data.wordMeanings);
 
-        $("#search").hide();
+        //$("#search").hide();
     } else {
         alert(res.message);
     }

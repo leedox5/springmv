@@ -230,7 +230,8 @@ const afterGetData = (res) => {
 const detail = (id) => {
     console.log("WORD ID:" + id);
 
-	$("#search").hide();
+	$("#top").hide();
+	$("#main").hide();
 
     $("#main").load("/wordbook/worddiv/" + id, function() {
         if(typeof $.chkDetail === "undefined") {
