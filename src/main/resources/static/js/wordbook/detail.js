@@ -1,6 +1,6 @@
 $.chkDetail = function(id) {
     console.log("Hello, this is detail.js! id==>" + id);
-    $("#div10").hide();
+    $("#div1").hide();
     var loc = `/data/words/${id}`
     $.getData(loc, afterGetDetail);
 }
@@ -148,6 +148,7 @@ const dispData = (rows) => {
         console.log(tag1);
         $("#div1").append(tag1);
     });
+    $("#div1").show();
 }
 
 // 데이터를 가져온후
