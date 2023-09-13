@@ -9,7 +9,7 @@ $("#form10").on("submit", function(e) {
 });
 */
 
-$("form").on("submit", function(e) {
+$("#form10").on("submit", function(e) {
     /*
     if($("input").first().val() == "") {
         $("#msg").text("단어는 필수!!").show().fadeOut(3000);
