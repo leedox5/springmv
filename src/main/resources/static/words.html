@@ -305,13 +305,16 @@ $(document).on("change", "#key", function() {
 $(document).on("click", "#btn_add", function() {
     $("#tit").text("단어 등록");
     $("#search").hide();
-    $("#main").load("/wordbook/add");
-    if(typeof $.chkCreate === "undefined") {
-        $.getScript("/js/wordbook/create.js", function() {
-            console.log("create.js was loaded!");
-            $.chkCreate();
-        });
-    }
+    $("#main").load("/wordbook/add", function(responseTxt, statusTxt, xhr) {
+        if(statusTxt == "success") {
+            if(typeof $.chkCreate === "undefined") {
+                $.getScript("/js/wordbook/create.js", function() {
+                    console.log("create.js was loaded!");
+                    $.chkCreate();
+                });
+            }
+        }
+    });
 });
 
 // 소개
