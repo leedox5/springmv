@@ -332,6 +332,9 @@ if (link1) {
         $("#tit").text("내단어장");
         search_type = "MY";
 
+        $("#key").val("");
+        path = "";
+
         console.log(loc);
 
         $("#main").load("/cont1.html", function(responseTxt, statusTxt, xhr) {
@@ -351,6 +354,9 @@ if (link2) {
 
         $("#tit").text("오픈단어장");
         search_type = "OPEN";
+
+        $("#key").val("");
+        path = "";
 
         //$.getData(loc, afterGetData);
         $("#main").load("/cont1.html", function(responseTxt, statusTxt, xhr) {
