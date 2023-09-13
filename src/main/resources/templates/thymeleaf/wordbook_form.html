@@ -14,6 +14,19 @@
             <label for="meaning1">의미</label>
             <textarea th:field="*{meaning1}" class="form-control" name="meaning1" id="meaning1" rows="5"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">저장</button>
+        <div class="mb-2">
+            <h6>공개</h6>
+        </div>
+        <div th:each="open : ${opens}" class="form-check form-check-inline">
+            <input type="radio" th:field="*{seq}" th:value="${open.val}" class="form-check-input">
+            <label th:for="${#ids.prev('seq')}" th:text="${open.name}" class="form-check-label"></label>
+        </div>
+        <div class="mb-2 text-end">
+            <button type="submit" class="btn btn-sm btn-primary">저장</button>
+            <a th:href="@{/wordbook2}" class="btn btn-sm btn-primary">취소</a>
+        </div>
     </form>
 </div>
+<script layout:fragment="script" type='text/javascript'>
+    document.getElementById("seq1").setAttribute("checked", "checked");
+</script>

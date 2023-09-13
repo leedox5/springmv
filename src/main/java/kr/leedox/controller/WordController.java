@@ -1,12 +1,10 @@
 package kr.leedox.controller;
 
 import kr.leedox.entity.Member;
+import kr.leedox.entity.Role;
 import kr.leedox.entity.WordMeaning;
 import kr.leedox.entity.Wordbook;
-import kr.leedox.service.MemberAdapter;
-import kr.leedox.service.MemberService;
-import kr.leedox.service.WordMeaningService;
-import kr.leedox.service.WordService;
+import kr.leedox.service.*;
 import kr.leedox.wordbook.WordbookForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class WordController {
@@ -40,6 +37,8 @@ public class WordController {
     @Autowired
     MemberService memberService;
 
+    @Autowired
+    RoleService roleService;
     /*
     @GetMapping("/wordbook")
     public String getList(Model model) {
@@ -330,14 +329,29 @@ public class WordController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/wordbook2/create")
-    public String createWord2(WordbookForm wordbookForm) {
+    public String createWord2(WordbookForm wordbookForm, Model model) {
+        List<Open> opens = new ArrayList<>();
+        Open open1 = Open.builder().id(1).name("공개").val(-1).build();
+        Open open2 = Open.builder().id(2).name("비공개").val(0).build();
+
+        opens.add(open1);
+        opens.add(open2);
+
+        model.addAttribute("opens", opens);
         return "thymeleaf/wordbook_form";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/wordbook2/create")
-    public String createWordbook(@Valid WordbookForm wordbookForm, BindingResult bindingResult, Principal principal) {
+    public String createWordbook(@Valid WordbookForm wordbookForm, BindingResult bindingResult, Principal principal, Model model) {
         if(bindingResult.hasErrors()) {
+            List<Open> opens = new ArrayList<>();
+            Open open1 = Open.builder().id(1).name("공개").val(-1).build();
+            Open open2 = Open.builder().id(2).name("비공개").val(0).build();
+
+            opens.add(open1);
+            opens.add(open2);
+            model.addAttribute("opens", opens);
             return "thymeleaf/wordbook_form";
         }
         Member member = memberService.getMember(principal.getName());
