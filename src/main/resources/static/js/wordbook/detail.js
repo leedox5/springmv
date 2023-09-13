@@ -145,6 +145,13 @@ const dispData = (rows) => {
         tag1 = tag1.replaceAll("TOGGLE_ID", item.id);
         tag1 = tag1.replaceAll("UPD_DATE" , item.updDate);
         tag1 = tag1.replaceAll("MEANING"  , item.meaning);
+        if(index == 0) {
+            tag1 = tag1.replaceAll("CLASS_SHOW", "show");
+            tag1 = tag1.replaceAll("CLASS_COLLAPSED", "");
+        } else {
+            tag1 = tag1.replaceAll("CLASS_SHOW", "");
+            tag1 = tag1.replaceAll("CLASS_COLLAPSED", "collapsed");
+        }
         console.log(tag1);
         $("#div1").append(tag1);
     });

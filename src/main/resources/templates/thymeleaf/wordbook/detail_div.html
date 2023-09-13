@@ -37,15 +37,14 @@
         </form>
     </div>
 
-    <div id="div1">
+    <div id="div1" class="accordion">
         <div class="accordion-item">
             <h2 class="accordion-header" id="HEADING_ID">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" aria-expanded="true" data-bs-target="#COLLAPSE_ID">학습일 :  UPD_DATE</button>
+                <button class="accordion-button CLASS_COLLAPSED" type="button" data-bs-toggle="collapse" aria-expanded="true" data-bs-target="#COLLAPSE_ID">학습일 :  UPD_DATE</button>
             </h2>
-            <div id="COLLAPSE_ID" class="accordion-collapse collapse show" aria-labelledby="HEADING_ID">
-                <div class="accordion-body">
+            <div id="COLLAPSE_ID" class="accordion-collapse collapse CLASS_SHOW" aria-labelledby="HEADING_ID" data-bs-parent="#div1">
 					<div id="collapTOGGLE_ID" class="collapse show mulcolTOGGLE_ID">
-						<div class="card mt-1" >
+						<div class="card mx-1 my-1" >
 							<div class="card-body">
 								<span style="white-space: pre-line;">MEANING</span>
 							</div>
@@ -56,7 +55,7 @@
 						</div>
 					</div>
 					<div class="collapse mulcolTOGGLE_ID" id="comment">
-						<form id="formTOGGLE_ID" class="my-2" action="/data/meaning/save/TOGGLE_ID" method="post">
+						<form id="formTOGGLE_ID" class="mx-1 my-1" action="/data/meaning/save/TOGGLE_ID" method="post">
 							<input type="hidden" name="id" id="id" value="TOGGLE_ID">
 							<div class="mb-2">
 								<textarea  name="meaning" id="meaning" class="form-control" rows="4">MEANING</textarea>
@@ -67,7 +66,6 @@
 							</div>
 						</form>
 					</div>
-                </div>
             </div>
         </div>	    
     </div>
