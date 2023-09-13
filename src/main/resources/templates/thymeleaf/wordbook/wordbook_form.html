@@ -1,4 +1,4 @@
-<html layout:decorate="~{thymeleaf/wordbook/layout}">
+<html layout:decorate="~{thymeleaf/layout}">
 <div layout:fragment="content" class="container my-3">
     <h5 class="my-3 border-bottom pb-2">단어 등록</h5>
     <form method="post" th:object="${wordbookForm}" class="post-form my-3">
@@ -15,7 +15,7 @@
             <textarea th:field="*{meaning1}" class="form-control" name="meaning1" id="meaning1" rows="5"></textarea>
         </div>
         <div class="mb-2">
-            <h6>공개 여부</h6>
+            <h6>공개</h6>
         </div>
         <div th:each="open : ${opens}" class="form-check form-check-inline">
             <input type="radio" th:field="*{seq}" th:value="${open.val}" class="form-check-input">
@@ -23,7 +23,7 @@
         </div>
         <div class="mb-2 text-end">
             <button type="submit" class="btn btn-sm btn-primary">저장</button>
-            <a th:href="@{/}" class="btn btn-sm btn-primary">취소</a>
+            <a th:href="@{/wordbook2}" class="btn btn-sm btn-primary">취소</a>
         </div>
     </form>
 </div>

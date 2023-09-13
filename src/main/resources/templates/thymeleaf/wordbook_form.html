@@ -15,7 +15,7 @@
             <textarea th:field="*{meaning1}" class="form-control" name="meaning1" id="meaning1" rows="5"></textarea>
         </div>
         <div class="mb-2">
-            <h6>공개</h6>
+            <h6>공개 여부</h6>
         </div>
         <div th:each="open : ${opens}" class="form-check form-check-inline">
             <input type="radio" th:field="*{seq}" th:value="${open.val}" class="form-check-input">

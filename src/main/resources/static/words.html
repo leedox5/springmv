@@ -303,6 +303,7 @@ $(document).on("change", "#key", function() {
 
 // 추가
 $(document).on("click", "#btn_add", function() {
+	/* ---
     $("#tit").text("단어 등록");
     $("#search").hide();
     $("#main").load("/wordbook/add", function(responseTxt, statusTxt, xhr) {
@@ -315,6 +316,8 @@ $(document).on("click", "#btn_add", function() {
             }
         }
     });
+	--- */
+    window.location.href = "/wordbook/add"
 });
 
 // 소개
@@ -422,13 +425,25 @@ $(function() {
     const page = urlParam.has("page") ? urlParam.get("page") : "0";
     console.log(page);
 
+    const type = urlParam.has("type") ? urlParam.get("type") : "MY";
     var loc = "";
+
+    /*
     if(path) {
         loc = "/data/search/" + path;
     } else {
         loc = "/data/wordspage/" + page
     }
-    $("#tit").text("내단어장");
+	*/
+	if(type == "MY") {
+		search_type = "MY";
+        $("#tit").text("내단어장");
+		loc = "/data/search/0";
+	} else {
+		search_type = "OPEN";
+        $("#tit").text("오픈단어장");
+		loc = "/data/search1/0";
+	}
 
     $("#main").load("/cont1.html", function(responseTxt, statusTxt, xhr) {
         if(statusTxt == "success") {

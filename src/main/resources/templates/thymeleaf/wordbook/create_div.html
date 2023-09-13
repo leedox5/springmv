@@ -1,0 +1,23 @@
+    <div id="msg"></div>
+    <form id="form10" class="post-form my-3" method="post" >
+        <div class="mb-2">
+            <label for="word">단어</label>
+            <input type="text" class="form-control" name="word" id="word" value="">
+        </div>
+        <div class="mb-2">
+            <label for="meaning1">의미</label>
+            <textarea class="form-control" name="meaning1" id="meaning1" rows="5"></textarea>
+        </div>
+        <div class="mb-2 form-group form-check">
+            <label class="form-check-label" for="share">공개</label>
+            <input type="checkbox" class="form-check-input" name="share" id="share" checked>
+        </div>
+		<div class="text-end">
+            <button id="btn_save" type="submit" class="btn btn-sm btn-primary">저장</button>
+            <button id="btn_cancel" type="button" class="btn btn-sm btn-primary">취소</button>
+		</div>
+    </form>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    

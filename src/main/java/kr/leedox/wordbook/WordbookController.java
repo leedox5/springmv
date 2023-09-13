@@ -2,8 +2,10 @@ package kr.leedox.wordbook;
 
 import kr.leedox.entity.Member;
 import kr.leedox.entity.Wordbook;
+import kr.leedox.controller.Open;
 import kr.leedox.service.MemberService;
 import kr.leedox.service.WordService;
+import kr.leedox.wordbook.WordbookForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -16,8 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/wordbook")
@@ -134,19 +135,36 @@ public class WordbookController {
     }
 
     @GetMapping("/add")
-    public String add() {
+    public String add(WordbookForm wordbookForm, Model model) {
+        List<Open> opens = new ArrayList<>();
+        Open open1 = Open.builder().id(1).name("공개").val(-1).build();
+        Open open2 = Open.builder().id(2).name("비공개").val(0).build();
+
+        opens.add(open1);
+        opens.add(open2);
+
+        model.addAttribute("opens", opens);
+
         return "thymeleaf/wordbook/create";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/add")
-    public String createWordbook(@Valid WordbookForm wordbookForm, BindingResult bindingResult, Principal principal) {
+    public String createWordbook(@Valid WordbookForm wordbookForm, BindingResult bindingResult, Principal principal, Model model) {
         if(bindingResult.hasErrors()) {
+            List<Open> opens = new ArrayList<>();
+            Open open1 = Open.builder().id(1).name("공개").val(-1).build();
+            Open open2 = Open.builder().id(2).name("비공개").val(0).build();
+
+            opens.add(open1);
+            opens.add(open2);
+            model.addAttribute("opens", opens);
+
             return "thymeleaf/wordbook/create";
         }
         Member member = memberService.getMember(principal.getName());
         wordService.create(wordbookForm, member);
-        return "redirect:/wordbook";
+        return "redirect:/";
     }
 
 }
