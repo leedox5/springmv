@@ -64,7 +64,7 @@ $(document).on("click", ".delete", function(e) {
 });
 
 // 메모수정
-$(document).on("submit", "form", function(e) {
+$(document).on("submit", ".meaning", function(e) {
     e.preventDefault();
     console.log($(this).serializeArray());
 
