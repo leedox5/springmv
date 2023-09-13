@@ -325,6 +325,7 @@ const link3 = document.getElementById("link3");
 
 if (link3) {
     link3.addEventListener('click', () => {
+		$("#top").hide();
         $("#main").load("/wordbook/intro");
     });
 }
@@ -435,21 +436,26 @@ $(function() {
         loc = "/data/wordspage/" + page
     }
 	*/
-	if(type == "MY") {
-		search_type = "MY";
-        $("#tit").text("내단어장");
-		loc = "/data/search/0";
+    if(type == "IN") {
+		$("#top").hide();
+		$("#main").load("/wordbook/intro");
 	} else {
-		search_type = "OPEN";
-        $("#tit").text("오픈단어장");
-		loc = "/data/search1/0";
-	}
+		if(type == "MY") {
+			search_type = "MY";
+			$("#tit").text("내단어장");
+			loc = "/data/search/0";
+		} else {
+			search_type = "OPEN";
+			$("#tit").text("오픈단어장");
+			loc = "/data/search1/0";
+		}
 
-    $("#main").load("/cont1.html", function(responseTxt, statusTxt, xhr) {
-        if(statusTxt == "success") {
-            $.getData(loc, afterGetData);
-        }
-    });
+		$("#main").load("/cont1.html", function(responseTxt, statusTxt, xhr) {
+			if(statusTxt == "success") {
+				$.getData(loc, afterGetData);
+			}
+		});
+	}
 
     /* ---
     if(path) {
