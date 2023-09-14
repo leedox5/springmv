@@ -38,7 +38,7 @@ window.paypal
     },
     async onApprove(data, actions) {
       try {
-        const response = await fetch(`/api/orders/${data.orderID}/capture`, {
+        const response = await fetch(`/club/orders/${data.orderID}/capture`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
