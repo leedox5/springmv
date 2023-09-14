@@ -101,6 +101,11 @@
 			<scope>system</scope>
 			<systemPath>${webapp.lib}/leedox-1.0-SNAPSHOT.jar</systemPath>
 		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20220924</version>
+		</dependency>
 	</dependencies>
 
 	<build>
