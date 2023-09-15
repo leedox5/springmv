@@ -52,11 +52,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain clubFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests().antMatchers("/**").permitAll()
-                .and().csrf().ignoringAntMatchers("/club/**")
+                .and().csrf().ignoringAntMatchers("/wordbook/**")
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/words.html")
+                .defaultSuccessUrl("/wordbook/")
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/")

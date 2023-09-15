@@ -1,12 +1,22 @@
 package kr.leedox.paypal;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.leedox.entity.Order;
+import kr.leedox.wordbook.OrderDTO;
+import kr.leedox.wordbook.OrderRepository;
+import kr.leedox.wordbook.OrderResponseDTO;
+import kr.leedox.wordbook.PaypalConfig;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,12 +24,20 @@ import java.util.logging.Logger;
 @RestController
 public class PayPalController {
 
-    private final String BASE = "https://api-m.sandbox.paypal.com";
     private final static Logger LOGGER =  Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    private final ObjectMapper objectMapper;
+    private final PaypalConfig paypalConfig;
+
+    @Autowired
+    OrderRepository orderRepository;
+    public PayPalController(ObjectMapper objectMapper, PaypalConfig paypalConfig) {
+        this.objectMapper = objectMapper;
+        this.paypalConfig = paypalConfig;
+    }
 
     @RequestMapping(value = "/club/orders", method = RequestMethod.POST)
     @CrossOrigin
-    public Object createOrder() {
+    public Object createOrder(@RequestBody OrderDTO orderDTO) throws JsonProcessingException {
         String accessToken = generateAccessToken();
         RestTemplate restTemplate = new RestTemplate();
 
@@ -31,11 +49,14 @@ public class PayPalController {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         //JSON String
-        String requestJson = "{\"intent\":\"CAPTURE\",\"purchase_units\":[{\"amount\":{\"currency_code\":\"USD\",\"value\":\"100.00\"}}]}";
+        //String requestJson = "{\"intent\":\"CAPTURE\",\"purchase_units\":[{\"amount\":{\"currency_code\":\"USD\",\"value\":\"10.00\"}}]}";
+        String requestJson = objectMapper.writeValueAsString(orderDTO);
+        System.out.println(requestJson);
+
         HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
 
         ResponseEntity<Object> response = restTemplate.exchange(
-            BASE + "/v2/checkout/orders",
+            paypalConfig.getBaseUrl() + "/v2/checkout/orders",
                 HttpMethod.POST,
                 entity,
                 Object.class
@@ -52,7 +73,7 @@ public class PayPalController {
 
     @RequestMapping(value = "/club/orders/{orderId}/capture", method = RequestMethod.POST)
     @CrossOrigin
-    public Object capturePayment(@PathVariable("orderId") String orderId) {
+    public Object capturePayment(@PathVariable("orderId") String orderId) throws IOException {
         String accessToken = generateAccessToken();
         HttpHeaders headers = new HttpHeaders();
         RestTemplate restTemplate = new RestTemplate();
@@ -65,7 +86,7 @@ public class PayPalController {
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
         ResponseEntity<Object> response = restTemplate.exchange(
-                BASE + "/v2/checkout/orders/" + orderId + "/capture",
+                paypalConfig.getBaseUrl() + "/v2/checkout/orders/" + orderId + "/capture",
                 HttpMethod.POST,
                 entity,
                 Object.class
@@ -73,6 +94,14 @@ public class PayPalController {
 
         if (response.getStatusCode() == HttpStatus.CREATED) {
             LOGGER.log(Level.INFO, "ORDER CREATED");
+
+            String resJson = objectMapper.writeValueAsString(response.getBody());
+            var dto = objectMapper.readValue(resJson, OrderResponseDTO.class);
+            var order = new Order();
+            order.setPaypalOrderId(dto.getId());
+            order.setPaypalOrderStatus(dto.getStatus().toString());
+            orderRepository.save(order);
+
             return response.getBody();
         } else {
             LOGGER.log(Level.INFO, "FAILED CREATING ORDER");
@@ -94,7 +123,7 @@ public class PayPalController {
         HttpEntity<?> request = new HttpEntity<>(requestBody, headers);
         requestBody.add("grant_type", "client_credentials");
 
-        ResponseEntity<String> response = restTemplate.postForEntity(BASE + "/v1/oauth2/token", request, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(paypalConfig.getBaseUrl() + "/v1/oauth2/token", request, String.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
             LOGGER.log(Level.INFO, "GET TOKEN: SUCCESSFUL!");

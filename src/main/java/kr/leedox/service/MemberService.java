@@ -62,15 +62,25 @@ public class MemberService {
 
     private void chkAdminUser(String name) {
         List<Role> roles = roleRepository.findByName("ROLE_ADMIN");
+        Role role = Role.builder().name("ROLE_ADMIN").build();
+
         if(roles.isEmpty()) {
-            Role role = Role.builder().name("ROLE_ADMIN").build();
             role = roleRepository.save(role);
         }
 
-        Member member = memberRepository.findByemail(name).get();
+        Optional<Member> _member = memberRepository.findByemail(name);
+
+        Member member = Member.builder().email(name).username("이명호").build();
+        member.setPassword("12345678");
+
+        if(_member.isPresent()) {
+            member = _member.get();
+        } else {
+            member = save(member);
+        }
 
         if(member.getAuthorities().isEmpty()) {
-            Role role = roleRepository.findById(1).get();
+            //Role role = roleRepository.findById(1).get();
 
             List<Authority> authorities = new ArrayList<>();
             Authority authority = Authority.builder().member(member).role(role).build();

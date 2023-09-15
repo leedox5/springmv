@@ -1,34 +1,43 @@
 package kr.leedox.wordbook;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.leedox.common.ErrorResponse;
 import kr.leedox.entity.Member;
 import kr.leedox.entity.Wordbook;
 import kr.leedox.controller.Open;
 import kr.leedox.service.MemberService;
 import kr.leedox.service.WordService;
-import kr.leedox.wordbook.WordbookForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/wordbook")
 public class WordbookController {
+
+    private final static Logger LOGGER =  Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
+    private final ObjectMapper objectMapper;
 
     @Autowired
     MemberService memberService;
 
     @Autowired
     WordService wordService;
+
+    public WordbookController(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
@@ -132,6 +141,26 @@ public class WordbookController {
         Wordbook wordbook = wordService.getWordbookByWord("10010");
         model.addAttribute("wordbook", wordbook);
         return "thymeleaf/wordbook/intro";
+    }
+
+    @GetMapping("/success")
+    public String success(Model model) {
+        Wordbook wordbook = wordService.getWordbookByWord("10040");
+        model.addAttribute("wordbook", wordbook);
+        return "thymeleaf/wordbook/intro";
+    }
+    @GetMapping("/order")
+    public String order(Model model) {
+        return "thymeleaf/wordbook/order";
+    }
+
+    @PostMapping("/orders")
+    public Object createOrder(@RequestBody OrderDTO order) throws JsonProcessingException {
+        System.out.println(order);
+        String orderJson = objectMapper.writeValueAsString(order);
+        System.out.println(orderJson);
+
+        return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
     }
 
     @GetMapping("/add")
