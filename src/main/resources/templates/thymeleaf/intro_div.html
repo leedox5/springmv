@@ -25,7 +25,7 @@
         </form>
     </div>
 
-    <div th:each="wordMeaning : ${wordbook.getWordMeanings()}">
+    <div id="meanings" th:each="wordMeaning : ${wordbook.getWordMeanings()}">
         <div th:id="'collap' + ${wordMeaning.id}" th:class="'collapse show mulcol' + ${wordMeaning.id}">
             <div class="card mt-1" >
                 <div class="card-body">
@@ -46,3 +46,17 @@
             </form>
         </div>
     </div>
+
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/js/wordbook/list.js"></script>
+    <script>
+        const afterGetIntro = (res) => {
+            var data = res.data;
+            console.log(data);
+        }
+
+        console.log("inside intro_div.html");
+        const wordbookId = [[${wordbook.id}]];
+        var loc = `/data/words/${wordbookId}`
+        $.getData(loc, afterGetIntro);
+    </script>

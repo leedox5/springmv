@@ -131,7 +131,7 @@ public class WordbookController {
     public String getIntro(Model model) {
         Wordbook wordbook = wordService.getWordbookByWord("10010");
         model.addAttribute("wordbook", wordbook);
-        return "thymeleaf/intro_div";
+        return "thymeleaf/wordbook/intro";
     }
 
     @GetMapping("/add")
