@@ -110,9 +110,7 @@ public class PayPalController {
     }
 
     private String generateAccessToken() {
-        String auth = this.getAuth(
-                 "AXCCZ3DPNAIy4kpeYaxDqZNj6QigVcPtXNm2PSvhiFcKsMGUZhfeUUZtg55M3vWtLq5-oRxQ5w_tltKN",
-                "EDlYNMkpFAEwspn2M6pskBUESpYl8MTStU8Np4gmq7CUjuzBmsjYwC7-MLgERNOBBzgRUuw-bQ5hm7ek");
+        String auth = this.getAuth(paypalConfig.getClientId(), paypalConfig.getSecret());
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();

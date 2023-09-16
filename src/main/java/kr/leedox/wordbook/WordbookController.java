@@ -28,6 +28,7 @@ public class WordbookController {
     private final static Logger LOGGER =  Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     private final ObjectMapper objectMapper;
+	private final PaypalConfig paypalConfig;
 
     @Autowired
     MemberService memberService;
@@ -35,8 +36,9 @@ public class WordbookController {
     @Autowired
     WordService wordService;
 
-    public WordbookController(ObjectMapper objectMapper) {
+    public WordbookController(ObjectMapper objectMapper, PaypalConfig paypalConfig) {
         this.objectMapper = objectMapper;
+		this.paypalConfig = paypalConfig;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -151,6 +153,7 @@ public class WordbookController {
     }
     @GetMapping("/order")
     public String order(Model model) {
+		model.addAttribute("client_id", paypalConfig.getClientId() + "&currency=USD");
         return "thymeleaf/wordbook/order";
     }
 
