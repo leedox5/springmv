@@ -1,6 +1,6 @@
 <html layout:decorate="~{thymeleaf/wordbook/layout}">
 <div layout:fragment="content" class="container my-3">
-    <div class="row border-bottom">
+    <div class="row border-bottom mb-2">
         <div class="col-4">
             <h2 th:text="결제"></h2>
         </div>
@@ -8,9 +8,11 @@
             <h3 th:text="STANDARD[1만]"></h3>
         </div>
     </div>
+	<!--
     <div class="my-2">
         <button id="btn1" type="button" class="btn btn-sm btn-outline-primary">Call API</button>
     </div>
+	-->
 	<script th:src="|https://www.paypal.com/sdk/js?client-id=${client_id}|"></script>
     <div id="paypal-button-container"></div>
     <!-- Set up a container element for the button -->
