@@ -132,22 +132,30 @@ public class WordbookRestController {
     public ResponseEntity<?> search(@PathVariable(required = false) Optional<Integer> page,
                                     @PathVariable(required = false) Optional<String> opt,
                                     @PathVariable(required = false) Optional<String> key, Model model, Principal principal) {
-        Member member = memberService.getMember(principal.getName());
 
-        // [2023.09.07] paging 처리
-        //List<Wordbook> words = wordService.searchList(member, opt, key);
-        Page<Wordbook> paging = wordService.searchListPaging(member, opt, key, page.orElse(0));
+        try {
+            if(principal == null) {
+                throw new Exception("LOGIN");
+            }
+             Member member = memberService.getMember(principal.getName());
 
-        WordbookResponse wordbookResponse = WordbookResponse.builder()
-                .username(member.getUsername())
-                .opts(getOpts())
-                .selOpt(opt.isPresent() ? opt.get() : "eng")
-                .words(paging.getContent())
-                .paging(paging)
-                .cols(getCols())
-                .build();
-        //WordbookResponse wordbookResponse = new WordbookResponse(member.getUsername(), getOpts(), opt.isPresent() ? opt.get() : "eng", paging.getContent(), null, paging);
-        return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
+            // [2023.09.07] paging 처리
+            //List<Wordbook> words = wordService.searchList(member, opt, key);
+            Page<Wordbook> paging = wordService.searchListPaging(member, opt, key, page.orElse(0));
+
+            WordbookResponse wordbookResponse = WordbookResponse.builder()
+                    .username(member.getUsername())
+                    .opts(getOpts())
+                    .selOpt(opt.isPresent() ? opt.get() : "eng")
+                    .words(paging.getContent())
+                    .paging(paging)
+                    .cols(getCols())
+                    .build();
+            return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
+
+        } catch(Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+        }
     }
 
     @GetMapping( value = {"/search1/{page}", "/search1/{page}/{opt}", "/search1/{page}/{opt}/{key}"})
