@@ -151,6 +151,7 @@ public class WordbookController {
         model.addAttribute("wordbook", wordbook);
         return "thymeleaf/wordbook/intro";
     }
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/order")
     public String order(Model model) {
 		model.addAttribute("client_id", paypalConfig.getClientId() + "&currency=USD");
