@@ -1,0 +1,179 @@
+<html layout:decorate="~{thymeleaf/book/layout}">
+<div layout:fragment="content" class="container my-2">
+    <div class="row border-bottom">
+        <div class="col-4">
+            <h2 th:text="${wordbook.word}"></h2>
+        </div>
+        <div class="col-8 text-end">
+			<button id="btn1" type="button" class="btn btn-sm btn-outline-primary">목록으로</button>
+        </div>
+    </div>
+    <h6 class="small text-muted text-end mt-1" th:text="'조회수 : ' + ${wordbook.access}"></h6>
+
+    <div th:id="'collap' + ${wordbook.id}" th:class="'collapse show mulcol0' + ${wordbook.id}">
+        <div class="card mt-1" >
+            <div class="card-body">
+                <span style="white-space: pre-line;" th:text="${wordbook.meaning1}"></span>
+            </div>
+            <div class="card-footer text-end comment">
+                <a th:href="'.mulcol0' + ${wordbook.id}" role="button" data-bs-toggle="collapse" class="small">수정</a>
+            </div>
+        </div>
+    </div>
+    <div th:class="'collapse mulcol0' + ${wordbook.id}" id="comment">
+        <form class="my-2" th:action="@{|/wordbook2/save/${wordbook.id}/${path}|}" th:object="${wordbook}" method="post">
+            <div class="mb-1">
+                <input type="text" class="form-control" name="word" id="word" th:field="*{word}">
+            </div>
+            <div class="mb-1">
+                <textarea  name="meaning1" id="meaning1" class="form-control" rows="4">[[${wordbook.meaning1}]]</textarea>
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-sm btn-outline-primary">저장</button>
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol0' + ${wordbook.id}">취소</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="accordion" id="ACC10">
+        <th:block th:each="wordMeaning, stat : ${wordbook.getWordMeanings()}">
+            <div class="accordion-item">
+                <h1 class="accordion-header" th:id="'acc' + ${wordMeaning.id}">
+                    <button class="accordion-button"
+                            th:classappend="${stat.index > 0} ? 'collapsed'"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            th:attr="data-bs-target='#acc-collapse' + ${wordMeaning.id}"
+                            aria-expanded="true"
+                            th:text="|학습일 : ${wordMeaning.updDate}|">
+                    </button>
+                </h1>
+                <div th:id="'acc-collapse' + ${wordMeaning.id}"
+                     class="accordion-collapse collapse"
+                     th:classappend="${stat.index == 0} ? 'show'"
+                     th:attr="aria-labelledby='acc' + ${wordMeaning.id}"
+                     data-bs-parent="#ACC10"
+                >
+                        <div th:id="'collap' + ${wordMeaning.id}" th:class="'collapse show mulcol' + ${wordMeaning.id}">
+                            <div class="card mx-1 my-1" >
+                                <div class="card-body">
+                                    <span style="white-space: pre-line;" th:utext="${wordMeaning.meaning}"></span>
+                                </div>
+                                <div class="card-footer text-end comment">
+                                    <a th:href="@{|.mulcol${wordMeaning.id}|}" role="button" data-bs-toggle="collapse" class="small">수정</a>
+                                    <a href="#" class="small delete" th:attr="data-uri='/meaning/delete/' + ${wordMeaning.id}">삭제</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:class="'collapse mulcol' + ${wordMeaning.id}" id="comment">
+                            <form class="mx-1 my-1" th:action="@{|/book/word/${wordbook.id}/savemeaning/${path}|}" th:object="${wordMeaning}" method="post">
+                                <input type="hidden" name="id" id="id" th:value="${wordMeaning.id}">
+                                <div class="mb-2">
+                                    <textarea  name="meaning" id="meaning" class="form-control" rows="4">[[${wordMeaning.meaning}]]</textarea>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">저장</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol' + ${wordMeaning.id}">취소</button>
+                                </div>
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <div class="mt-1 mb-2">
+        <textarea  name="meaning11" id="meaning11" class="form-control" rows="4"></textarea>
+    </div>
+    <div class="text-end">
+        <button id="btn2" class="btn btn-sm btn-outline-primary">메모등록</button>
+    </div>
+</div>
+<script layout:fragment="script" type='text/javascript'>
+const param = {};
+param.page = "[[${page}]]";
+param.opt = "[[${opt}]]";
+param.key = "[[${key}]]";
+
+const delete_elements = document.getElementsByClassName("delete");
+Array.from(delete_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            //location.href = this.dataset.uri;
+		    var form_data = {};
+			var loc = this.dataset.uri;
+            $.ajax({
+                type: "GET",
+                contentType: "application/json",
+                url: loc,
+                data: null,
+                dataType: "json",
+                success: function(data) {
+                    var json = JSON.stringify(data, null, 4);
+                    if(data.errorContent == "Y") {
+                        location.reload();
+                    } else {
+                        //$("#err").html(data.messages[0]);
+					    alert(data.messages[0]);
+                    }
+                },
+                error: function(e) {
+				    alert(e.responseText);
+                    console.log(e);
+                }
+            });
+        }
+    });
+});
+
+	$("#btn2").click(function(event) {
+		event.preventDefault();
+
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        var form_data = {};
+		form_data.meaning = $("#meaning11").val();
+		console.log(form_data);
+		var wid = [[${wordbook.id}]];
+		console.log(wid);
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/data/savemeaning/" + wid,
+            data: JSON.stringify(form_data),
+            dataType: "json",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function(data) {
+                var json = JSON.stringify(data, null, 4);
+                if(data.errorContent == "Y") {
+                    location.reload();
+                } else {
+                    //$("#err").html(data.messages[0]);
+					alert(data.messages[0]);
+                }
+            },
+            error: function(e) {
+                //$("#err").html(e.responseText);
+				alert(e.responseText);
+                console.log(e);
+            }
+        });
+	});
+
+const btn1 = document.getElementById("btn1");
+
+if (btn1) {
+    btn1.addEventListener('click', () => {
+        const loc = "[[${referer}]]";
+        console.log(loc);
+        window.location.href = loc;
+    });
+}
+
+</script>

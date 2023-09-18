@@ -212,6 +212,32 @@ public class WordService {
         return wordRepository.findAll(spec, Sort.by("updDate").descending());
     }
 
+    public List<Wordbook> bookList(String code, Optional<String> opt, Optional<String> key) {
+        Specification<Wordbook> spec = Specification.where(WordbookSpcifications.likeMeaning2(code));
+
+        String option = opt.isPresent() ? opt.get() : "";
+
+        if("eng".equals(option)) {
+            if(key.isPresent()) {
+                spec = spec.and(WordbookSpcifications.likeWord(key.get()));
+            }
+        } else if("kor".equals(option)) {
+            if(key.isPresent()) {
+                spec = spec.and(WordbookSpcifications.likeMeaning1(key.get()));
+            }
+        } else if("num".equals(option)) {
+            if(key.isPresent()) {
+                spec = spec.and(WordbookSpcifications.greaterThanSeq(key.get()));
+            }
+        } else if("tag".equals(option)) {
+            if(key.isPresent()) {
+                spec = spec.and(WordbookSpcifications.likeMeaning2(key.get()));
+            }
+        }
+
+        return wordRepository.findAll(spec, Sort.by("word").ascending());
+    }
+
     public List<Wordbook> searchList(Optional<String> opt, Optional<String> key) {
         Specification<Wordbook> spec = Specification.where(WordbookSpcifications.equalToSeq(-1));
 

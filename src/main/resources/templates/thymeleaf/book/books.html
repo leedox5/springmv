@@ -1,4 +1,4 @@
-<html layout:decorate="~{thymeleaf/layout}">
+<html layout:decorate="~{thymeleaf/book/layout}">
 <div layout:fragment="content" class="container my-2">
     <div class="input-group input-group-sm mb-2">
         <div class="input-group-prepend">
@@ -13,7 +13,7 @@
             <h6 id="cnt1" class="small text-muted text-start mt-1"></h6>
         </div>
         <div class="col-4 text-end">
-            <a th:href="@{/wordbook2/create}" class="btn btn-sm btn-primary">단어 추가</a>
+            <a th:href="@{/book/create}" class="btn btn-sm btn-primary">단어 추가</a>
         </div>
     </div>
     <table id="grid1" class="table mt-1">
@@ -52,14 +52,12 @@ const setGrid = (rows) => {
         
     $.each(rows, function(index, item) {
         row_tag  = `<tr>`;
-        if(path) {
-            row_tag += `<td class="text-start"><a href="/wordbook/word/${item.id}/${path}">${item.word}</a></td>`;
-        } else {
-            row_tag += `<td class="text-start"><a href="/wordbook/word/${item.id}">${item.word}</a></td>`;
-        }
+        row_tag += `<td class="text-start"><a href="/book/word/${item.id}">${item.word}</a></td>`;
         row_tag += `<td class="text-start">${item.meaning1}</td>`;
         row_tag += `</tr>`;
-    
+
+        console.log(row_tag);
+
         $("#grid1>tbody").append(row_tag);
     });
     
@@ -82,27 +80,24 @@ const afterGetData = (res) => {
 // Search
 const btn1 = document.getElementById("btn1");
 
-
 if (btn1) {
     btn1.addEventListener('click', () => {
         var opt = $("#opt").val();
         var key = $("#key").val();
       
-        var loc = `/data/wordbook/${opt}`;
-        
-        path = opt;
+        var loc = `/book/list/${code}/${opt}`;
         
         if (key) {
             loc += `/${key}`;
             path += `/${key}`;
         }
-        
         console.log(loc);
-        $.getData(loc, afterGetData);
+        location.href = loc;
     });
 }
 
 var data = {};
+var code = "[[${code}]]";
 var opt = "[[${opt}]]";
 var key = "[[${key}]]";
 var path = "[[${path}]]";
@@ -126,12 +121,8 @@ $(function() {
     if(key) {
         $("#key").val(key);
     }
-    
-    if(path) {
-        $.getData("/data/wordbook/" + path, afterGetData);
-    } else {
-        $.getData("/data/words", afterGetData);
-    }
+    console.log(path);
+    $.getData(path, afterGetData);
 });
 
 </script>

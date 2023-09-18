@@ -87,4 +87,14 @@ public class WordMeaningService {
         }
         return colsDb;
     }
+
+    public String getBookName(Wordbook wordbook, String code) {
+        for(WordMeaning wordMeaning : wordbook.getWordMeanings()) {
+            String[] str = wordMeaning.getMeaning().split(",");
+            if(code.equals(str[0])) {
+                return str[1];
+            }
+        }
+        return null;
+    }
 }

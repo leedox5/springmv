@@ -65,7 +65,13 @@ public class WordbookController {
         }
         model.addAttribute("path", path);
 
-        return "thymeleaf/wordbook/list";
+        return "thymeleaf/book/list";
+    }
+
+    @GetMapping(value = {"/books/{id}"})
+    public String books(@PathVariable String id, Model model) {
+        model.addAttribute("path", "/data/books/" + id);
+        return "thymeleaf/book/books";
     }
 
     @GetMapping(value = {"/word/{id}", "/word/{id}/{opt}", "/word/{id}/{opt}/{key}"})

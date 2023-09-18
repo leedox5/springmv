@@ -1,0 +1,17 @@
+<html layout:decorate="~{thymeleaf/book/layout}">
+<div layout:fragment="content" class="container my-3">
+    <th:block th:each="book : ${books}">
+        <div>
+            <div class="card mt-1" >
+                <div class="card-body">
+                    <a th:href="@{|/book/list/${book.code}}" th:text="${book.name}"></a>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+<script layout:fragment="script" type='text/javascript'>
+    $(function() {
+        console.log("/wordbook/word");
+    });
+</script>

@@ -127,7 +127,50 @@ public class WordbookRestController {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
         }
     }
+    @GetMapping( value = {"/wordbook", "/wordbook/{opt}", "/wordbook/{opt}/{key}"})
+    public ResponseEntity<?> wordbook(@PathVariable(required = false) Optional<String> opt,
+                                      @PathVariable(required = false) Optional<String> key,
+                                      Model model, Principal principal) {
+        try {
+            if(principal == null) {
+                throw new Exception("LOGIN");
+            }
+            Member member = memberService.getMember(principal.getName());
 
+            List<Wordbook> words = wordService.searchList(member, opt, key);
+
+            WordbookResponse wordbookResponse = WordbookResponse.builder()
+                    .username(member.getUsername())
+                    .opts(getOpts())
+                    .selOpt(opt.isPresent() ? opt.get() : "eng")
+                    .words(words)
+                    .paging(null)
+                    .cols(getCols())
+                    .build();
+            return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
+
+        } catch(Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+        }
+    }
+
+    @GetMapping( value = {"/books/{code}", "/books/{code}/{opt}", "/books/{code}/{opt}/{key}"})
+    public ResponseEntity<?> books(@PathVariable String code,
+                                   @PathVariable(required = false) Optional<String> opt,
+                                   @PathVariable(required = false) Optional<String> key,
+                                   Principal principal) {
+        Member member = memberService.getMember(principal.getName());
+        List<Wordbook> words = wordService.bookList(code, opt, key);
+        WordbookResponse wordbookResponse = WordbookResponse.builder()
+                .username(member.getUsername())
+                .opts(getOpts())
+                .selOpt(opt.orElse("eng"))
+                .words(words)
+                .paging(null)
+                .cols(getCols())
+                .build();
+        return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
+    }
     @GetMapping( value = {"/search/{page}", "/search/{page}/{opt}", "/search/{page}/{opt}/{key}"})
     public ResponseEntity<?> search(@PathVariable(required = false) Optional<Integer> page,
                                     @PathVariable(required = false) Optional<String> opt,
