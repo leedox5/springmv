@@ -21,12 +21,15 @@
         </div>
     </div>
     <div th:class="'collapse mulcol0' + ${wordbook.id}" id="comment">
-        <form class="my-2" th:action="@{|/wordbook2/save/${wordbook.id}/${path}|}" th:object="${wordbook}" method="post">
+        <form id="form10" class="my-2" th:action="@{|/data/save/${wordbook.id}|}" th:object="${wordbook}" method="post">
             <div class="mb-1">
                 <input type="text" class="form-control" name="word" id="word" th:field="*{word}">
             </div>
             <div class="mb-1">
                 <textarea  name="meaning1" id="meaning1" class="form-control" rows="4">[[${wordbook.meaning1}]]</textarea>
+            </div>
+            <div class="mb-1">
+                <input type="text" class="form-control" name="meaning2" id="meaning2" th:field="*{meaning2}">
             </div>
             <div class="text-end">
                 <button type="submit" class="btn btn-sm btn-outline-primary">저장</button>
@@ -61,12 +64,12 @@
                                 </div>
                                 <div class="card-footer text-end comment">
                                     <a th:href="@{|.mulcol${wordMeaning.id}|}" role="button" data-bs-toggle="collapse" class="small">수정</a>
-                                    <a href="#" class="small delete" th:attr="data-uri='/meaning/delete/' + ${wordMeaning.id}">삭제</a>
+                                    <a href="#" class="small delete" th:attr="data-uri='/data/meaning/delete/' + ${wordMeaning.id}">삭제</a>
                                 </div>
                             </div>
                         </div>
                         <div th:class="'collapse mulcol' + ${wordMeaning.id}" id="comment">
-                            <form class="mx-1 my-1" th:action="@{|/book/word/${wordbook.id}/savemeaning/${path}|}" th:object="${wordMeaning}" method="post">
+                            <form class="mx-1 my-1 meaning" th:action="@{|/book/word/${wordbook.id}/savemeaning/${path}|}" th:object="${wordMeaning}" method="post">
                                 <input type="hidden" name="id" id="id" th:value="${wordMeaning.id}">
                                 <div class="mb-2">
                                     <textarea  name="meaning" id="meaning" class="form-control" rows="4">[[${wordMeaning.meaning}]]</textarea>
@@ -129,49 +132,122 @@ Array.from(delete_elements).forEach(function(element) {
     });
 });
 
-	$("#btn2").click(function(event) {
-		event.preventDefault();
+$(document).on("submit", "#form10", function(e) {
+    e.preventDefault();
 
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
+    const url = e.target.action;
+    console.log(url);
 
-        var form_data = {};
-		form_data.meaning = $("#meaning11").val();
-		console.log(form_data);
-		var wid = [[${wordbook.id}]];
-		console.log(wid);
-        $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            url: "/data/savemeaning/" + wid,
-            data: JSON.stringify(form_data),
-            dataType: "json",
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader(header, token);
-            },
-            success: function(data) {
-                var json = JSON.stringify(data, null, 4);
-                if(data.errorContent == "Y") {
-                    location.reload();
-                } else {
-                    //$("#err").html(data.messages[0]);
-					alert(data.messages[0]);
-                }
-            },
-            error: function(e) {
-                //$("#err").html(e.responseText);
-				alert(e.responseText);
-                console.log(e);
+    const data = Object.fromEntries(new FormData(e.target).entries());
+    console.log(data);
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        url: url,
+        beforeSend: function(jqXHR, settings) {
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var token = $("meta[name='_csrf']").attr("content");
+            jqXHR.setRequestHeader(header, token);
+        },
+        success: function(data) {
+            console.log(data);
+            if(data.status == 200) {
+                location.reload();
+            } else {
+                alert(data.message);
             }
-        });
-	});
+        },
+        error: function(e) {
+            console.log(e.responseText)
+        }
+    });
+});
+
+$(document).on("submit", ".meaning", function(e) {
+    e.preventDefault();
+
+    const url = e.target.action;
+    console.log(url);
+
+    const data = Object.fromEntries(new FormData(e.target).entries());
+    console.log(data);
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        url: "/book/save/meaning",
+        beforeSend: function(jqXHR, settings) {
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var token = $("meta[name='_csrf']").attr("content");
+            jqXHR.setRequestHeader(header, token);
+        },
+        success: function(data) {
+            console.log(data);
+            if(data.errorContent == "Y") {
+                location.reload();
+            } else {
+                alert(data.messages[0]);
+            }
+        },
+        error: function(e) {
+            console.log(e.responseText)
+        }
+    });
+});
+
+$("#btn2").click(function(event) {
+	event.preventDefault();
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    var form_data = {};
+	form_data.meaning = $("#meaning11").val();
+	form_data.wordbook_id = [[${wordbook.id}]];
+
+	console.log(form_data);
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/book/create/meaning",
+        data: JSON.stringify(form_data),
+        dataType: "json",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success: function(data) {
+            var json = JSON.stringify(data, null, 4);
+            if(data.errorContent == "Y") {
+                location.reload();
+            } else {
+                //$("#err").html(data.messages[0]);
+				alert(data.messages[0]);
+            }
+        },
+        error: function(e) {
+            //$("#err").html(e.responseText);
+			alert(e.responseText);
+            console.log(e);
+        }
+    });
+});
 
 const btn1 = document.getElementById("btn1");
 
 if (btn1) {
     btn1.addEventListener('click', () => {
-        const loc = "[[${referer}]]";
+        let loc = "/book/";
+        let path = "[[${path}]]";
+
+        if(path) {
+            loc += "search/" + path;
+        }
+
         console.log(loc);
+
         window.location.href = loc;
     });
 }

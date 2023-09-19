@@ -71,14 +71,22 @@ public class BookController {
         return "thymeleaf/book/word";
     }
 
-    @GetMapping( value = {"/search/{opt}/{key}"})
-    public String search(@PathVariable(required = false) Optional<String> opt
+    @GetMapping( value = {"/search/{opt}", "/search/{opt}/{key}"})
+    public String search(@PathVariable String opt
                         ,@PathVariable(required = false) Optional<String> key, Model model) {
+
+        String loc = "/data/wordbook/" + opt;
+
         model.addAttribute("tit", "내단어장");
-        model.addAttribute("opt", opt.get());
-        model.addAttribute("key", key.get());
-        model.addAttribute("path", "/data/wordbook/" + opt.get() + "/" + key.get());
-        //model.addAttribute("referer", referer);
+        model.addAttribute("opt", opt);
+
+        if(key.isPresent()) {
+            model.addAttribute("key", key.get());
+            loc += "/" + key.get();
+        } else {
+            model.addAttribute("key", "");
+        }
+        model.addAttribute("path", loc);
         return "thymeleaf/book/list";
     }
 
@@ -96,19 +104,15 @@ public class BookController {
     @GetMapping(value = {"/word/{id}", "/word/{id}/{opt}", "/word/{id}/{opt}/{key}"})
     public String word(@PathVariable Integer id,
                        @PathVariable(required = false) Optional<String> opt,
-                       @PathVariable(required = false) Optional<String> key, Model model, @RequestHeader("referer") String referer, HttpEntity httpEntity) {
+                       @PathVariable(required = false) Optional<String> key, Model model) {
 
         Wordbook wordbook = wordService.getWordbook(id);
 
         String path = "";
 
-        for(Map.Entry<String, List<String>> entry : httpEntity.getHeaders().entrySet()) {
-            System.out.println(entry);
-        }
-
         if (opt.isPresent()) {
             model.addAttribute("opt", opt.get());
-            path = opt.get();
+            path += opt.get();
         }
 
         if (key.isPresent()) {
@@ -118,7 +122,6 @@ public class BookController {
         model.addAttribute("id", id);
         model.addAttribute("wordbook", wordbook);
         model.addAttribute("path", path);
-        model.addAttribute("referer", referer);
         return "thymeleaf/book/word_detail";
     }
 
@@ -136,20 +139,23 @@ public class BookController {
         model.addAttribute("author", author.getMember());
 
         String path = "";
+        String loc = "/book/word/" + id;
 
         if (opt.isPresent()) {
             model.addAttribute("opt", opt.get());
             path = opt.get();
+            loc += "/" + opt.get();
         }
 
         if (key.isPresent()) {
             model.addAttribute("key", key.get());
             path += "/" + key.get();
+            loc += "/" + key.get();
         }
 
         model.addAttribute("path", path);
 
-        return "redirect:/book/word/" + id;
+        return "redirect:" + loc;
     }
 
     @GetMapping(value = {"/list/{code}", "/list/{code}/{opt}", "/list/{code}/{opt}/{key}"})
@@ -208,4 +214,43 @@ public class BookController {
         wordService.create(wordbookForm, member);
         return "redirect:/book/";
     }
+
+    @PostMapping(value = {"/wordbook/{id}/save", "/wordbook/{id}/{opt}/save", "/wordbook/{id}/{opt}/{key}/save"})
+    public String saveWordbook(@PathVariable Integer id,
+                               @PathVariable( required = false) Optional<String> opt,
+                               @PathVariable( required = false) Optional<String> key,
+                               @AuthenticationPrincipal MemberAdapter author,
+                               Model model,
+                               Wordbook wordbookForm) {
+        Wordbook wordbookRepo = wordService.getWordbook(id);
+        wordbookRepo.setWord(wordbookForm.getWord());
+        wordbookRepo.setSeq(wordbookForm.getSeq());
+        wordbookRepo.setMeaning1(wordbookForm.getMeaning1());
+        wordbookRepo.setMeaning2(wordbookForm.getMeaning2());
+        wordbookRepo.setExample1(wordbookForm.getExample1());
+        wordbookRepo = wordService.saveWordbook(wordbookRepo);
+
+        model.addAttribute("wordbook", wordbookRepo);
+        model.addAttribute("author", author.getMember());
+
+        String path = "";
+        String loc = "/book/word/" + id;
+
+        if (opt.isPresent()) {
+            model.addAttribute("opt", opt.get());
+            path = opt.get();
+            loc += "/" + opt.get();
+        }
+
+        if (key.isPresent()) {
+            model.addAttribute("key", key.get());
+            path += "/" + key.get();
+            loc += "/" + key.get();
+        }
+
+        model.addAttribute("path", path);
+
+        return "redirect:" + loc;
+    }
+
 }
