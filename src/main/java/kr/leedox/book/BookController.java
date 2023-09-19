@@ -19,7 +19,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.net.http.HttpHeaders;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -186,8 +189,11 @@ public class BookController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/create")
-    public String createWord2(WordbookForm wordbookForm, Model model) {
+    @GetMapping({"/create", "/create/{opt}", "/create/{opt}/{key}"})
+    public String createWord2(WordbookForm wordbookForm,
+                              @PathVariable(required = false) Optional<String> opt,
+                              @PathVariable(required = false) Optional<String> key,
+                              Model model) {
         List<Open> opens = new ArrayList<>();
         Open open1 = Open.builder().id(1).name("공개").val(-1).build();
         Open open2 = Open.builder().id(2).name("비공개").val(0).build();
@@ -195,13 +201,19 @@ public class BookController {
         opens.add(open1);
         opens.add(open2);
 
+        model.addAttribute("opt", opt.orElse(""));
+        model.addAttribute("key", key.orElse(""));
         model.addAttribute("opens", opens);
         return "thymeleaf/book/create";
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/create")
-    public String createWordbook(@Valid WordbookForm wordbookForm, BindingResult bindingResult, Principal principal, Model model) {
+    @PostMapping({"/create", "/create/{opt}", "/create/{opt}/{key}"})
+    public String createWordbook(@Valid WordbookForm wordbookForm, BindingResult bindingResult,
+                                 @PathVariable(required = false) Optional<String> opt,
+                                 @PathVariable(required = false) Optional<String> key,
+                                 Principal principal, Model model) {
+
         if(bindingResult.hasErrors()) {
             List<Open> opens = new ArrayList<>();
             Open open1 = Open.builder().id(1).name("공개").val(-1).build();
@@ -210,11 +222,25 @@ public class BookController {
             opens.add(open1);
             opens.add(open2);
             model.addAttribute("opens", opens);
+            model.addAttribute("opt", opt.orElse(""));
+            model.addAttribute("key", key.orElse(""));
             return "thymeleaf/book/create";
         }
+
+        String loc = "/book/";
+
+        if(opt.isPresent()) {
+            loc += "search/" + opt.get();
+        }
+
+        if(key.isPresent()) {
+            loc += "/" + URLEncoder.encode(key.get(), StandardCharsets.UTF_8);
+        }
+
         Member member = memberService.getMember(principal.getName());
         wordService.create(wordbookForm, member);
-        return "redirect:/book/";
+
+        return "redirect:" + loc;
     }
 
     @PostMapping(value = {"/wordbook/{id}/save", "/wordbook/{id}/{opt}/save", "/wordbook/{id}/{opt}/{key}/save"})

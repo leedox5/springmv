@@ -15,7 +15,7 @@
             <h6 id="cnt1" class="small text-muted text-start mt-1"></h6>
         </div>
         <div class="col-4 text-end">
-            <a th:href="@{/book/create}" class="btn btn-sm btn-primary">단어 추가</a>
+            <a th:onclick="|javascript:goCreate()|" class="btn btn-sm btn-primary">단어 추가</a>
         </div>
     </div>
     <table id="grid1" class="table mt-1">
@@ -63,6 +63,20 @@ const setGrid = (rows) => {
     });
     
     $("#cnt1").text(rows.length);
+}
+
+const goCreate = () => {
+    let loc = `/book/create`;
+
+    if(opt) {
+        loc += "/" + opt;
+    }
+
+    if(key) {
+        loc += "/" + key;
+    }
+
+    location.href = loc;
 }
 
 const goDetail = (id) => {

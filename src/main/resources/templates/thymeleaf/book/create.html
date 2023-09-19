@@ -23,10 +23,22 @@
         </div>
         <div class="mb-2 text-end">
             <button type="submit" class="btn btn-sm btn-primary">저장</button>
-            <a th:href="@{/book/}" class="btn btn-sm btn-primary">취소</a>
+            <a th:onclick="|javascript:goCancel()|" class="btn btn-sm btn-primary">취소</a>
         </div>
     </form>
 </div>
 <script layout:fragment="script" type='text/javascript'>
-    document.getElementById("seq1").setAttribute("checked", "checked");
+var opt = "[[${opt}]]";
+var key = "[[${key}]]";
+document.getElementById("seq1").setAttribute("checked", "checked");
+const goCancel = () => {
+    var loc = "/book/";
+    if(opt) {
+        loc += "search/" + opt;
+    }
+    if(key) {
+        loc += "/" + key;
+    }
+    location.href = loc;
+}
 </script>
