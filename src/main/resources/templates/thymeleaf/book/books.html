@@ -52,7 +52,7 @@ const setGrid = (rows) => {
         
     $.each(rows, function(index, item) {
         row_tag  = `<tr>`;
-        row_tag += `<td class="text-start"><a href="/book/word/${item.id}">${item.word}</a></td>`;
+        row_tag += `<td class="text-start"><a href="javascript:void(0);" onclick="goDetail('${item.id}');">${item.word}</a></td>`;
         row_tag += `<td class="text-start">${item.meaning1}</td>`;
         row_tag += `</tr>`;
 
@@ -63,6 +63,22 @@ const setGrid = (rows) => {
     
     $("#cnt1").text(rows.length);
 }
+
+const goDetail = (id) => {
+    let loc = `/book/word/${code}/${id}`;
+
+    if(opt) {
+        loc += `/${opt}`
+    }
+
+    if(key) {
+        loc += `/${key}`
+    }
+
+    console.log(loc);
+    location.href = loc;
+}
+
 
 // 데이터를 가져온후 
 const afterGetData = (res) => {

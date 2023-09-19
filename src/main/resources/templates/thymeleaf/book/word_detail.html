@@ -241,9 +241,17 @@ if (btn1) {
     btn1.addEventListener('click', () => {
         let loc = "/book/";
         let path = "[[${path}]]";
+        let cate = "[[${cate}]]";
 
-        if(path) {
-            loc += "search/" + path;
+        if(cate == "00") {
+            if(path) {
+                loc += "search/" + path;
+            }
+        } else {
+            loc += `list/${cate}/`;
+            if(path) {
+                loc += path;
+            }
         }
 
         console.log(loc);

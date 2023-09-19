@@ -101,8 +101,9 @@ public class BookController {
         return "thymeleaf/book/books";
     }
 
-    @GetMapping(value = {"/word/{id}", "/word/{id}/{opt}", "/word/{id}/{opt}/{key}"})
+    @GetMapping(value = {"/word/{cate}/{id}", "/word/{cate}/{id}/{opt}", "/word/{cate}/{id}/{opt}/{key}"})
     public String word(@PathVariable Integer id,
+                       @PathVariable String cate,
                        @PathVariable(required = false) Optional<String> opt,
                        @PathVariable(required = false) Optional<String> key, Model model) {
 
@@ -120,6 +121,7 @@ public class BookController {
             path += "/" + key.get();
         }
         model.addAttribute("id", id);
+        model.addAttribute("cate", cate);
         model.addAttribute("wordbook", wordbook);
         model.addAttribute("path", path);
         return "thymeleaf/book/word_detail";
