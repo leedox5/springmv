@@ -29,4 +29,12 @@ public class WordMeaning {
 
     @Transient
     private String key;
+
+    @Transient
+    private String header;
+
+    public String getHeader() {
+        String[] meanings = meaning.split("\\r?\\n");
+        return meanings[0];
+    }
 }
