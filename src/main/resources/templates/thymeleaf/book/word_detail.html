@@ -245,13 +245,14 @@ if (btn1) {
         let loc = "/book/";
         let path = "[[${path}]]";
         let cate = "[[${cate}]]";
+        let sort = "[[${sort}]]";
 
         if(cate == "00") {
             if(path) {
                 loc += "search/" + path;
             }
         } else {
-            loc += `list/${cate}/`;
+            loc += `list/${cate}/${sort}`;
             if(path) {
                 loc += path;
             }
