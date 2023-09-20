@@ -36,6 +36,6 @@ public class Wordbook {
 
     @JsonIgnore
     @OneToMany(mappedBy = "wordbook", cascade = CascadeType.ALL)
-    @OrderBy("updDate DESC")
+    @OrderBy("crtDate DESC")
     private Collection<WordMeaning> wordMeanings;
 }
