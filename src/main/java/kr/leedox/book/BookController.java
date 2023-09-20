@@ -171,6 +171,7 @@ public class BookController {
         return "redirect:" + loc;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = {"/list/{code}", "/list/{code}/{opt}", "/list/{code}/{opt}/{key}"})
     public String list(@PathVariable String code
                       ,@PathVariable(required = false) Optional<String> opt
