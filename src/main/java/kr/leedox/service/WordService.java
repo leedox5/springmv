@@ -235,7 +235,7 @@ public class WordService {
             }
         }
 
-        return wordRepository.findAll(spec, Sort.by("word").ascending());
+        return wordRepository.findAll(spec, Sort.by("word").descending());
     }
 
     public List<Wordbook> searchList(Optional<String> opt, Optional<String> key) {
