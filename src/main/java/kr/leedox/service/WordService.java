@@ -213,7 +213,7 @@ public class WordService {
     }
 
     public List<Wordbook> bookList(String code, Optional<String> opt, Optional<String> key) {
-        Specification<Wordbook> spec = Specification.where(WordbookSpcifications.likeMeaning2(code));
+        Specification<Wordbook> spec = Specification.where(WordbookSpcifications.equalToMeaning2(code));
 
         String option = opt.isPresent() ? opt.get() : "";
 

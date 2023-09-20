@@ -63,4 +63,13 @@ public class WordbookSpcifications {
             }
         };
     }
+
+    public static Specification<Wordbook> equalToMeaning2(String key) {
+        return new Specification<Wordbook>() {
+            @Override
+            public Predicate toPredicate(Root<Wordbook> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.equal(root.get("meaning2"), key);
+            }
+        };
+    }
 }
