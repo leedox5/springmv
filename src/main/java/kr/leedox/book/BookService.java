@@ -3,18 +3,23 @@ package kr.leedox.book;
 import kr.leedox.entity.WordMeaning;
 import kr.leedox.entity.Wordbook;
 import kr.leedox.service.WordMeaningService;
+import kr.leedox.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookService {
 
     @Autowired
     WordMeaningService wordMeaningService;
+
+    @Autowired
+    WordService wordService;
     public List<Book> findAll() {
         return null;
     }
@@ -28,7 +33,8 @@ public class BookService {
             String[] auth = str[2].split("|");
             String[] active = str[3].split("|");
             if(Arrays.asList(auth).contains(Integer.toString(id))) {
-                Book book = Book.builder().code(str[0]).name(str[1]).active(getActive (active, id)).build();
+                List<Wordbook> wordbooks = wordService.bookList(str[0], Optional.empty(), Optional.empty());
+                Book book = Book.builder().code(str[0]).name(str[1]).active(getActive (active, id)).wordCount(wordbooks.size()).build();
                 books.add(book);
             }
         }

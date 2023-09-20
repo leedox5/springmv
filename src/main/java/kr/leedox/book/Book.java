@@ -12,4 +12,5 @@ public class Book {
     private String createDate;
     private String updateDate;
     private String active;
+    private int wordCount;
 }
