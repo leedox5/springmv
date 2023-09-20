@@ -117,7 +117,7 @@ if (btn1) {
         var opt = $("#opt").val();
         var key = $("#key").val();
       
-        var loc = `/book/list/${code}/${opt}`;
+        var loc = `/book/list/${sort}/${code}/${opt}`;
         
         if (key) {
             loc += `/${key}`;
@@ -130,6 +130,7 @@ if (btn1) {
 
 var data = {};
 var code = "[[${code}]]";
+var sort = "[[${sort}]]";
 var opt = "[[${opt}]]";
 var key = "[[${key}]]";
 var path = "[[${path}]]";

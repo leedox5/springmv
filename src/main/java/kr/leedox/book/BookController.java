@@ -181,6 +181,7 @@ public class BookController {
         String name = wordMeaningService.getBookName(wordbook, code);
 
         model.addAttribute("code", code);
+        model.addAttribute("sort", sort);
         model.addAttribute("tit", name);
 
         String path = "";
