@@ -172,8 +172,9 @@ public class BookController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(value = {"/list/{code}", "/list/{code}/{opt}", "/list/{code}/{opt}/{key}"})
+    @GetMapping(value = {"/list/{code}/{sort}", "/list/{code}/{sort}/{opt}", "/list/{code}/{sort}/{opt}/{key}"})
     public String list(@PathVariable String code
+                      ,@PathVariable String sort
                       ,@PathVariable(required = false) Optional<String> opt
                       ,@PathVariable(required = false) Optional<String> key, Model model) {
         Wordbook wordbook = wordService.getWordbookByWord("10110");
@@ -193,7 +194,7 @@ public class BookController {
         }
         model.addAttribute("opt", opt.orElse(""));
         model.addAttribute("key", key.orElse(""));
-        model.addAttribute("path", "/data/books/" + code + path);
+        model.addAttribute("path", "/data/books/" + code +"/" + sort + path);
         return "thymeleaf/book/books";
     }
 

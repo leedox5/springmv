@@ -6,7 +6,7 @@
                 <div class="card-body" th:if="${book.active == 'Y'}">
 				    <div class="row">
 					    <div class="col-8">
-                            <a th:href="@{|/book/list/${book.code}}" th:text="${book.name}"></a>
+                            <a th:href="@{|/book/list/${book.code}/${book.sort}}" th:text="${book.name}"></a>
 					    </div>
 						<div class="col-4 text-end">
 							<span th:text="${book.wordCount}"></span>

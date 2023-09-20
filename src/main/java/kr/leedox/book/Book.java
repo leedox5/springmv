@@ -13,4 +13,5 @@ public class Book {
     private String updateDate;
     private String active;
     private int wordCount;
+    private String sort;
 }

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
@@ -154,13 +155,14 @@ public class WordbookRestController {
         }
     }
 
-    @GetMapping( value = {"/books/{code}", "/books/{code}/{opt}", "/books/{code}/{opt}/{key}"})
+    @GetMapping( value = {"/books/{code}/{sort}", "/books/{code}/{sort}/{opt}", "/books/{code}/{sort}/{opt}/{key}"})
     public ResponseEntity<?> books(@PathVariable String code,
+                                   @PathVariable String sort,
                                    @PathVariable(required = false) Optional<String> opt,
                                    @PathVariable(required = false) Optional<String> key,
                                    Principal principal) {
         Member member = memberService.getMember(principal.getName());
-        List<Wordbook> words = wordService.bookList(code, opt, key);
+        List<Wordbook> words = wordService.bookList(code, sort, opt, key);
         WordbookResponse wordbookResponse = WordbookResponse.builder()
                 .username(member.getUsername())
                 .opts(getOpts())

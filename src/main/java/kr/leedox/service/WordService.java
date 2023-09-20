@@ -212,7 +212,7 @@ public class WordService {
         return wordRepository.findAll(spec, Sort.by("updDate").descending());
     }
 
-    public List<Wordbook> bookList(String code, Optional<String> opt, Optional<String> key) {
+    public List<Wordbook> bookList(String code, String sort, Optional<String> opt, Optional<String> key) {
         Specification<Wordbook> spec = Specification.where(WordbookSpcifications.equalToMeaning2(code));
 
         String option = opt.isPresent() ? opt.get() : "";
@@ -234,8 +234,11 @@ public class WordService {
                 spec = spec.and(WordbookSpcifications.likeMeaning2(key.get()));
             }
         }
-
-        return wordRepository.findAll(spec, Sort.by("word").descending());
+        if("A".equals(sort)) {
+            return wordRepository.findAll(spec, Sort.by("word").ascending());
+        } else {
+            return wordRepository.findAll(spec, Sort.by("word").descending());
+        }
     }
 
     public List<Wordbook> searchList(Optional<String> opt, Optional<String> key) {

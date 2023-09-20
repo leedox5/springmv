@@ -32,9 +32,16 @@ public class BookService {
             String[] str = wordMeaning.getMeaning().split(",");
             String[] auth = str[2].split("|");
             String[] active = str[3].split("|");
+            String sort = str[4];
             if(Arrays.asList(auth).contains(Integer.toString(id))) {
-                List<Wordbook> wordbooks = wordService.bookList(str[0], Optional.empty(), Optional.empty());
-                Book book = Book.builder().code(str[0]).name(str[1]).active(getActive (active, id)).wordCount(wordbooks.size()).build();
+                List<Wordbook> wordbooks = wordService.bookList(str[0], "A", Optional.empty(), Optional.empty());
+                Book book = Book.builder()
+                        .code(str[0])
+                        .name(str[1])
+                        .active(getActive(active, id))
+                        .wordCount(wordbooks.size())
+                        .sort(sort)
+                        .build();
                 books.add(book);
             }
         }
