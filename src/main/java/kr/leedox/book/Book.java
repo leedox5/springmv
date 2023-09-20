@@ -11,4 +11,5 @@ public class Book {
     private String name;
     private String createDate;
     private String updateDate;
+    private String active;
 }

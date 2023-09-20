@@ -3,15 +3,26 @@
     <th:block th:each="book : ${books}">
         <div>
             <div class="card mt-1" >
-                <div class="card-body">
+                <div class="card-body" th:if="${book.active == 'Y'}">
                     <a th:href="@{|/book/list/${book.code}}" th:text="${book.name}"></a>
+                </div>
+                <div class="card-body" th:if="${book.active == 'N'}">
+                    <div class="card-text" style="white-space: pre-line;" th:utext="|${book.name} (NOT ACTIVE)|"></div>
+                </div>
+                <div class="card-footer text-end comment" th:if="${book.active == 'N'}">
+                    <a th:onclick="|javascript:goPay()|" role="button" class="small">결제</a>
                 </div>
             </div>
         </div>
     </th:block>
 </div>
 <script layout:fragment="script" type='text/javascript'>
-    $(function() {
-        console.log("/wordbook/word");
-    });
+
+const goPay = () => {
+    alert("준비중입니다...");
+}
+
+$(function() {
+    console.log("/wordbook/word");
+});
 </script>

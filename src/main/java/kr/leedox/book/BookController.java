@@ -41,6 +41,9 @@ public class BookController {
     @Autowired
     MemberService memberService;
 
+    @Autowired
+    BookService bookService;
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
     public String home(Model model) {
@@ -57,18 +60,19 @@ public class BookController {
     }
 
     @GetMapping("/view/{word}")
-    public String getWordbook(@PathVariable String word, Model model) {
+    public String getWordbook(@PathVariable String word, Model model, @AuthenticationPrincipal MemberAdapter author ) {
         Wordbook wordbook = wordService.getWordbookByWord(word);
         model.addAttribute("tit", wordbook.getMeaning1());
         model.addAttribute("wordbook", wordbook);
 
-        List<Book> books = new ArrayList<>();
+        List<Book> books = bookService.getBooks(wordbook, author.getMember().getId());
+        /* ---
         for(WordMeaning wordMeaning : wordbook.getWordMeanings()) {
             String[] str = wordMeaning.getMeaning().split(",");
             Book book = Book.builder().code(str[0]).name(str[1]).build();
             books.add(book);
         }
-
+        --- */
         model.addAttribute("books", books);
 
         return "thymeleaf/book/word";
