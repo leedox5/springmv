@@ -296,4 +296,11 @@ public class BookController {
         return "thymeleaf/book/order";
     }
 
+    @GetMapping("/success")
+    public String success(Model model) {
+        Wordbook wordbook = wordService.getWordbookByWord("10040");
+        model.addAttribute("wordbook", wordbook);
+        return "thymeleaf/book/intro";
+    }
+
 }
