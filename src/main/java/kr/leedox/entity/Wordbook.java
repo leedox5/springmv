@@ -38,4 +38,11 @@ public class Wordbook {
     @OneToMany(mappedBy = "wordbook", cascade = CascadeType.ALL)
     @OrderBy("crtDate DESC")
     private Collection<WordMeaning> wordMeanings;
+
+    @Transient
+    private int memoCount;
+
+    public int getMemoCount() {
+        return wordMeanings.size();
+    }
 }
