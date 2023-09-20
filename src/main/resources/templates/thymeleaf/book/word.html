@@ -4,7 +4,14 @@
         <div>
             <div class="card mt-1" >
                 <div class="card-body" th:if="${book.active == 'Y'}">
-                    <a th:href="@{|/book/list/${book.code}}" th:text="${book.name}"></a>
+				    <div class="row">
+					    <div class="col-8">
+                            <a th:href="@{|/book/list/${book.code}}" th:text="${book.name}"></a>
+					    </div>
+						<div class="col-4 text-end">
+							<span th:text="${book.active}"></span>
+						</div>
+					</div>
                 </div>
                 <div class="card-body" th:if="${book.active == 'N'}">
                     <div class="card-text" style="white-space: pre-line;" th:utext="|${book.name} (NOT ACTIVE)|"></div>
