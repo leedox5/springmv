@@ -8,9 +8,9 @@ import kr.leedox.service.MemberAdapter;
 import kr.leedox.service.MemberService;
 import kr.leedox.service.WordMeaningService;
 import kr.leedox.service.WordService;
+import kr.leedox.wordbook.PaypalConfig;
 import kr.leedox.wordbook.WordbookForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,14 +19,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.net.http.HttpHeaders;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -43,6 +40,12 @@ public class BookController {
 
     @Autowired
     BookService bookService;
+
+    private final PaypalConfig paypalConfig;
+
+    public BookController(PaypalConfig paypalConfig) {
+        this.paypalConfig = paypalConfig;
+    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
@@ -284,6 +287,13 @@ public class BookController {
         model.addAttribute("path", path);
 
         return "redirect:" + loc;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/order")
+    public String order(Model model) {
+        model.addAttribute("client_id", paypalConfig.getClientId() + "&currency=USD");
+        return "thymeleaf/book/order";
     }
 
 }
