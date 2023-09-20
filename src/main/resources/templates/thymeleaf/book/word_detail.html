@@ -59,7 +59,7 @@
                         <div th:id="'collap' + ${wordMeaning.id}" th:class="'collapse show mulcol' + ${wordMeaning.id}">
                             <div class="card mx-1 my-1" >
                                 <div class="card-body">
-                                    <div class="card-text" style="white-space: pre-line;" th:utext="${wordMeaning.meaning}"></div>
+                                    <div class="card-text" style="white-space: pre-line;" th:utext="${#strings.replace(wordMeaning.meaning, wordMeaning.header + newline, '')}"></div>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item text-end" th:text="|최종수정 : ${wordMeaning.updDate}|">

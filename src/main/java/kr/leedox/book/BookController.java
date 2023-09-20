@@ -127,6 +127,7 @@ public class BookController {
         model.addAttribute("cate", cate);
         model.addAttribute("wordbook", wordbook);
         model.addAttribute("path", path);
+        model.addAttribute("newline", "\n");
         return "thymeleaf/book/word_detail";
     }
 
