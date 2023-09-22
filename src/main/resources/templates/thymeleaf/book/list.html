@@ -11,11 +11,23 @@
         </div>
     </form>
     <div class="row ">
-        <div class="col-8">
+        <div class="col-2">
             <h6 id="cnt1" class="small text-muted text-start mt-1"></h6>
         </div>
-        <div class="col-4 text-end">
-            <a th:onclick="|javascript:goCreate()|" class="btn btn-sm btn-primary">단어 추가</a>
+        <div class="col-5 text-end">
+            <div class="input-group input-group-sm justify-content-end">
+                <input type="text" class="form-control float-end text-end" name="page" id="page10" value="0">
+                <span class="input-group-text">/</span>
+                <span id="pages" class="input-group-text">0</span>
+                <button id="btn10" type="button" class="btn btn-outline-secondary">Go</button>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="input-group input-group-sm justify-content-end">
+                <button id="btn20" type="button" class="btn btn-outline-secondary">이전</button>
+                <button id="btn30" type="button" class="btn btn-outline-secondary">다음</button>
+                <a th:onclick="|javascript:goCreate()|" class="btn btn-sm btn-primary">추가</a>
+            </div>
         </div>
     </div>
     <table id="grid1" class="table mt-1">
@@ -101,12 +113,103 @@ const afterGetData = (res) => {
         console.log(data);
 
         $("#cnt1").text(data.paging.totalElements);
-
+        $("#pages").text(data.paging.totalPages - 1); 
+        
         setOpts(data.opts, data.selOpt);
         setGrid(data.words);
     } else {
         alert(res.message);
     }
+}
+
+const btn10 = document.getElementById("btn10");
+
+if (btn10) {
+    btn10.addEventListener('click', (e) => {
+        var page1 = $("#page10").val();
+        var opt = $("#opt").val();
+        var key = $("#key").val();
+
+        var loc = `/book/my/${opt}`;
+
+        if(key) {
+            loc += `/${key}`;
+        } else {
+            loc += `/xxxx`;
+        }
+
+        if(page1) {
+            loc += `/${page1}`;
+        }
+        location.href = loc;
+    });
+}
+
+const btn20 = document.getElementById("btn20");
+
+if (btn20) {
+    btn20.addEventListener('click', (e) => {
+        
+        var page = parseInt($("#page10").val(), 10);
+
+        if(page == 0) {
+            alert("시작 페이지입니다.");
+            return;
+        }
+
+        var totalPages = parseInt($("#pages").val(),10);
+
+        if(page == totalPages) {
+            alert("마지막 페이지입니다.");
+            return;
+        }
+
+        var opt = $("#opt").val();
+        var key = $("#key").val();
+
+        var loc = `/book/my/${opt}`;
+
+        if(key) {
+            loc += `/${key}`;
+        } else {
+            loc += `/xxxx`;
+        }
+
+        loc += `/${page - 1}`;
+
+        location.href = loc;
+    });
+}
+
+const btn30 = document.getElementById("btn30");
+
+if (btn30) {
+    btn30.addEventListener('click', (e) => {
+        
+        var page = parseInt($("#page10").val(), 10);
+
+        var totalPages = parseInt($("#pages").val(),10);
+
+        if(page == totalPages) {
+            alert("마지막 페이지입니다.");
+            return;
+        }
+
+        var opt = $("#opt").val();
+        var key = $("#key").val();
+
+        var loc = `/book/my/${opt}`;
+
+        if(key) {
+            loc += `/${key}`;
+        } else {
+            loc += `/xxxx`;
+        }
+
+        loc += `/${page + 1}`;
+
+        location.href = loc;
+    });
 }
 
 // Search
@@ -220,6 +323,7 @@ $(function() {
 
     if(page) {
         loc += `/${page}`;
+        $("#page10").val(page);
     }
 
     console.log(loc);
