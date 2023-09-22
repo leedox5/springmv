@@ -16,7 +16,7 @@
         </div>
         <div class="col-5 text-end">
             <div class="input-group input-group-sm justify-content-end">
-                <input type="text" class="form-control float-end text-end" name="page" id="page10" value="0">
+                <input type="number" min="0" class="form-control float-end text-end" name="page10" id="page10" value="0">
                 <span class="input-group-text">/</span>
                 <span id="pages" class="input-group-text">0</span>
                 <button id="btn10" type="button" class="btn btn-outline-secondary">Go</button>
@@ -114,6 +114,10 @@ const afterGetData = (res) => {
 
         $("#cnt1").text(data.paging.totalElements);
         $("#pages").text(data.paging.totalPages - 1); 
+        $("#page10").attr({
+            "max" : data.paging.totalPages - 1,
+            "min" : 0
+        });
         
         setOpts(data.opts, data.selOpt);
         setGrid(data.words);
