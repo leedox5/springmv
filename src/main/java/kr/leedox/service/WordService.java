@@ -167,6 +167,12 @@ public class WordService {
 
         String option = opt.isPresent() ? opt.get() : "";
 
+        if(key.isPresent()) {
+            if("xxxx".equals(key.get())) {
+                return wordRepository.findAll(spec, pageable);
+            }
+        }
+
         if("eng".equals(option)) {
             if(key.isPresent()) {
                 spec = spec.and(WordbookSpcifications.likeWord(key.get()));

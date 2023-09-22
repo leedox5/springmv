@@ -32,8 +32,8 @@ public class BookServiceTest {
     }
 
     private List<WordMeaning> getStubWordMeanings() {
-        WordMeaning wordMeaning1 = WordMeaning.builder().meaning("10010,시스템 관리,2,2").build();
-        WordMeaning wordMeaning2 = WordMeaning.builder().meaning("10,영한 기본,1|2,2|1").build();
+        WordMeaning wordMeaning1 = WordMeaning.builder().meaning("10010,시스템 관리,2,2,D").build();
+        WordMeaning wordMeaning2 = WordMeaning.builder().meaning("10,영한 기본,1|2,2|1,A").build();
         return List.of(wordMeaning1, wordMeaning2);
     }
 

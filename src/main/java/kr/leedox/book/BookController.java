@@ -50,9 +50,11 @@ public class BookController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
     public String home(Model model) {
+        /* ---
         model.addAttribute("tit", "내단어장");
         model.addAttribute("path", "/data/wordbook");
-        return "thymeleaf/book/list";
+        --- */
+        return "redirect:/book/my";
     }
 
     @GetMapping("/intro")
@@ -79,6 +81,28 @@ public class BookController {
         model.addAttribute("books", books);
 
         return "thymeleaf/book/word";
+    }
+
+    @GetMapping( value = {"/my", "/my/{opt}", "/my/{opt}/{key}", "/my/{opt}/{key}/{page}"})
+    public String list(@PathVariable(required = false) Optional<String> opt,
+                       @PathVariable(required = false) Optional<String> key,
+                       @PathVariable(required = false) Optional<Integer> page, Model model) {
+
+        String loc = "/data/my/" + opt.orElse("eng");
+
+        model.addAttribute("tit", "내단어장");
+        model.addAttribute("opt", opt.orElse("eng"));
+
+        if(key.isPresent()) {
+            model.addAttribute("key", key.get());
+            loc += "/" + key.get();
+        } else {
+            model.addAttribute("key", "");
+        }
+        model.addAttribute("page", page.orElse(0));
+
+        model.addAttribute("path", loc);
+        return "thymeleaf/book/list";
     }
 
     @GetMapping( value = {"/search/{opt}", "/search/{opt}/{key}"})
@@ -243,7 +267,7 @@ public class BookController {
         String loc = "/book/";
 
         if(opt.isPresent()) {
-            loc += "search/" + opt.get();
+            loc += "my/" + opt.get();
         }
 
         if(key.isPresent()) {

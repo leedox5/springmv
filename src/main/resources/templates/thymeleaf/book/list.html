@@ -62,7 +62,7 @@ const setGrid = (rows) => {
         $("#grid1>tbody").append(row_tag);
     });
     
-    $("#cnt1").text(rows.length);
+    //$("#cnt1").text(rows.length);
 }
 
 const goCreate = () => {
@@ -99,6 +99,9 @@ const afterGetData = (res) => {
     if(res.status == 200) {
         data = res.data;
         console.log(data);
+
+        $("#cnt1").text(data.paging.totalElements);
+
         setOpts(data.opts, data.selOpt);
         setGrid(data.words);
     } else {
@@ -141,10 +144,16 @@ searchForm.addEventListener("submit", (e) => {
     var opt = $("#opt").val();
     var key = $("#key").val();
 
-    var loc = `/book/search/${opt}`;
+    var loc = `/book/my/${opt}`;
 
     if(key) {
         loc += `/${key}`;
+    } else {
+        loc += `/xxxx`;
+    }
+
+    if(page) {
+        loc += `/${page}`;
     }
 
     console.log(loc);
@@ -170,6 +179,7 @@ $("#form1").on("submit", function(event) {
 --- */
 
 var data = {};
+var page = "[[${page}]]";
 var opt = "[[${opt}]]";
 var key = "[[${key}]]";
 var path = "[[${path}]]";
@@ -191,10 +201,30 @@ data.words = [
 
 $(function() {
     if(key) {
-        $("#key").val(key);
+        if(key != "xxxx") {
+            $("#key").val(key);
+        }
     }
     console.log(path);
-    $.getData(path, afterGetData);
+
+    var loc = `/book/data/my`
+    if(opt) {
+        loc += `/${opt}`;
+    }
+
+    if(key) {
+        loc += `/${key}`;
+    } else {
+        loc += `/xxxx`;
+    }
+
+    if(page) {
+        loc += `/${page}`;
+    }
+
+    console.log(loc);
+
+    $.getData(loc, afterGetData);
 });
 
 </script>
