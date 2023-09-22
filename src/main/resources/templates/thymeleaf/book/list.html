@@ -116,10 +116,19 @@ const afterGetData = (res) => {
 
         $("#cnt1").text(data.paging.totalElements);
         $("#pages").text(data.paging.totalPages); 
-        $("#page10").attr({
-            "max" : data.paging.totalPages,
-            "min" : 1
-        });
+
+		if(data.paging.totalPages == 0) {
+			$("#page10").attr({
+				"max" : data.paging.totalPages,
+				"min" : 0
+			});
+			$("#page10").val(0);
+		} else {
+			$("#page10").attr({
+				"max" : data.paging.totalPages,
+				"min" : 1
+			});
+		}
         
         setOpts(data.opts, data.selOpt);
         setGrid(data.words);
@@ -160,6 +169,10 @@ if (btn20) {
         
         var page = parseInt($("#page10").val(), 10);
 
+        if(page == 0) {
+		    return;
+		}
+
         if(page == 1) {
             alert("시작 페이지입니다.");
             return;
@@ -195,6 +208,10 @@ if (btn30) {
     btn30.addEventListener('click', (e) => {
         
         var page = parseInt($("#page10").val(), 10);
+
+        if(page == 0) {
+		    return;
+		}
 
         var totalPages = parseInt($("#pages").text(),10);
 
@@ -251,8 +268,14 @@ if (btn1) {
 let form10 = document.getElementById("form10");
 form10.addEventListener("submit", (e) => {
 	e.preventDefault();
-    var page1 = parseInt($("#page10").val(), 10);
-    var opt = $("#opt").val();
+    
+	var page1 = parseInt($("#page10").val(), 10);
+
+	if(page1 == 0) {
+	    return false;
+	}
+
+	var opt = $("#opt").val();
     var key = $("#key").val();
 
     var loc = `/book/my/${opt}`;
@@ -284,9 +307,11 @@ searchForm.addEventListener("submit", (e) => {
         loc += `/xxxx`;
     }
 
+    /*
     if(page) {
         loc += `/${page}`;
     }
+	*/
 
     console.log(loc);
 
