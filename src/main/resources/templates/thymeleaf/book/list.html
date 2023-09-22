@@ -15,12 +15,14 @@
             <h6 id="cnt1" class="small text-muted text-start mt-1"></h6>
         </div>
         <div class="col-5 text-end">
+		    <form id="form10">
             <div class="input-group input-group-sm justify-content-end">
-                <input type="number" min="0" class="form-control float-end text-end" name="page10" id="page10" value="0">
+                <input type="number" min="1" class="form-control float-end text-end" name="page10" id="page10" value="0">
                 <span class="input-group-text">/</span>
                 <span id="pages" class="input-group-text">0</span>
-                <button id="btn10" type="button" class="btn btn-outline-secondary">Go</button>
+                <button id="btn10" type="submit" class="btn btn-outline-secondary">Go</button>
             </div>
+			</form>
         </div>
         <div class="col-5">
             <div class="input-group input-group-sm justify-content-end">
@@ -113,10 +115,10 @@ const afterGetData = (res) => {
         console.log(data);
 
         $("#cnt1").text(data.paging.totalElements);
-        $("#pages").text(data.paging.totalPages - 1); 
+        $("#pages").text(data.paging.totalPages); 
         $("#page10").attr({
-            "max" : data.paging.totalPages - 1,
-            "min" : 0
+            "max" : data.paging.totalPages,
+            "min" : 1
         });
         
         setOpts(data.opts, data.selOpt);
@@ -126,6 +128,7 @@ const afterGetData = (res) => {
     }
 }
 
+/*
 const btn10 = document.getElementById("btn10");
 
 if (btn10) {
@@ -148,6 +151,7 @@ if (btn10) {
         location.href = loc;
     });
 }
+*/
 
 const btn20 = document.getElementById("btn20");
 
@@ -156,7 +160,7 @@ if (btn20) {
         
         var page = parseInt($("#page10").val(), 10);
 
-        if(page == 0) {
+        if(page == 1) {
             alert("시작 페이지입니다.");
             return;
         }
@@ -179,7 +183,7 @@ if (btn20) {
             loc += `/xxxx`;
         }
 
-        loc += `/${page - 1}`;
+        loc += `/${page - 2}`;
 
         location.href = loc;
     });
@@ -210,7 +214,7 @@ if (btn30) {
             loc += `/xxxx`;
         }
 
-        loc += `/${page + 1}`;
+        loc += `/${page}`;
 
         location.href = loc;
     });
@@ -243,6 +247,27 @@ if (btn1) {
     });
 }
 --- */
+
+let form10 = document.getElementById("form10");
+form10.addEventListener("submit", (e) => {
+	e.preventDefault();
+    var page1 = parseInt($("#page10").val(), 10);
+    var opt = $("#opt").val();
+    var key = $("#key").val();
+
+    var loc = `/book/my/${opt}`;
+
+    if(key) {
+        loc += `/${key}`;
+    } else {
+        loc += `/xxxx`;
+    }
+
+    if(page1) {
+        loc += `/${page1 - 1}`;
+    }
+    location.href = loc;
+});
 
 let searchForm = document.getElementById("form1");
 
@@ -327,7 +352,7 @@ $(function() {
 
     if(page) {
         loc += `/${page}`;
-        $("#page10").val(page);
+        $("#page10").val(parseInt(page, 10) + 1);
     }
 
     console.log(loc);
