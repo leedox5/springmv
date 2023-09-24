@@ -9,11 +9,25 @@
         <button id="btn1" type="submit" class="btn btn-outline-secondary">Search</button>
     </div>
     <div class="row ">
-        <div class="col-8">
+        <div class="col-2">
             <h6 id="cnt1" class="small text-muted text-start mt-1"></h6>
         </div>
-        <div class="col-4 text-end">
-            <a th:onclick="|javascript:goCreate()|" class="btn btn-sm btn-primary">단어 추가</a>
+        <div class="col-5 text-end">
+		    <form id="form10">
+            <div class="input-group input-group-sm justify-content-end">
+                <input type="number" min="1" class="form-control float-end text-end" name="page10" id="page10" value="1">
+                <span class="input-group-text">/</span>
+                <span id="pages" class="input-group-text"></span>
+                <button id="btn10" type="submit" class="btn btn-outline-secondary">Go</button>
+            </div>
+			</form>
+        </div>
+        <div class="col-5">
+            <div class="input-group input-group-sm justify-content-end">
+                <button id="btn20" type="button" class="btn btn-outline-secondary">◀</button>
+                <button id="btn30" type="button" class="btn btn-outline-secondary">▶</button>
+                <a th:onclick="|javascript:goCreate()|" class="btn btn-sm btn-primary">추가</a>
+            </div>
         </div>
     </div>
     <table id="grid1" class="table mt-1">
@@ -63,7 +77,7 @@ const setGrid = (rows) => {
         $("#grid1>tbody").append(row_tag);
     });
     
-    $("#cnt1").text(rows.length);
+    //$("#cnt1").text(rows.length);
 }
 
 const goCreate = () => {
@@ -101,6 +115,23 @@ const afterGetData = (res) => {
     if(res.status == 200) {
         data = res.data;
         console.log(data);
+
+        $("#cnt1").text(data.paging.totalElements);
+        $("#pages").text(data.paging.totalPages); 
+
+        if(data.paging.totalPages == 0) {
+			$("#page10").attr({
+				"max" : data.paging.totalPages,
+				"min" : 0
+			});
+			$("#page10").val(0);
+		} else {
+			$("#page10").attr({
+				"max" : data.paging.totalPages,
+				"min" : 1
+			});
+		}
+
         setOpts(data.opts, data.selOpt);
         setGrid(data.words);
     } else {
@@ -128,11 +159,114 @@ if (btn1) {
     });
 }
 
+let form10 = document.getElementById("form10");
+form10.addEventListener("submit", (e) => {
+	e.preventDefault();
+    
+	var page1 = parseInt($("#page10").val(), 10);
+
+	if(page1 == 0) {
+	    return false;
+	}
+
+	var opt = $("#opt").val();
+    var key = $("#key").val();
+
+    var loc = `/book/list/${code}/${sort}/${opt}`;
+
+    if(key) {
+        loc += `/${key}`;
+    } else {
+        loc += `/xxxx`;
+    }
+
+    if(page1) {
+        loc += `/${page1 - 1}`;
+    }
+    location.href = loc;
+});
+
+const btn20 = document.getElementById("btn20");
+
+if (btn20) {
+    btn20.addEventListener('click', (e) => {
+        
+        var page = parseInt($("#page10").val(), 10);
+
+        if(page == 0) {
+		    return;
+		}
+
+        if(page == 1) {
+            alert("시작 페이지입니다.");
+            return;
+        }
+
+        var totalPages = parseInt($("#pages").val(),10);
+
+        if(page == totalPages) {
+            alert("마지막 페이지입니다.");
+            return;
+        }
+
+        var opt = $("#opt").val();
+        var key = $("#key").val();
+
+        var loc = `/book/my/${opt}`;
+
+        if(key) {
+            loc += `/${key}`;
+        } else {
+            loc += `/xxxx`;
+        }
+
+        loc += `/${page - 2}`;
+
+        location.href = loc;
+    });
+}
+
+const btn30 = document.getElementById("btn30");
+
+if (btn30) {
+    btn30.addEventListener('click', (e) => {
+        
+        var page = parseInt($("#page10").val(), 10);
+
+        if(page == 0) {
+		    return;
+		}
+
+        var totalPages = parseInt($("#pages").text(),10);
+
+        if(page == totalPages) {
+            alert("마지막 페이지입니다.");
+            return;
+        }
+
+        var opt = $("#opt").val();
+        var key = $("#key").val();
+
+        var loc = `/book/my/${opt}`;
+
+        if(key) {
+            loc += `/${key}`;
+        } else {
+            loc += `/xxxx`;
+        }
+
+        loc += `/${page}`;
+
+        location.href = loc;
+    });
+}
+
 var data = {};
 var code = "[[${code}]]";
 var sort = "[[${sort}]]";
 var opt = "[[${opt}]]";
 var key = "[[${key}]]";
+var page = "[[${page}]]";
 var path = "[[${path}]]";
 
 /* --- sample data
@@ -155,7 +289,25 @@ $(function() {
         $("#key").val(key);
     }
     console.log(path);
-    $.getData(path, afterGetData);
+
+    var loc = `/book/data/list/${code}/${sort}`;
+    if(opt) {
+        loc += `/${opt}`;
+    }
+
+    if(key) {
+        loc += `/${key}`;
+    } else {
+        loc += `/xxxx`;
+    }
+
+    if(page) {
+        loc += `/${page}`;
+    }
+
+    console.log(loc);
+
+    $.getData(loc, afterGetData);
 });
 
 </script>

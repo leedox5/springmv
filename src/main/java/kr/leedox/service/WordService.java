@@ -154,13 +154,13 @@ public class WordService {
         return wordRepository.findByAuthorOrderByUpdDateDesc(member, pageable);
     }
 
-    public Page<Wordbook> searchListPaging(Member author, Optional<String> opt, Optional<String> key, Integer page) {
+    public Page<Wordbook> searchListPaging(Member author, String code, String sort, Optional<String> opt, Optional<String> key, Integer page) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by("updDate").descending());
 
         Specification<Wordbook> spec = null;
 
         if(author == null) {
-            spec = Specification.where(WordbookSpcifications.equalToSeq(-1));
+            spec = Specification.where(WordbookSpcifications.equalToMeaning2(code));
         } else {
             spec = Specification.where(WordbookSpcifications.equalToAuthor(author));
         }

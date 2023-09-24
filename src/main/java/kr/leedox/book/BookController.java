@@ -198,11 +198,12 @@ public class BookController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(value = {"/list/{code}/{sort}", "/list/{code}/{sort}/{opt}", "/list/{code}/{sort}/{opt}/{key}"})
-    public String list(@PathVariable String code
-                      ,@PathVariable String sort
-                      ,@PathVariable(required = false) Optional<String> opt
-                      ,@PathVariable(required = false) Optional<String> key, Model model) {
+    @GetMapping(value = {"/list/{code}/{sort}", "/list/{code}/{sort}/{opt}", "/list/{code}/{sort}/{opt}/{key}/{page}"})
+    public String list(@PathVariable String code,
+                       @PathVariable String sort,
+                       @PathVariable(required = false) Optional<String> opt,
+                       @PathVariable(required = false) Optional<String> key,
+                       @PathVariable(required = false) Optional<Integer> page , Model model) {
         Wordbook wordbook = wordService.getWordbookByWord("10110");
         String name = wordMeaningService.getBookName(wordbook, code);
 
@@ -219,8 +220,9 @@ public class BookController {
         if (key.isPresent()) {
             path += "/" + key.get();
         }
-        model.addAttribute("opt", opt.orElse(""));
+        model.addAttribute("opt", opt.orElse("eng"));
         model.addAttribute("key", key.orElse(""));
+        model.addAttribute("page", page.orElse(0));
         model.addAttribute("path", "/data/books/" + code +"/" + sort + path);
         return "thymeleaf/book/books";
     }

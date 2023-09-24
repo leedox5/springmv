@@ -64,7 +64,7 @@ public class BookRestController {
             }
              Member member = memberService.getMember(principal.getName());
 
-            Page<Wordbook> paging = wordService.searchListPaging(member, opt, key, page.orElse(0));
+            Page<Wordbook> paging = wordService.searchListPaging(member, "00", "A", opt, key, page.orElse(0));
 
             WordbookResponse wordbookResponse = WordbookResponse.builder()
                     .username(member.getUsername())
@@ -80,6 +80,27 @@ public class BookRestController {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
         }
     }
+
+    @GetMapping( value = {"/data/list/{code}/{sort}", "/data/list/{code}/{sort}/{opt}", "/data/list/{code}/{sort}/{opt}/{key}", "/data/list/{code}/{sort}/{opt}/{key}/{page}"})
+    public ResponseEntity<?> books(@PathVariable String code,
+                                   @PathVariable String sort,
+                                   @PathVariable(required = false) Optional<String> opt,
+                                   @PathVariable(required = false) Optional<String> key,
+                                   @PathVariable(required = false) Optional<Integer> page,
+                                   Principal principal) {
+        Member member = memberService.getMember(principal.getName());
+        Page<Wordbook> paging = wordService.searchListPaging(null, code, sort, opt, key, page.orElse(0));
+        WordbookResponse wordbookResponse = WordbookResponse.builder()
+                .username(member.getUsername())
+                .opts(getOpts())
+                .selOpt(opt.orElse("eng"))
+                .words(paging.getContent())
+                .paging(paging)
+                .cols(getCols())
+                .build();
+        return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbookResponse);
+    }
+
 
     @PostMapping("/create/meaning")
     public ResponseEntity<?> createMeaning(@Valid @RequestBody WordMeaningDTO wordMeaningDTO, Errors errors) throws JsonProcessingException {
