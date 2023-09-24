@@ -152,8 +152,10 @@ if (btn1) {
         
         if (key) {
             loc += `/${key}`;
-            path += `/${key}`;
         }
+		if (page) {
+		    loc += `/${page}`;
+		}
         console.log(loc);
         location.href = loc;
     });
