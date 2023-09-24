@@ -198,7 +198,7 @@ public class BookController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(value = {"/list/{code}/{sort}", "/list/{code}/{sort}/{opt}", "/list/{code}/{sort}/{opt}/{key}/{page}"})
+    @GetMapping(value = {"/list/{code}/{sort}", "/list/{code}/{sort}/{opt}", "/list/{code}/{sort}/{opt}/{key}", "/list/{code}/{sort}/{opt}/{key}/{page}"})
     public String list(@PathVariable String code,
                        @PathVariable String sort,
                        @PathVariable(required = false) Optional<String> opt,
