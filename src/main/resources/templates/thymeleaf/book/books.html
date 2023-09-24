@@ -286,8 +286,10 @@ data.words = [
 
 $(function() {
     if(key) {
-        $("#key").val(key);
-    }
+        if(key != "xxxx") {
+            $("#key").val(key);
+        }
+    }    
     console.log(path);
 
     var loc = `/book/data/list/${code}/${sort}`;
