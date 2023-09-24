@@ -88,20 +88,11 @@ public class BookController {
                        @PathVariable(required = false) Optional<String> key,
                        @PathVariable(required = false) Optional<Integer> page, Model model) {
 
-        String loc = "/data/my/" + opt.orElse("eng");
-
         model.addAttribute("tit", "내단어장");
         model.addAttribute("opt", opt.orElse("eng"));
-
-        if(key.isPresent()) {
-            model.addAttribute("key", key.get());
-            loc += "/" + key.get();
-        } else {
-            model.addAttribute("key", "");
-        }
+        model.addAttribute("key", key.orElse(""));
         model.addAttribute("page", page.orElse(0));
 
-        model.addAttribute("path", loc);
         return "thymeleaf/book/list";
     }
 
@@ -210,20 +201,10 @@ public class BookController {
         model.addAttribute("code", code);
         model.addAttribute("sort", sort);
         model.addAttribute("tit", name);
-
-        String path = "";
-
-        if (opt.isPresent()) {
-            path = "/" + opt.get();
-        }
-
-        if (key.isPresent()) {
-            path += "/" + key.get();
-        }
         model.addAttribute("opt", opt.orElse("eng"));
         model.addAttribute("key", key.orElse(""));
         model.addAttribute("page", page.orElse(0));
-        model.addAttribute("path", "/data/books/" + code +"/" + sort + path);
+
         return "thymeleaf/book/books";
     }
 

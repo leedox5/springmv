@@ -267,7 +267,6 @@ var sort = "[[${sort}]]";
 var opt = "[[${opt}]]";
 var key = "[[${key}]]";
 var page = "[[${page}]]";
-var path = "[[${path}]]";
 
 /* --- sample data
 data.username = '홍길동';
@@ -290,7 +289,6 @@ $(function() {
             $("#key").val(key);
         }
     }    
-    console.log(path);
 
     var loc = `/book/data/list/${code}/${sort}`;
     if(opt) {
