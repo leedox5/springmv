@@ -186,7 +186,7 @@ public class WordbookRestController {
 
             // [2023.09.07] paging 처리
             //List<Wordbook> words = wordService.searchList(member, opt, key);
-            Page<Wordbook> paging = wordService.searchListPaging(member, opt, key, page.orElse(0));
+            Page<Wordbook> paging = wordService.searchListPaging(member, "00", "A", opt, key, page.orElse(0));
 
             WordbookResponse wordbookResponse = WordbookResponse.builder()
                     .username(member.getUsername())
@@ -208,7 +208,7 @@ public class WordbookRestController {
                                      @PathVariable(required = false) Optional<String> key, Model model, Principal principal) {
         Member member = memberService.getMember(principal.getName());
         //List<Wordbook> words = wordService.searchList(opt, key);
-        Page<Wordbook> paging = wordService.searchListPaging(null, opt, key, page.orElse(0));
+        Page<Wordbook> paging = wordService.searchListPaging(null, "00", "A", opt, key, page.orElse(0));
 
         WordbookResponse wordbookResponse = WordbookResponse.builder()
                 .username(member.getUsername())

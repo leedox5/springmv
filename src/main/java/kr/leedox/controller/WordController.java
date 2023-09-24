@@ -72,7 +72,7 @@ public class WordController {
         Page<Wordbook> words = null;
         Member author = memberService.getMember(principal.getName());
         //Page<Wordbook> words = wordService.getListByAuthorPaging(author, page);
-        words = wordService.searchListPaging(author, Optional.of(opt), Optional.ofNullable(key), page);
+        words = wordService.searchListPaging(author, "00", "A", Optional.of(opt), Optional.ofNullable(key), page);
 
         model.addAttribute("list", words);
         model.addAttribute("page", page);
@@ -99,7 +99,7 @@ public class WordController {
 
         Member author = memberService.getMember(principal.getName());
 
-        words = wordService.searchListPaging(author, Optional.of(opt), Optional.ofNullable(key), 0);
+        words = wordService.searchListPaging(author, "00", "A", Optional.of(opt), Optional.ofNullable(key), 0);
 
         model.addAttribute("list", words);
 		model.addAttribute("opt", opt);
