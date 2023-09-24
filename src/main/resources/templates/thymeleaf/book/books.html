@@ -212,7 +212,7 @@ if (btn20) {
         var opt = $("#opt").val();
         var key = $("#key").val();
 
-        var loc = `/book/my/${opt}`;
+        var loc = `/book/list/${code}/${sort}/${opt}`;
 
         if(key) {
             loc += `/${key}`;
@@ -247,7 +247,7 @@ if (btn30) {
         var opt = $("#opt").val();
         var key = $("#key").val();
 
-        var loc = `/book/my/${opt}`;
+        var loc = `/book/list/${code}/${sort}/${opt}`;
 
         if(key) {
             loc += `/${key}`;
