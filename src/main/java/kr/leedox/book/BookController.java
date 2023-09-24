@@ -126,12 +126,13 @@ public class BookController {
         return "thymeleaf/book/books";
     }
 
-    @GetMapping(value = {"/word/{cate}/{sort}/{id}", "/word/{cate}/{sort}/{id}/{opt}", "/word/{cate}/{sort}/{id}/{opt}/{key}"})
+    @GetMapping(value = {"/word/{cate}/{sort}/{id}", "/word/{cate}/{sort}/{id}/{opt}", "/word/{cate}/{sort}/{id}/{opt}/{key}", "/word/{cate}/{sort}/{id}/{opt}/{key}/{page}"})
     public String word(@PathVariable Integer id,
                        @PathVariable String cate,
                        @PathVariable String sort,
                        @PathVariable(required = false) Optional<String> opt,
-                       @PathVariable(required = false) Optional<String> key, Model model) {
+                       @PathVariable(required = false) Optional<String> key,
+		               @PathVariable(required = false) Optional<Integer> page, Model model) {
 
         Wordbook wordbook = wordService.getWordbook(id);
 
@@ -152,6 +153,7 @@ public class BookController {
         model.addAttribute("wordbook", wordbook);
         model.addAttribute("path", path);
         model.addAttribute("newline", "\n");
+		model.addAttribute("page", page.orElse(0));
         return "thymeleaf/book/word_detail";
     }
 

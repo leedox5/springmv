@@ -105,6 +105,9 @@ const goDetail = (id) => {
         loc += `/${key}`
     }
 
+    if(page) {
+		loc += `/${page}`
+	}
     console.log(loc);
     location.href = loc;
 }

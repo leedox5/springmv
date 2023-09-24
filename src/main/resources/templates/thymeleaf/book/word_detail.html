@@ -104,6 +104,8 @@ param.page = "[[${page}]]";
 param.opt = "[[${opt}]]";
 param.key = "[[${key}]]";
 
+var page = "[[${page}]]";
+
 const delete_elements = document.getElementsByClassName("delete");
 Array.from(delete_elements).forEach(function(element) {
     element.addEventListener('click', function() {
@@ -256,6 +258,9 @@ if (btn1) {
             if(path) {
                 loc += path;
             }
+			if(page) {
+				loc += `/${page}`;
+			}
         }
 
         console.log(loc);
