@@ -19,14 +19,16 @@ public class WordMeaningService {
     @Autowired
     WordMeaningRepository wordMeaningRepository;
 
-    public WordMeaning create(Wordbook wordbookRepo, WordMeaningDTO wordMeaningDTO) {
+    public WordMeaning create(WordMeaningDTO wordMeaningDTO, Wordbook wordbook) {
+
         WordMeaning wordMeaning = null;
         wordMeaning = WordMeaning.builder()
-                .wordbook(wordbookRepo)
+                .wordbook(wordbook)
                 .meaning(wordMeaningDTO.getMeaning())
                 .crtDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .updDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
+
         return wordMeaningRepository.save(wordMeaning);
     }
 
@@ -49,12 +51,12 @@ public class WordMeaningService {
         return wordMeaningRepository.save(wordMeaning);
     }
 
-    public WordMeaning save(WordMeaning wordMeaningForm) {
-        Optional<WordMeaning> owm = wordMeaningRepository.findById(wordMeaningForm.getId());
+    public WordMeaning save(WordMeaningDTO wordMeaningDTO) {
+        Optional<WordMeaning> owm = wordMeaningRepository.findById(wordMeaningDTO.getId());
         WordMeaning wordMeaning = null;
         if (owm.isPresent()) {
             wordMeaning = owm.get();
-            wordMeaning.setMeaning(wordMeaningForm.getMeaning());
+            wordMeaning.setMeaning(wordMeaningDTO.getMeaning());
             wordMeaning.setUpdDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             return wordMeaningRepository.save(wordMeaning);
         }

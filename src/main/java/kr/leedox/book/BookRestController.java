@@ -113,18 +113,22 @@ public class BookRestController {
         System.out.println(requestJson);
 
         Wordbook wordbook = wordService.getWordbook(wordMeaningDTO.getWordbookId());
+        wordService.saveWordbook(wordbook);
 
-        wordMeaningService.create(wordbook, wordMeaningDTO);
+        wordMeaningService.create(wordMeaningDTO, wordbook);
         return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
     }
 
     @PostMapping("/save/meaning")
-    public ResponseEntity<?> saveMeaning(@Valid @RequestBody WordMeaning wordMeaning, Errors errors) {
+    public ResponseEntity<?> saveMeaning(@Valid @RequestBody WordMeaningDTO wordMeaningDTO, Errors errors) {
         if(errors.hasErrors()) {
             List<String> msg = errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList());
             return ResponseEntity.ok(new ErrorResponse("404", "N", msg));
         }
-        wordMeaningService.save(wordMeaning);
+        Wordbook wordbook = wordService.getWordbook(wordMeaningDTO.getWordbookId());
+        wordService.saveWordbook(wordbook);
+
+        wordMeaningService.save(wordMeaningDTO);
         return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
     }
 

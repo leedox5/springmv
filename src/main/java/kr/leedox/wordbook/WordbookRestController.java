@@ -1,5 +1,6 @@
 package kr.leedox.wordbook;
 
+import kr.leedox.book.WordMeaningDTO;
 import kr.leedox.common.ErrorResponse;
 import kr.leedox.entity.Member;
 import kr.leedox.entity.WordMeaning;
@@ -297,12 +298,12 @@ public class WordbookRestController {
 
 
     @PostMapping("/meaning/save/{id}")
-    public ResponseEntity<?> meaningSave( @PathVariable Integer id, @Valid @RequestBody WordMeaning wordMeaning, Errors errors) {
+    public ResponseEntity<?> meaningSave(@PathVariable Integer id, @Valid @RequestBody WordMeaningDTO wordMeaningDTO, Errors errors) {
         if(errors.hasErrors()) {
             List<String> msg = errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList());
             return ResponseEntity.ok(new ErrorResponse("404", "N", msg));
         }
-        wordMeaningService.save(wordMeaning);
+        wordMeaningService.save(wordMeaningDTO);
 
         return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
     }

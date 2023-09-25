@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 @Data
 public class WordMeaningDTO implements Serializable {
+    private  int id;
     @NotEmpty(message = "내용은 필수 항목 입니다.")
     private String meaning;
     @JsonProperty("wordbook_id")
