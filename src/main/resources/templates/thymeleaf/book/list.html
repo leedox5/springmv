@@ -37,6 +37,7 @@
         <tr>
             <th>단어</th>
             <th>의미</th>
+            <th class="text-end">메모</th>
         </tr>
         </thead>
         <tbody>
@@ -70,6 +71,7 @@ const setGrid = (rows) => {
         row_tag  = `<tr>`;
         row_tag += `<td class="text-start"><a href="javascript:void(0);" onclick="goDetail('${item.id}');">${item.word}</a></td>`;
         row_tag += `<td class="text-start">${item.meaning1}</td>`;
+        row_tag += `<td class="text-end">${item.memoCount}</td>`;
         row_tag += `</tr>`;
 
         //console.log(row_tag);
