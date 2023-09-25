@@ -48,7 +48,7 @@
                             data-bs-toggle="collapse"
                             th:attr="data-bs-target='#acc-collapse' + ${wordMeaning.id}"
                             aria-expanded="true"
-                            th:text="|${wordMeaning.header}|">
+                            th:utext="|${wordMeaning.header}|">
                     </button>
                 </h1>
                 <div th:id="'acc-collapse' + ${wordMeaning.id}"
