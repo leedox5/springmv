@@ -155,7 +155,13 @@ public class WordService {
     }
 
     public Page<Wordbook> searchListPaging(Member author, String code, String sort, Optional<String> opt, Optional<String> key, Integer page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("word").ascending());
+        Pageable pageable = null;
+
+        if("D".equals(sort)) {
+            pageable = PageRequest.of(page, 10, Sort.by("updDate").descending());
+        } else {
+            pageable = PageRequest.of(page, 10, Sort.by("word").ascending());
+        }
 
         Specification<Wordbook> spec = null;
 
