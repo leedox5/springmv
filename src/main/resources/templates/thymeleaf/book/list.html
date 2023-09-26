@@ -37,7 +37,6 @@
         <tr>
             <th>단어</th>
             <th>의미</th>
-            <th>코드</th>
             <th class="text-end">기본</th>
             <th class="text-end">메모</th>
         </tr>
@@ -73,7 +72,6 @@ const setGrid = (rows) => {
         row_tag  = `<tr>`;
         row_tag += `<td class="text-start"><a href="javascript:void(0);" onclick="goDetail('${item.id}');">${item.word}</a></td>`;
         row_tag += `<td class="text-start">${item.meaning1}</td>`;
-        row_tag += `<td class="text-start">${item.meaning2 == null ? '' : item.meaning2}</td>`;
         row_tag += `<td class="text-end">${item.basicCount}</td>`;
         row_tag += `<td class="text-end">${item.memoCount}</td>`;
         row_tag += `</tr>`;
