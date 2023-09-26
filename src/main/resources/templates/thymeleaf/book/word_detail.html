@@ -254,6 +254,9 @@ if (btn1) {
             if(path) {
                 loc += "my/" + path;
             }
+            if(page) {
+                loc += `/${page}`;
+            }
         } else {
             loc += `list/${cate}/${sort}/`;
             if(path) {

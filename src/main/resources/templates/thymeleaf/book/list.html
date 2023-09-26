@@ -101,11 +101,15 @@ const goDetail = (id) => {
     let loc = `/book/word/00/A/${id}`;
 
     if(opt) {
-        loc += `/${opt}`
+        loc += `/${opt}`;
     }
 
     if(key) {
-        loc += `/${key}`
+        loc += `/${key}`;
+    }
+
+    if(page) {
+        loc += `/${page}`;
     }
 
     console.log(loc);
