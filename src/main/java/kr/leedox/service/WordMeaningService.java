@@ -1,6 +1,7 @@
 package kr.leedox.service;
 
 import kr.leedox.book.WordMeaningDTO;
+import kr.leedox.entity.Member;
 import kr.leedox.entity.WordMeaning;
 import kr.leedox.entity.Wordbook;
 import kr.leedox.repository.WordMeaningRepository;
@@ -19,7 +20,7 @@ public class WordMeaningService {
     @Autowired
     WordMeaningRepository wordMeaningRepository;
 
-    public WordMeaning create(WordMeaningDTO wordMeaningDTO, Wordbook wordbook) {
+    public WordMeaning create(WordMeaningDTO wordMeaningDTO, Wordbook wordbook, Member member) {
 
         WordMeaning wordMeaning = null;
         wordMeaning = WordMeaning.builder()
@@ -27,6 +28,7 @@ public class WordMeaningService {
                 .meaning(wordMeaningDTO.getMeaning())
                 .crtDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .updDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .member(member)
                 .build();
 
         return wordMeaningRepository.save(wordMeaning);

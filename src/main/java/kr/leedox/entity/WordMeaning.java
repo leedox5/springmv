@@ -27,6 +27,10 @@ public class WordMeaning {
     @JoinColumn(name = "wordbook_id")
     private Wordbook wordbook;
 
+    @JsonIgnore
+    @ManyToOne
+    private Member member;
+
     @Transient
     private String key;
 

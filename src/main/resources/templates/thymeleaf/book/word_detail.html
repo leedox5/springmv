@@ -62,7 +62,7 @@
                                     <div class="card-text" style="white-space: pre-line;" th:utext="${#strings.replace(wordMeaning.meaning, wordMeaning.header + newline, '')}"></div>
                                 </div>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item text-end" th:text="|최종수정 : ${wordMeaning.updDate}|">
+                                    <li class="list-group-item text-end" th:text="|${wordMeaning.member.username}[${#strings.substring(wordMeaning.updDate, 2, 16)}]|">
                                     </li>
                                 </ul>
                                 <div class="card-footer text-end comment">

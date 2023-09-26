@@ -103,11 +103,13 @@ public class BookRestController {
 
 
     @PostMapping("/create/meaning")
-    public ResponseEntity<?> createMeaning(@Valid @RequestBody WordMeaningDTO wordMeaningDTO, Errors errors) throws JsonProcessingException {
+    public ResponseEntity<?> createMeaning(@Valid @RequestBody WordMeaningDTO wordMeaningDTO, Errors errors, Principal principal) throws JsonProcessingException {
         if(errors.hasErrors()) {
             List<String> msg = errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList());
             return ResponseEntity.ok(new ErrorResponse("404", "N", msg));
         }
+
+        Member member = memberService.getMember(principal.getName());
 
         String requestJson = objectMapper.writeValueAsString(wordMeaningDTO);
         System.out.println(requestJson);
@@ -115,7 +117,7 @@ public class BookRestController {
         Wordbook wordbook = wordService.getWordbook(wordMeaningDTO.getWordbookId());
         wordService.saveWordbook(wordbook);
 
-        wordMeaningService.create(wordMeaningDTO, wordbook);
+        wordMeaningService.create(wordMeaningDTO, wordbook, member);
         return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
     }
 
