@@ -72,4 +72,13 @@ public class WordbookSpcifications {
             }
         };
     }
+
+    public static Specification<Wordbook> meaning2IsNull() {
+        return new Specification<Wordbook>() {
+            @Override
+            public Predicate toPredicate(Root<Wordbook> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.isNull(root.get("meaning2"));
+            }
+        };
+    }
 }

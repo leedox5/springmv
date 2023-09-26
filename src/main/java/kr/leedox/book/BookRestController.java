@@ -66,11 +66,13 @@ public class BookRestController {
 
             Page<Wordbook> paging = wordService.searchListPaging(member, "00", "A", opt, key, page.orElse(0));
 
+            List<Wordbook> words = paging.getContent();
+
             WordbookResponse wordbookResponse = WordbookResponse.builder()
                     .username(member.getUsername())
                     .opts(getOpts())
-                    .selOpt(opt.isPresent() ? opt.get() : "eng")
-                    .words(paging.getContent())
+                    .selOpt(opt.orElse("eng"))
+                    .words(words)
                     .paging(paging)
                     .cols(getCols())
                     .build();

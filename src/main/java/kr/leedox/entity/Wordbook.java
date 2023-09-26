@@ -2,6 +2,7 @@ package kr.leedox.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -39,10 +40,12 @@ public class Wordbook {
     @OrderBy("crtDate DESC")
     private Collection<WordMeaning> wordMeanings;
 
-    @Transient
+    @Formula("(select count(*) from word_meaning a where a.wordbook_id = id)")
     private int memoCount;
 
-    public int getMemoCount() {
-        return wordMeanings.size();
-    }
+    @Formula("(select count(*) from word_meaning a where a.wordbook_id = 51 and instr(substring_index(substring_index(a.meaning,',', -2),',',1),author_id) > 0)")
+    private int bookCount;
+
+    @Formula("(select count(*) from wordbook a where a.meaning2 = '3000' and a.word = word)")
+    private int basicCount;
 }
