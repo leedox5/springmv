@@ -169,7 +169,7 @@ public class WordService {
             spec = Specification.where(WordbookSpcifications.equalToMeaning2(code));
         } else {
             spec = Specification.where(WordbookSpcifications.equalToAuthor(author));
-            spec = spec.and(WordbookSpcifications.meaning2IsNull());
+            //spec = spec.and(WordbookSpcifications.meaning2IsNull());
         }
 
         String option = opt.isPresent() ? opt.get() : "";
