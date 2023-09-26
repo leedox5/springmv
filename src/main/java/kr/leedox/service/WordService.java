@@ -225,6 +225,9 @@ public class WordService {
         return wordRepository.findAll(spec, Sort.by("updDate").descending());
     }
 
+    public int getWordCountByMeaning2(String meaning2) {
+        return wordRepository.countByMeaning2(meaning2);
+    }
     public List<Wordbook> bookList(String code, String sort, Optional<String> opt, Optional<String> key) {
         Specification<Wordbook> spec = Specification.where(WordbookSpcifications.equalToMeaning2(code));
 

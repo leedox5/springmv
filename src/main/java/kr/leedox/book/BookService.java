@@ -34,12 +34,12 @@ public class BookService {
             String[] active = str[3].split("|");
             String sort = str[4];
             if(Arrays.asList(auth).contains(Integer.toString(id))) {
-                List<Wordbook> wordbooks = wordService.bookList(str[0], "A", Optional.empty(), Optional.empty());
+                //List<Wordbook> wordbooks = wordService.bookList(str[0], "A", Optional.empty(), Optional.empty());
                 Book book = Book.builder()
                         .code(str[0])
                         .name(str[1])
                         .active(getActive(active, id))
-                        .wordCount(wordbooks.size())
+                        .wordCount(wordService.getWordCountByMeaning2(str[0]))
                         .sort(sort)
                         .build();
                 books.add(book);

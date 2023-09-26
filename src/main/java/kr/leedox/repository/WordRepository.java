@@ -14,7 +14,6 @@ public interface WordRepository extends JpaRepository<Wordbook, Integer>, JpaSpe
     List<Wordbook> findByWordContaining(String word);
     List<Wordbook> findByWordStartsWithOrderByWordAsc(String word);
     List<Wordbook> findTop10ByOrderByUpdDateDesc();
-
     List<Wordbook> findTop10BySeqGreaterThanOrderBySeqAscIdAsc(int seq);
 
     List<Wordbook> findBySeqGreaterThanOrderBySeqAsc(int seq);
@@ -34,4 +33,6 @@ public interface WordRepository extends JpaRepository<Wordbook, Integer>, JpaSpe
     List<Wordbook> findByAuthorOrderByUpdDateDesc(Member author);
 
     Page<Wordbook> findByAuthorOrderByUpdDateDesc(Member member, Pageable pageable);
+
+    int countByMeaning2(String meaning2);
 }
