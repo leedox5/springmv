@@ -77,7 +77,7 @@ public class WordbookSpcifications {
         return new Specification<Wordbook>() {
             @Override
             public Predicate toPredicate(Root<Wordbook> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.isEmpty(root.get("meaning2"));
+                return criteriaBuilder.isNull(root.get("meaning2"));
             }
         };
     }
