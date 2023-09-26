@@ -72,7 +72,11 @@ const setGrid = (rows) => {
         row_tag  = `<tr>`;
         row_tag += `<td class="text-start"><a href="javascript:void(0);" onclick="goDetail('${item.id}');">${item.word}</a></td>`;
         row_tag += `<td class="text-start">${item.meaning1}</td>`;
-        row_tag += `<td class="text-end">${item.basicCount}</td>`;
+        if(item.basicCount > 0) {
+            row_tag += `<td class="text-center"><a href="/book/list/3000/A/eng/${item.word}" class="small">GO</a></td>>`
+        } else {
+            row_tag += `<td class="text-end"></td>`;
+        }
         row_tag += `<td class="text-end">${item.memoCount}</td>`;
         row_tag += `</tr>`;
 
