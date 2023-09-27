@@ -56,8 +56,28 @@
                         <div th:id="'collap' + ${wordMeaning.id}" th:class="'collapse show mulcol' + ${wordMeaning.id}">
                             <div class="card mx-1 my-1" >
                                 <div class="card-body">
-                                    <div class="card-text" style="white-space: pre-line;" th:utext="${#strings.replace(wordMeaning.meaning, wordMeaning.header + newline, '')}"></div>
+                                    <div class="card mb-2">
+                                        <div class="card-body">
+                                            <div class="card-text" style="white-space: pre-line;" th:utext="${#strings.replace(wordMeaning.meaning, wordMeaning.header + newline, '')}"></div>
+                                        </div>
+                                    </div>
+                                    <th:block th:each="reply, idx : ${wordMeaning.meanings}">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <span th:text="${reply.meaning}"></span>
+                                        </div>
+                                        <div class="card-footer text-end">
+                                            <a href="#" class="small delete" th:attr="data-uri='/data/meaning/delete/' + ${reply.id}">삭제</a>
+                                        </div>
+                                    </div>
+                                    </th:block>
                                 </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item text-end">
+                                        <textarea  name="mean" th:id="'mean' + ${wordMeaning.id}" class="form-control" rows="1"></textarea>
+                                        <button id="btn20" th:onclick="'createMean('+${wordMeaning.id}+')'" class="btn btn-sm btn-outline-primary mt-1">답글 등록</button>
+                                    </li>
+                                </ul>
                                 <div class="card-footer text-end comment"  th:if="${#authentication.getPrincipal().getUsername() == wordMeaning.member.email}">
                                     <a th:href="@{|.mulcol${wordMeaning.id}|}" role="button" data-bs-toggle="collapse" class="small">수정</a>
                                     <a href="#" class="small delete" th:attr="data-uri='/data/meaning/delete/' + ${wordMeaning.id}">삭제</a>
@@ -233,6 +253,45 @@ $("#btn2").click(function(event) {
         }
     });
 });
+
+const createMean = (id) => {
+    event.preventDefault();
+
+    var loc = "/book/create/meaning/" + id
+    console.log(loc);
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    var form_data = {};
+	form_data.meaning = $("#mean" + id).val();
+
+	console.log(form_data);
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/book/create/meaning/" + id,
+        data: JSON.stringify(form_data),
+        dataType: "json",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success: function(data) {
+            var json = JSON.stringify(data, null, 4);
+            if(data.errorContent == "Y") {
+                location.reload();
+            } else {
+                //$("#err").html(data.messages[0]);
+				alert(data.messages[0]);
+            }
+        },
+        error: function(e) {
+            //$("#err").html(e.responseText);
+			alert(e.responseText);
+            console.log(e);
+        }
+    });
+}
 
 const btn1 = document.getElementById("btn1");
 

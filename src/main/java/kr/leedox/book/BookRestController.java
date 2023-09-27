@@ -136,6 +136,19 @@ public class BookRestController {
         return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
     }
 
+    @PostMapping("/create/meaning/{id}")
+    public ResponseEntity<?> createReply(@Valid @RequestBody WordMeaningDTO wordMeaningDTO, Errors errors, @PathVariable Integer id, Principal principal) {
+        if(errors.hasErrors()) {
+            List<String> msg = errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList());
+            return ResponseEntity.ok(new ErrorResponse("404", "N", msg));
+        }
+        Member member = memberService.getMember(principal.getName());
+        WordMeaning upper = wordMeaningService.getWordMeaning(id);
+
+        wordMeaningService.create(wordMeaningDTO, upper, member);
+        return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
+    }
+
     @PostMapping("/save/meaning")
     public ResponseEntity<?> saveMeaning(@Valid @RequestBody WordMeaningDTO wordMeaningDTO, Errors errors) {
         if(errors.hasErrors()) {

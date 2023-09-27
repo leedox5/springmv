@@ -113,4 +113,17 @@ public class WordMeaningService {
         }
         return null;
     }
+
+    public WordMeaning create(WordMeaningDTO wordMeaningDTO, WordMeaning upper, Member member) {
+        WordMeaning wordMeaning = WordMeaning.builder()
+                .wordbook(null)
+                .meaning(wordMeaningDTO.getMeaning())
+                .crtDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .updDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .member(member)
+                .upperMeaning(upper)
+                .build();
+
+        return wordMeaningRepository.save(wordMeaning);
+    }
 }

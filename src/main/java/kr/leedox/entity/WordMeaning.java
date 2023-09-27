@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "word_meaning")
@@ -28,8 +29,15 @@ public class WordMeaning {
     private Wordbook wordbook;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
     private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "upper_id")
+    private WordMeaning upperMeaning;
+
+    @OneToMany(mappedBy = "upperMeaning")
+    private List<WordMeaning> meanings;
 
     @Transient
     private String key;
