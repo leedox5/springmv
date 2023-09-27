@@ -35,4 +35,6 @@ public interface WordRepository extends JpaRepository<Wordbook, Integer>, JpaSpe
     Page<Wordbook> findByAuthorOrderByUpdDateDesc(Member member, Pageable pageable);
 
     int countByMeaning2(String meaning2);
+
+    int countByMeaning2AndWord(String code, String word);
 }

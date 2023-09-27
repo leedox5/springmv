@@ -48,6 +48,9 @@ public class BookRestController {
     WordService wordService;
 
     @Autowired
+    BookService bookService;
+
+    @Autowired
     WordMeaningService wordMeaningService;
     public BookRestController(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
@@ -62,11 +65,21 @@ public class BookRestController {
             if(principal == null) {
                 throw new Exception("LOGIN");
             }
-             Member member = memberService.getMember(principal.getName());
+            Member member = memberService.getMember(principal.getName());
 
             Page<Wordbook> paging = wordService.searchListPaging(member, "00", "A", opt, key, page.orElse(0));
 
             List<Wordbook> words = paging.getContent();
+
+            Book book = Book.builder().id(10).name("영한기본").build();
+            words.get(0).setBooks(List.of(book));
+
+            Wordbook wordbook = wordService.getWordbookByWord("10110");
+            List<Book> books = bookService.getBooks(wordbook, member.getId());
+
+            for (int i = 0; i < words.size(); i++) {
+                words.get(i).setBooks(bookService.getBooksByWord(books, words.get(i).getWord()));
+            }
 
             WordbookResponse wordbookResponse = WordbookResponse.builder()
                     .username(member.getUsername())

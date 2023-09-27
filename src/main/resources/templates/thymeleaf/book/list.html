@@ -32,12 +32,11 @@
             </div>
         </div>
     </div>
-    <table id="grid1" class="table table-sm table-bordered border-primary mt-1">
+    <table id="grid1" class="table table-sm mt-1">
         <thead class="text-left table-dark">
         <tr>
             <th>단어</th>
             <th>의미</th>
-            <th class="text-end">기본</th>
             <th class="text-end">메모</th>
         </tr>
         </thead>
@@ -72,14 +71,30 @@ const setGrid = (rows) => {
         row_tag  = `<tr>`;
         row_tag += `<td class="text-start"><a href="javascript:void(0);" onclick="goDetail('${item.id}');">${item.word}</a></td>`;
         row_tag += `<td class="text-start">${item.meaning1}</td>`;
+        /* ---
         if(item.basicCount > 0) {
             row_tag += `<td class="text-center"><a href="/book/list/3000/A/eng/${item.word}" class="small">GO</a></td>>`
         } else {
             row_tag += `<td class="text-end"></td>`;
         }
+        --- */
         row_tag += `<td class="text-end">${item.memoCount}</td>`;
         row_tag += `</tr>`;
 
+        if(item.books.length > 0) {
+            for(var i = 0 ; i < item.books.length ; i++) {
+                row_tag += `<tr>`;
+                row_tag += `<td class="text-end">=></td>`;
+                if(item.books[i].active == "Y") {
+                    row_tag += `<td><a href="/book/list/${item.books[i].code}/A/eng/${item.word}">${item.books[i].name}</a></td>`;
+                    row_tag += `<td class='text-end'>ACTIVE</td>`
+                } else {
+                    row_tag += `<td>${item.books[i].name}</td>`;
+                    row_tag += `<td class='text-end'><a href='/book/view/10110'>NOT ACTIVE</a></td>`
+                }
+                row_tag += `</tr>`;
+            }
+        }
         //console.log(row_tag);
         $("#grid1>tbody").append(row_tag);
     });

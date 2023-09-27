@@ -55,4 +55,15 @@ public class BookService {
             return "N";
         }
     }
+
+    public List<Book> getBooksByWord(List<Book> books, String word) {
+        List<Book> books1 = new ArrayList<>();
+        for(Book book : books) {
+            int cnt = wordService.getWordCountByMeaning2AndWord(book.getCode(), word);
+            if(cnt > 0) {
+                books1.add(book);
+            }
+        }
+        return books1;
+    }
 }

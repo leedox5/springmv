@@ -1,11 +1,13 @@
 package kr.leedox.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import kr.leedox.book.Book;
 import lombok.*;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "wordbook")
@@ -48,4 +50,7 @@ public class Wordbook {
 
     @Formula("(select count(*) from wordbook a where a.meaning2 = '3000' and a.word = word)")
     private int basicCount;
+
+    @Transient
+    private List<Book> books;
 }

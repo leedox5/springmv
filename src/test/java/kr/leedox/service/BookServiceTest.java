@@ -23,11 +23,19 @@ public class BookServiceTest {
     @Mock
     WordMeaningService wordMeaningService;
 
+    @Mock
+    WordService wordService;
+
     @Test
     void getBooksTest() {
         given(wordMeaningService.getWordMeanings(null)).willReturn(getStubWordMeanings());
+        given(wordService.getWordCountByMeaning2("10")).willReturn(1);
+        given(wordService.getWordCountByMeaning2AndWord("10", "prefer")).willReturn(1);
         List<Book> books = bookService.getBooks(null, 1);
         System.out.println(books);
+        assertEquals(1, books.size());
+
+        books = bookService.getBooksByWord(books, "prefer");
         assertEquals(1, books.size());
     }
 
@@ -37,4 +45,8 @@ public class BookServiceTest {
         return List.of(wordMeaning1, wordMeaning2);
     }
 
+    @Test
+    void getBooksByWord() {
+        given(wordMeaningService.getWordMeanings(null)).willReturn(getStubWordMeanings());
+    }
 }

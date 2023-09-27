@@ -12,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -290,5 +289,9 @@ public class WordService {
     public void delete(Integer id) {
         Wordbook wordbook = getWordbook(id);
         wordRepository.delete(wordbook);
+    }
+
+    public int getWordCountByMeaning2AndWord(String code, String word) {
+        return wordRepository.countByMeaning2AndWord(code, word);
     }
 }

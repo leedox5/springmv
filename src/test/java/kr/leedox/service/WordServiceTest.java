@@ -1,6 +1,8 @@
 package kr.leedox.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.leedox.book.Book;
+import kr.leedox.book.BookService;
 import kr.leedox.entity.Member;
 import kr.leedox.entity.WordMeaning;
 import kr.leedox.entity.Wordbook;
@@ -33,6 +35,9 @@ public class WordServiceTest {
     MemberService memberService;
 
     @Autowired
+    BookService bookService;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @Test
@@ -59,11 +64,24 @@ public class WordServiceTest {
         Wordbook wordbook = wordService.getWordbookByWord("10110");
         //assertEquals(3, wordbook.getWordMeanings().size());
         for(WordMeaning wordMeaning : wordbook.getWordMeanings()) {
-            //System.out.println(wordMeaning.getMeaning());
+            System.out.println(wordMeaning.getMeaning());
+            /*
             String[] str1 = wordMeaning.getMeaning().split("\n");
             if(str1[1].contains("1")) {
                 System.out.println(Arrays.toString(str1[0].split(",")));
             }
+            */
         }
+    }
+
+    @Test
+    void getWordCountByMeaning2AndWordTesst() {
+        Wordbook wordbook = wordService.getWordbookByWord("10110");
+        List<Book> books = bookService.getBooks(wordbook, 1);
+        System.out.println(books);
+        assertEquals(2, books.size());
+
+        int cnt = wordService.getWordCountByMeaning2AndWord(books.get(0).getCode(), "prefer");
+        assertEquals(1, cnt);
     }
 }
