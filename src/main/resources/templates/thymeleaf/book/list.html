@@ -83,16 +83,18 @@ const setGrid = (rows) => {
 
         if(item.books.length > 0) {
             for(var i = 0 ; i < item.books.length ; i++) {
-                row_tag += `<tr>`;
-                row_tag += `<td class="text-end">=></td>`;
-                if(item.books[i].active == "Y") {
-                    row_tag += `<td><a href="/book/list/${item.books[i].code}/A/eng/${item.word}">${item.books[i].name}</a></td>`;
-                    row_tag += `<td class='text-end'>ACTIVE</td>`
-                } else {
-                    row_tag += `<td>${item.books[i].name}</td>`;
-                    row_tag += `<td class='text-end'><a href='/book/view/10110'>NOT ACTIVE</a></td>`
-                }
-                row_tag += `</tr>`;
+                //if(item.books[i].code != item.meaning2) {
+                    row_tag += `<tr>`;
+                    row_tag += `<td class="text-end">${item.books[i].code == item.meaning2 ? '[O] ' : ''}=></td>`;
+                    if(item.books[i].active == "Y") {
+                            row_tag += `<td><a href="/book/list/${item.books[i].code}/A/eng/${item.word}">${item.books[i].name}</a></td>`;
+                            row_tag += `<td class='text-end'>ACTIVE</td>`
+                    } else {
+                        row_tag += `<td>${item.books[i].name}</td>`;
+                        row_tag += `<td class='text-end'><a href='/book/view/10110'>NOT ACTIVE</a></td>`
+                    }
+                    row_tag += `</tr>`;
+                //}
             }
         }
         //console.log(row_tag);
