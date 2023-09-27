@@ -39,7 +39,7 @@ public class Wordbook {
 
     @JsonIgnore
     @OneToMany(mappedBy = "wordbook", cascade = CascadeType.ALL)
-    @OrderBy("crtDate DESC")
+    @OrderBy("crtDate ASC")
     private Collection<WordMeaning> wordMeanings;
 
     @Formula("(select count(*) from word_meaning a where a.wordbook_id = id)")
