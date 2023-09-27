@@ -14,10 +14,17 @@
 					</div>
                 </div>
                 <div class="card-body" th:if="${book.active == 'N'}">
-                    <div class="card-text" style="white-space: pre-line;" th:utext="|${book.name} (NOT ACTIVE)|"></div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="card-text" style="white-space: pre-line;" th:utext="|${book.name} (NOT ACTIVE)|"></div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <span th:text="${book.wordCount}"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer text-end comment" th:if="${book.active == 'N'}">
-                    <a th:onclick="|javascript:goPay()|" role="button" class="small">결제</a>
+                    <a th:onclick="|javascript:goPay()|" role="button" class="small">활성화 요청</a>
                 </div>
             </div>
         </div>
@@ -26,7 +33,7 @@
 <script layout:fragment="script" type='text/javascript'>
 
 const goPay = () => {
-    location.href = `/book/order`;
+    location.href = `/book/word/202309.003`;
 }
 
 $(function() {

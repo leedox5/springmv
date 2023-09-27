@@ -64,6 +64,12 @@ public class BookController {
         return "thymeleaf/book/intro";
     }
 
+    @GetMapping("/means/{word}")
+    public String getMeanings(@PathVariable String word, Model model) {
+        Wordbook wordbook = wordService.getWordbookByWord(word);
+        model.addAttribute("wordbook", wordbook);
+        return "thymeleaf/book/means";
+    }
     @GetMapping("/view/{word}")
     public String getWordbook(@PathVariable String word, Model model, @AuthenticationPrincipal MemberAdapter author ) {
         Wordbook wordbook = wordService.getWordbookByWord(word);
@@ -124,6 +130,13 @@ public class BookController {
         model.addAttribute("key", key.get());
         model.addAttribute("path", "/data/books/" + id + "/" + opt.get() + "/" + key.get());
         return "thymeleaf/book/books";
+    }
+
+    @GetMapping(value = {"/word/{word}"})
+    public String getWord(@PathVariable String word, Model model) {
+        Wordbook wordbook = wordService.getWordbookByWord(word);
+        model.addAttribute("wordbook", wordbook);
+        return "thymeleaf/book/word_view";
     }
 
     @GetMapping(value = {"/word/{cate}/{sort}/{id}", "/word/{cate}/{sort}/{id}/{opt}", "/word/{cate}/{sort}/{id}/{opt}/{key}", "/word/{cate}/{sort}/{id}/{opt}/{key}/{page}"})
