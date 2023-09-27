@@ -26,7 +26,10 @@
                 <input type="text" class="form-control" name="word" id="word" th:field="*{word}">
             </div>
             <div class="mb-1">
-                <textarea  name="meaning1" id="meaning1" class="form-control" rows="4">[[${wordbook.meaning1}]]</textarea>
+                <textarea  name="meaning1" id="meaning1" class="form-control" rows="2">[[${wordbook.meaning1}]]</textarea>
+            </div>
+            <div class="mb-1">
+                <textarea  name="example1" id="example1" class="form-control" rows="8">[[${wordbook.example1}]]</textarea>
             </div>
             <div class="mb-1">
                 <input type="text" class="form-control" name="meaning2" id="meaning2" th:field="*{meaning2}">
