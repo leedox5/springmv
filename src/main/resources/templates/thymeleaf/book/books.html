@@ -77,7 +77,9 @@ const setGrid = (rows) => {
         row_tag += `</tr>`;
 
         //console.log(row_tag);
-
+        if(active == "N" && index > 0) {
+			return;
+		}
         $("#grid1>tbody").append(row_tag);
     });
     
