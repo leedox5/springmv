@@ -12,11 +12,8 @@
 
     <div th:id="'collap' + ${wordbook.id}" th:class="'collapse show mulcol0' + ${wordbook.id}">
         <div class="card mb-2" >
-            <div class="card-header">
-                <span style="white-space: pre-line;" th:text="${wordbook.meaning1}"></span>
-            </div>
             <div class="card-body">
-                <span style="white-space: pre-line;" th:utext="${wordbook.example1}"></span>
+                <span style="white-space: pre-line;" th:utext="${wordbook.meaning1}"></span>
             </div>
             <div class="card-footer text-end comment" th:if="${#authentication.getPrincipal().getUsername() == wordbook.author.email}">
                 <a th:href="'.mulcol0' + ${wordbook.id}" role="button" data-bs-toggle="collapse" class="small">수정</a>
