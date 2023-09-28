@@ -209,10 +209,23 @@ public class BookController {
                        @PathVariable String sort,
                        @PathVariable(required = false) Optional<String> opt,
                        @PathVariable(required = false) Optional<String> key,
-                       @PathVariable(required = false) Optional<Integer> page , Model model) {
+                       @PathVariable(required = false) Optional<Integer> page ,
+		               @AuthenticationPrincipal MemberAdapter author,
+		               Model model) {
         Wordbook wordbook = wordService.getWordbookByWord("10110");
         String name = wordMeaningService.getBookName(wordbook, code);
 
+        List<Book> books = bookService.getBooks(wordbook, author.getMember().getId());
+
+        String active = "N";
+
+        for(Book book : books) {
+		    if(code.equals(book.getCode())) {
+                active = book.getActive();
+			}
+		}
+
+        model.addAttribute("active", active);
         model.addAttribute("code", code);
         model.addAttribute("sort", sort);
         model.addAttribute("tit", name);

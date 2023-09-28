@@ -67,9 +67,13 @@ const setGrid = (rows) => {
         
     $.each(rows, function(index, item) {
         row_tag  = `<tr>`;
-        row_tag += `<td class="text-start"><a href="javascript:void(0);" onclick="goDetail('${item.id}');">${item.word}</a></td>`;
-        row_tag += `<td class="text-start">${item.meaning1}</td>`;
-        row_tag += `<td class="text-end">${item.memoCount}</td>`;
+		if(active == 'Y') {
+			row_tag += `<td class="text-start"><a href="javascript:void(0);" onclick="goDetail('${item.id}');">${item.word}</a></td>`;
+			row_tag += `<td class="text-start">${item.meaning1}</td>`;
+			row_tag += `<td class="text-end">${item.memoCount}</td>`;
+		} else {
+			row_tag += `<td class="text-center" colspan='3'>오픈단어장 [${tit}]는 활성화 전입니다. <a href='/book/view/10110'>활성화 요청하기</a></td>`
+		}
         row_tag += `</tr>`;
 
         //console.log(row_tag);
@@ -271,6 +275,8 @@ if (btn30) {
 }
 
 var data = {};
+var active = "[[${active}]]";
+var tit = "[[${tit}]]";
 var code = "[[${code}]]";
 var sort = "[[${sort}]]";
 var opt = "[[${opt}]]";
