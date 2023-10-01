@@ -71,8 +71,10 @@ public class BookRestController {
 
             List<Wordbook> words = paging.getContent();
 
+            /*
             Book book = Book.builder().id(10).name("영한기본").build();
             words.get(0).setBooks(List.of(book));
+            */
 
             Wordbook wordbook = wordService.getWordbookByWord("10110");
             List<Book> books = bookService.getBooks(wordbook, member.getId());
