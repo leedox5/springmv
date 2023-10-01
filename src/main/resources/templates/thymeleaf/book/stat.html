@@ -1,0 +1,31 @@
+<html layout:decorate="~{thymeleaf/book/layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="row border-bottom">
+        <div class="col-8">
+            <h2 th:text="${title}"></h2>
+        </div>
+        <div class="col-4 text-end">
+			<a th:href="@{/book/}" class="btn btn-sm btn-primary">시작하기</a>
+        </div>
+    </div>
+
+    <div th:each="wordcount : ${wordcounts}">
+        <div class="card mt-1" >
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <span style="white-space: pre-line;" th:utext="${wordcount.updDate}"></span>
+                    </div>
+                    <div class="col-6 text-end">
+                        <span style="white-space: pre-line;" th:utext="${wordcount.count}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script layout:fragment="script" type='text/javascript'>
+    $(function() {
+        console.log("/book/stat");
+    });
+</script>

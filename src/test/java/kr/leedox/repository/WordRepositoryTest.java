@@ -2,6 +2,8 @@ package kr.leedox.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.leedox.entity.Wordbook;
+import kr.leedox.wordbook.WordCountDTO;
+import kr.leedox.wordbook.WordCountInterface;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +78,23 @@ class WordRepositoryTest {
                 break;
             }
         }
+    }
+
+    @Test
+    void getWordCountTest() {
+        List<WordCountDTO> wordCounts = wordRepository.findCount("3000");
+        for(WordCountDTO dto : wordCounts) {
+            System.out.println(dto.getUpdDate() + "==>" + dto.getCount());
+        }
+        assertEquals(5, wordCounts.size());
+    }
+
+    @Test
+    void getWordCountNativeQueryTest() {
+        List<WordCountInterface> wordCounts = wordRepository.findCountNativeQuery();
+        for(WordCountInterface dto : wordCounts) {
+            System.out.println(dto.getUpdDate() + "==>" + dto.getCount());
+        }
+        assertEquals(5, wordCounts.size());
     }
 }

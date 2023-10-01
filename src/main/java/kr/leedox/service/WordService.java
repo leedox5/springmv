@@ -4,6 +4,7 @@ import kr.leedox.entity.Member;
 import kr.leedox.entity.WordMeaning;
 import kr.leedox.entity.Wordbook;
 import kr.leedox.repository.WordRepository;
+import kr.leedox.wordbook.WordCountDTO;
 import kr.leedox.wordbook.WordbookForm;
 import kr.leedox.wordbook.WordbookSpcifications;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -293,5 +294,9 @@ public class WordService {
 
     public int getWordCountByMeaning2AndWord(String code, String word) {
         return wordRepository.countByMeaning2AndWord(code, word);
+    }
+
+    public List<WordCountDTO> getWordCount(String cate) {
+        return wordRepository.findCount(cate);
     }
 }

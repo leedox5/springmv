@@ -9,6 +9,7 @@ import kr.leedox.service.MemberService;
 import kr.leedox.service.WordMeaningService;
 import kr.leedox.service.WordService;
 import kr.leedox.wordbook.PaypalConfig;
+import kr.leedox.wordbook.WordCountDTO;
 import kr.leedox.wordbook.WordbookForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -69,6 +70,14 @@ public class BookController {
         Wordbook wordbook = wordService.getWordbookByWord(word);
         model.addAttribute("wordbook", wordbook);
         return "thymeleaf/book/means";
+    }
+
+    @GetMapping("/stat/{cate}")
+    public String getStat(@PathVariable String cate, Model model) {
+        List<WordCountDTO> wordCountDTOS = wordService.getWordCount(cate);
+        model.addAttribute("title", "통계");
+        model.addAttribute("wordcounts", wordCountDTOS);
+        return "thymeleaf/book/stat";
     }
     @GetMapping("/view/{word}")
     public String getWordbook(@PathVariable String word, Model model, @AuthenticationPrincipal MemberAdapter author ) {
