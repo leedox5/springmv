@@ -48,6 +48,7 @@ public interface WordRepository extends JpaRepository<Wordbook, Integer>, JpaSpe
         + "FROM Wordbook w "
         + "WHERE w.meaning2 = :meaning2 "
         + "GROUP BY SUBSTRING(w.updDate, 1, 10) "
+        + "ORDER BY 1 "
     )
     List<WordCountDTO> findCount(@Param("meaning2") String meaning2);
 
