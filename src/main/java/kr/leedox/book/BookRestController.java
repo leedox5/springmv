@@ -56,6 +56,21 @@ public class BookRestController {
         this.objectMapper = objectMapper;
     }
 
+    @GetMapping( value = {"/api/word/{key}"})
+    public ResponseEntity<?> get(@PathVariable String key) {
+        Wordbook wordbook = wordService.getWordbookByWord(key);
+        if(wordbook == null) {
+            return ResponseHandler.generateResponse("NO DATA FOUND", HttpStatus.OK, null);
+        } else {
+            return ResponseHandler.generateResponse("OK", HttpStatus.OK, wordbook);
+        }
+    }
+
+    @GetMapping( value = "/api/hello")
+    public ResponseEntity<?> hello() {
+        return ResponseEntity.ok("Hello, api!");
+    }
+
     @GetMapping( value = {"/data/my", "/data/my/{opt}", "/data/my/{opt}/{key}", "/data/my/{opt}/{key}/{page}"})
     public ResponseEntity<?> search(@PathVariable(required = false) Optional<Integer> page,
                                     @PathVariable(required = false) Optional<String> opt,

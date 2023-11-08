@@ -75,7 +75,9 @@ public class WordService {
             checkInitData(word, "컬럼정의");
         }
 		List<Wordbook> wordbookList = wordRepository.findByWord(word);
-
+        if(wordbookList.isEmpty()) {
+            return null;
+        }
         return wordbookList.get(0);
 	}
 
