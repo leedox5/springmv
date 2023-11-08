@@ -1,5 +1,6 @@
 package kr.leedox.response;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -12,6 +13,9 @@ public class ResponseHandler {
         map.put("message", message);
         map.put("status", status.value());
         map.put("data", responseObj);
-        return new ResponseEntity<Object>(map, status);
+
+        HttpHeaders header = new HttpHeaders();
+        header.add("Content-Type", "application/json;charset=UTF-8");
+        return new ResponseEntity<Object>(map, header, status);
     }
 }
