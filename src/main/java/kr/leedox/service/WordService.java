@@ -301,4 +301,17 @@ public class WordService {
     public List<WordCountDTO> getWordCount(String cate) {
         return wordRepository.findCount(cate);
     }
+
+    public Wordbook getWordbookByKey(String key) {
+        List<Wordbook> wordbookList = wordRepository.findByWord(key);
+        if(wordbookList.isEmpty()) {
+            return Wordbook.builder().word(key).meaning1("TBD...").build();
+        }
+        for(Wordbook wordbook : wordbookList) {
+            if("ABBR".equals(wordbook.getMeaning2())) {
+                return wordbook;
+            }
+        }
+        return wordbookList.get(0);
+    }
 }

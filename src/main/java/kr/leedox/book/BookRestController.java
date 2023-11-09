@@ -58,7 +58,7 @@ public class BookRestController {
 
     @GetMapping( value = {"/api/word/{key}"})
     public ResponseEntity<?> get(@PathVariable String key) {
-        Wordbook wordbook = wordService.getWordbookByWord(key);
+        Wordbook wordbook = wordService.getWordbookByKey(key);
         if(wordbook == null) {
             return ResponseHandler.generateResponse("NO DATA FOUND", HttpStatus.OK, null);
         } else {
