@@ -306,6 +306,12 @@ public class WordService {
     public Wordbook getWordbookByKey(String key) {
         List<Wordbook> wordbookList = wordRepository.findByWord(key);
         if(wordbookList.isEmpty()) {
+            if(key.endsWith("s")) {
+                wordbookList = wordRepository.findByWord(key.substring(0, key.length() - 1));
+                if(!wordbookList.isEmpty()) {
+                    return wordbookList.get(0);
+                }
+            }
             wordbookList = wordRepository.findByWord(key.substring(1));
             if(wordbookList.isEmpty()) {
                 return Wordbook.builder().word(key).meaning1(key.toUpperCase()).build();
