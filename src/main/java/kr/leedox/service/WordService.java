@@ -305,7 +305,10 @@ public class WordService {
     public Wordbook getWordbookByKey(String key) {
         List<Wordbook> wordbookList = wordRepository.findByWord(key);
         if(wordbookList.isEmpty()) {
-            return Wordbook.builder().word(key).meaning1("TBD...").build();
+            wordbookList = wordRepository.findByWord(key.substring(1));
+            if(wordbookList.isEmpty()) {
+                return Wordbook.builder().word(key).meaning1("TBD...").build();
+            }
         }
         for(Wordbook wordbook : wordbookList) {
             if("ABBR".equals(wordbook.getMeaning2())) {
