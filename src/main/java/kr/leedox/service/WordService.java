@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -307,7 +308,7 @@ public class WordService {
         if(wordbookList.isEmpty()) {
             wordbookList = wordRepository.findByWord(key.substring(1));
             if(wordbookList.isEmpty()) {
-                return Wordbook.builder().word(key).meaning1("TBD...").build();
+                return Wordbook.builder().word(key).meaning1(key.toUpperCase()).build();
             }
         }
         for(Wordbook wordbook : wordbookList) {
