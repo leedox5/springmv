@@ -1,13 +1,10 @@
 package kr.leedox.club;
 
 import kr.leedox.common.ErrorResponse;
-import kr.leedox.controller.WordController;
-import kr.leedox.entity.Game;
 import kr.leedox.entity.Member;
 import kr.leedox.entity.Player;
 import kr.leedox.entity.UserCreateForm;
 import kr.leedox.service.*;
-import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +44,16 @@ public class ClubRestController {
             return ResponseEntity.ok(new ErrorResponse("404", "N", msg));
         }
         playerService.save(game_id, player);
+
+        return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
+    }
+
+
+    @PostMapping("/player/savebirth")
+    public ResponseEntity<?> saveBirth(@Valid @RequestBody Player player) {
+        Player playerRepo = playerService.findById(player.getId());
+        playerRepo.setBirth(player.getBirth());
+        playerService.save(playerRepo);
 
         return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
     }

@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
@@ -78,7 +76,7 @@ public class PlayerService {
 
     public void saveRank(List<Player> players) {
         getRank1(players);
-
+        getRankBirth(players);
         for ( Player p : players ) {
             playerRepository.save(p);
         }
@@ -265,7 +263,7 @@ public class PlayerService {
     public void getRank1(List<Player> players) {
         List<Player> sortedPlayers = new ArrayList<>(players);
 
-        Collections.sort(sortedPlayers, Comparator.comparing(Player::getMatchWin)
+        sortedPlayers.sort(Comparator.comparing(Player::getMatchWin)
                 .thenComparing(Player::getGameSum).reversed());
 
         for(int i = 0 ; i < sortedPlayers.size() ; i++) {
@@ -283,4 +281,31 @@ public class PlayerService {
         }
     }
 
+    public Player findById(Integer id) {
+        return playerRepository.findById(id).orElse(null);
+    }
+
+    public void getRankBirth(List<Player> players) {
+        for(int i = 0 ; i < players.size() ; i++) {
+            int r = getNewRankByBirth(players, players.get(i));
+            players.get(i).setMatchRank(r);
+        }
+    }
+
+    private int getNewRankByBirth(List<Player> players, Player curr) {
+        for(Player p : players) {
+            if(p.getId().equals(curr.getId())) return curr.getMatchRank();
+            if(curr.getMatchRank().equals(p.getMatchRank())) {
+                try {
+                    if(Integer.parseInt(curr.getBirth()) > Integer.parseInt(p.getBirth())) {
+                        return curr.getMatchRank() + 1;
+                    }
+                } catch (NumberFormatException e) {
+                    System.err.println(e.getMessage());
+                    return curr.getMatchRank();
+                }
+            }
+        }
+        return curr.getMatchRank();
+    }
 }

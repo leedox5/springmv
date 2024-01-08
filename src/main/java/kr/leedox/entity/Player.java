@@ -31,13 +31,15 @@ public class Player {
     private Integer gameLose;
     private Integer gameSum;
     private Integer matchRank;
+    private String birth;
 
     public Player() {
     }
 
-    public Player(Integer id, String name, Integer seq, Integer score01, Integer score11, Integer score02, Integer score12, Integer score03, Integer score13, Integer score04, Integer score14, Integer matchWin, Integer matchLose, Integer gameWin, Integer gameLose, Integer gameSum, Integer matchRank, Game game) {
+    public Player(Integer id, String name, Integer seq, Integer score01, Integer score11, Integer score02, Integer score12, Integer score03, Integer score13, Integer score04, Integer score14, Integer matchWin, Integer matchLose, Integer gameWin, Integer gameLose, Integer gameSum, Integer matchRank, String birth, Game game) {
         this.id = id;
         this.name = name;
+        this.birth = birth;
         this.seq = seq;
         this.score01 = score01;
         this.score11 = score11;
