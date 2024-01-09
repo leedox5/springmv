@@ -1,6 +1,7 @@
 package kr.leedox.club;
 
 import kr.leedox.common.ErrorResponse;
+import kr.leedox.entity.Game;
 import kr.leedox.entity.Member;
 import kr.leedox.entity.Player;
 import kr.leedox.entity.UserCreateForm;
@@ -15,10 +16,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -58,6 +56,90 @@ public class ClubRestController {
         return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
     }
 
+    @PostMapping("/player/create3")
+    public ResponseEntity<?> create3(@RequestBody Game game) {
+        Map<String, String> result = new HashMap<>();
+
+        Game gameRepo = gameService.findById(game.getId()).orElse(null);
+        String name1 = String.format("%s 결승", gameRepo.getSubject().substring(0, 12));
+        String name2 = String.format("%s 3,4위전", gameRepo.getSubject().substring(0, 12));
+
+        List<Game> games1 = gameService.findBySubject(name1);
+        List<Game> games2 = gameService.findBySubject(name2);
+
+        List<Player> players = (List<Player>) gameRepo.getPlayers();
+
+        Game gameFinal = games1.get(0);
+        Game gameFinal34 = games2.get(0);
+
+        if(gameRepo.getSubject().contains("A")) {
+            for(Player p : players) {
+                if(p.getMatchRank().equals(1)) {
+                    if(chkSeq(gameFinal, 1)) {
+                        playerService.saveRankA1(gameFinal, p.getName(), 1);
+                    }
+                }
+                if(p.getMatchRank().equals(2)) {
+                    if(chkSeq(gameFinal, 4)) {
+                        playerService.saveRankA1(gameFinal, p.getName(), 4);
+                    }
+                }
+                if(p.getMatchRank().equals(3)) {
+                    if(chkSeq(gameFinal34, 1)) {
+                        playerService.saveRankA1(gameFinal34, p.getName(), 1);
+                    }
+                }
+                if(p.getMatchRank().equals(4)) {
+                    if(chkSeq(gameFinal34, 4)) {
+                        playerService.saveRankA1(gameFinal34, p.getName(), 4);
+                    }
+                }
+            }
+        } else {
+            for(Player p : players) {
+                if(p.getMatchRank().equals(1)) {
+                    if(chkSeq(gameFinal, 3)) {
+                        playerService.saveRankA1(gameFinal, p.getName(), 3);
+                    }
+                }
+                if(p.getMatchRank().equals(2)) {
+                    if(chkSeq(gameFinal, 2)) {
+                        playerService.saveRankA1(gameFinal, p.getName(), 2);
+                    }
+                }
+                if(p.getMatchRank().equals(3)) {
+                    if(chkSeq(gameFinal34, 3)) {
+                        playerService.saveRankA1(gameFinal34, p.getName(), 3);
+                    }
+                }
+                if(p.getMatchRank().equals(4)) {
+                    if(chkSeq(gameFinal34, 2)) {
+                        playerService.saveRankA1(gameFinal34, p.getName(), 2);
+                    }
+                }
+            }
+        }
+
+        result.put("code", "Y");
+        result.put("message", "OK");
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    private boolean chkSeq(Game game, int seq) {
+        List<Player> players = (List<Player>) game.getPlayers();
+        for(Player p : players) {
+            if(p.getSeq().equals(seq)) {
+                if(p.getMatchRank() == null) {
+                    return true;
+                }
+                if(p.getMatchRank() > 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     @PostMapping("/player/create2/{game_id}")
     public ResponseEntity<?> create2(@PathVariable Integer game_id, @Valid @RequestBody Player player, Errors errors) {
         HashMap<String, String> result = new HashMap<>();

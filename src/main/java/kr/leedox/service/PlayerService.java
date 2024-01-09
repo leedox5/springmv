@@ -35,6 +35,24 @@ public class PlayerService {
         save(player);
     }
 
+    public void clearBySeq(List<Player> players, int seq) {
+        for(Player p : players) {
+            if(p.getSeq().equals(seq)) {
+                delete(p.getId());
+            }
+        }
+    }
+
+    public void saveRankA1(Game game, String name, int seq) {
+        deletePlayers(game, seq);
+        Player player = Player.builder()
+                .name(name)
+                .game(game)
+                .seq(seq)
+                .build();
+        save(player);
+    }
+
     public boolean chkName(Integer game_id, Player player) {
         Game game = gameRepository.getById(game_id);
 
@@ -307,5 +325,50 @@ public class PlayerService {
             }
         }
         return curr.getMatchRank();
+    }
+
+    public Game getFinal(int i) {
+        Game game = gameRepository.getById(i);
+        return game;
+    }
+
+    public void saveRankA4(Game game, Player player) {
+        for(Player p : game.getPlayers()) {
+            if(p.getSeq().equals(4)) {
+                playerRepository.delete(p);
+            }
+        }
+        player.setGame(game);
+        player.setSeq(4);
+        save(player);
+    }
+    public void saveRankB3(Game game, Player player) {
+        for(Player p : game.getPlayers()) {
+            if(p.getSeq().equals(3)) {
+                playerRepository.delete(p);
+            }
+        }
+        player.setGame(game);
+        player.setSeq(3);
+        save(player);
+    }
+
+    public void saveRankB2(Game game, Player player) {
+        for(Player p : game.getPlayers()) {
+            if(p.getSeq().equals(2)) {
+                playerRepository.delete(p);
+            }
+        }
+        player.setGame(game);
+        player.setSeq(2);
+        save(player);
+    }
+
+    public void deletByGame(Game game) {
+        playerRepository.deleteByGame(game);
+    }
+
+    public void deletePlayers(Game game, int seq) {
+        playerRepository.deletePlayers(game, seq);
     }
 }

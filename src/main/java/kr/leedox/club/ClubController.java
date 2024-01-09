@@ -212,6 +212,21 @@ public class ClubController {
         return new RedirectView("/club/meeting/" + game_id);
     }
 
+    @GetMapping("/match/create1/{game_id}")
+    public RedirectView matchCreateFinal(@PathVariable Integer game_id) {
+       Game game = gameService.getById(game_id);
+       List<Player> players = (List<Player>) game.getPlayers();
+
+       int cnt = players.size();
+
+       if( cnt != 4) {
+           return new RedirectView("/club/meeting/" + game_id);
+       }
+       addMatch(game, 1, players.get(0), players.get(1), players.get(2), players.get(3));
+
+       return new RedirectView("/club/meeting/" + game_id);
+    }
+
     @GetMapping("/match/create/{game_id}")
     public RedirectView matchCreate(@PathVariable Integer game_id) {
         Game game = gameService.getById(game_id);

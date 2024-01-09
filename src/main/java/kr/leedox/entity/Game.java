@@ -21,10 +21,12 @@ public class Game {
     @ManyToOne
     private Member author;
 
-    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OrderBy("seq")
     private Collection<Player> players;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    @OrderBy("seq")
     private Collection<Match> matches;
 
     public Collection<Match> getMatches() {

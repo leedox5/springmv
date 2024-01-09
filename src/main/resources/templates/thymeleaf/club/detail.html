@@ -64,7 +64,12 @@
         <div class="col-4 text-end">
 			<div th:if="${#authorization.expression('hasRole(''ROLE_GOLD'')') ? true : false}" class="btn-toolbar justify-content-end">
 				<div th:if="${game.getMatches().isEmpty()}" class="btn-group btn-group-sm">
-					<a th:href="|@{/club/match/create/}${game.id}|" class="btn btn-outline-secondary">대진표 생성</a>
+                    <div th:if="${game.getSubject().contains('결승') || game.getSubject().contains('3,4')}">
+                        <a th:href="|@{/club/match/create1/}${game.id}|" class="btn btn-outline-secondary">결승 대진표 생성</a>
+                    </div>
+                    <div th:unless="${game.getSubject().contains('결승') || game.getSubject().contains('3,4')}">
+                        <a th:href="|@{/club/match/create/}${game.id}|" class="btn btn-outline-secondary">대진표 생성</a>
+                    </div>
 				</div>
 				<div th:unless="${game.getMatches().isEmpty()}" class="btn-group btn-group-sm">
 					<a th:href="|@{/club/match/delete/}${game.id}|" class="btn btn-outline-secondary">대진표 삭제</a>
@@ -141,6 +146,7 @@
         <div th:if="${#authorization.expression('hasRole(''ROLE_GOLD'')') ? true : false}"  class="col-4 text-end mb-1">
 			<div class="text-end">
 				<a th:href="@{|/club/player/ranking/${game.id}|}" class="btn btn-sm btn-outline-secondary">집계</a>
+                <button th:unless="${game.getSubject().contains('결승')}" id="btn0109" class="btn btn-sm btn-outline-secondary">결승</button>
 			</div>
         </div>
     </div>
@@ -206,6 +212,8 @@
 <script layout:fragment="script">
 const cnt_player = [[${game.getPlayers().size()}]] ;
 const cnt_match = [[${game.getMatches().size()}]] ;
+const game_id = [[${game.getId()}]];
+
 $(document).ready(function() {
     console.log("ready");
     //$.getParam();
@@ -359,5 +367,34 @@ $(document).on("click", ".open-modal", function(e) {
 
     $($(this).data("bs-target")).modal("show");
 });
+
+const btn0109 = document.getElementById('btn0109');
+if (btn0109) {
+    btn0109.addEventListener('click', () => {
+        //alert('You clicked btn0109', 'success');
+
+        var data = {};
+        data.id = game_id;
+
+        console.log(data);
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/club/player/create3",
+            data: JSON.stringify(data),
+            dataType: "json",
+            success: function(data) {
+                console.log(data);
+                location.reload();
+            },
+            error: function(e) {
+                console.log(e.responseJSON);
+                var result = e.responseJSON;
+                alert(result.message, "warning");
+            }
+        });
+    });
+}
 
 </script>

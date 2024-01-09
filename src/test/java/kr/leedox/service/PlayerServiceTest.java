@@ -8,12 +8,10 @@ import kr.leedox.repository.GameRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -64,6 +62,27 @@ public class PlayerServiceTest {
 
         printPlayers(2, players);
 
+    }
+
+    @Test
+    public void getFinalTest() {
+        Game game = gameService.findById(10).orElse(null);
+        String name = String.format("%s 결승", Objects.requireNonNull(game).getSubject().substring(0, 12));
+        assertThat(name).isEqualTo("[2024.01.07] 결승");
+
+        List<Game> games = gameService.findBySubject(name);
+        assertThat(games.size()).isEqualTo(1);
+        assertThat(games.get(0).getId()).isEqualTo(12);
+
+        List<Player> players = (List<Player>) game.getPlayers();
+        printPlayers(1, players);
+
+        for(Player p : players) {
+            if(p.getMatchRank().equals(1)) {
+                System.out.println(p.getName());
+                playerService.save(games.get(0).getId(), p);
+            }
+        }
     }
 
     @Test
@@ -130,4 +149,6 @@ public class PlayerServiceTest {
             System.out.println(String.format("%10s %3d %3d %3d %s", p.getName(), p.getMatchWin(), p.getGameSum(), p.getMatchRank(), p.getBirth()));
         }
     }
+
+
 }
