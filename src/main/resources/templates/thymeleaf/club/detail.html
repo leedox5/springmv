@@ -146,7 +146,7 @@
         <div th:if="${#authorization.expression('hasRole(''ROLE_GOLD'')') ? true : false}"  class="col-4 text-end mb-1">
 			<div class="text-end">
 				<a th:href="@{|/club/player/ranking/${game.id}|}" class="btn btn-sm btn-outline-secondary">집계</a>
-                <button th:unless="${game.getSubject().contains('결승')}" id="btn0109" class="btn btn-sm btn-outline-secondary">결승</button>
+                <button th:unless="${game.getSubject().contains('결승') || game.getSubject().contains('3,4위전')}" id="btn0109" class="btn btn-sm btn-outline-secondary">결승</button>
 			</div>
         </div>
     </div>
