@@ -57,64 +57,74 @@ public class ClubRestController {
     }
 
     @PostMapping("/player/create3")
-    public ResponseEntity<?> create3(@RequestBody Game game) {
+    public ResponseEntity<?> create3(@RequestBody Game game, @AuthenticationPrincipal MemberAdapter author) {
         Map<String, String> result = new HashMap<>();
 
-        Game gameRepo = gameService.findById(game.getId()).orElse(null);
-        String name1 = String.format("%s 결승", gameRepo.getSubject().substring(0, 12));
-        String name2 = String.format("%s 3,4위전", gameRepo.getSubject().substring(0, 12));
+        Game gameRepo = gameService.getById(game.getId());
 
-        List<Game> games1 = gameService.findBySubject(name1);
-        List<Game> games2 = gameService.findBySubject(name2);
+        List<Player> players = null;
+        if (gameRepo != null) {
+            players = (List<Player>) gameRepo.getPlayers();
+        }
 
-        List<Player> players = (List<Player>) gameRepo.getPlayers();
+        Game gameFinal = null;
+        if (gameRepo != null) {
+            gameFinal = gameService.getFinal(gameRepo, author.getMember());
+        }
+        Game thirdPlace = null;
+        if (gameRepo != null) {
+            thirdPlace = gameService.getThirdPlace(gameRepo, author.getMember());
+        }
 
-        Game gameFinal = games1.get(0);
-        Game gameFinal34 = games2.get(0);
-
-        if(gameRepo.getSubject().contains("A")) {
-            for(Player p : players) {
-                if(p.getMatchRank().equals(1)) {
-                    if(chkSeq(gameFinal, 1)) {
-                        playerService.saveRankA1(gameFinal, p.getName(), 1);
+        if(gameRepo != null) {
+            if(gameRepo.getSubject().contains("A")) {
+                if (players != null) {
+                    for(Player p : players) {
+                        if(p.getMatchRank().equals(1)) {
+                            if(chkSeq(gameFinal, 1)) {
+                                playerService.saveRankA1(gameFinal, p.getName(), 1);
+                            }
+                        }
+                        if(p.getMatchRank().equals(2)) {
+                            if(chkSeq(gameFinal, 4)) {
+                                playerService.saveRankA1(gameFinal, p.getName(), 4);
+                            }
+                        }
+                        if(p.getMatchRank().equals(3)) {
+                            if(chkSeq(thirdPlace, 1)) {
+                                playerService.saveRankA1(thirdPlace, p.getName(), 1);
+                            }
+                        }
+                        if(p.getMatchRank().equals(4)) {
+                            if(chkSeq(thirdPlace, 4)) {
+                                playerService.saveRankA1(thirdPlace, p.getName(), 4);
+                            }
+                        }
                     }
                 }
-                if(p.getMatchRank().equals(2)) {
-                    if(chkSeq(gameFinal, 4)) {
-                        playerService.saveRankA1(gameFinal, p.getName(), 4);
-                    }
-                }
-                if(p.getMatchRank().equals(3)) {
-                    if(chkSeq(gameFinal34, 1)) {
-                        playerService.saveRankA1(gameFinal34, p.getName(), 1);
-                    }
-                }
-                if(p.getMatchRank().equals(4)) {
-                    if(chkSeq(gameFinal34, 4)) {
-                        playerService.saveRankA1(gameFinal34, p.getName(), 4);
-                    }
-                }
-            }
-        } else {
-            for(Player p : players) {
-                if(p.getMatchRank().equals(1)) {
-                    if(chkSeq(gameFinal, 3)) {
-                        playerService.saveRankA1(gameFinal, p.getName(), 3);
-                    }
-                }
-                if(p.getMatchRank().equals(2)) {
-                    if(chkSeq(gameFinal, 2)) {
-                        playerService.saveRankA1(gameFinal, p.getName(), 2);
-                    }
-                }
-                if(p.getMatchRank().equals(3)) {
-                    if(chkSeq(gameFinal34, 3)) {
-                        playerService.saveRankA1(gameFinal34, p.getName(), 3);
-                    }
-                }
-                if(p.getMatchRank().equals(4)) {
-                    if(chkSeq(gameFinal34, 2)) {
-                        playerService.saveRankA1(gameFinal34, p.getName(), 2);
+            } else {
+                if (players != null) {
+                    for(Player p : players) {
+                        if(p.getMatchRank().equals(1)) {
+                            if(chkSeq(gameFinal, 3)) {
+                                playerService.saveRankA1(gameFinal, p.getName(), 3);
+                            }
+                        }
+                        if(p.getMatchRank().equals(2)) {
+                            if(chkSeq(gameFinal, 2)) {
+                                playerService.saveRankA1(gameFinal, p.getName(), 2);
+                            }
+                        }
+                        if(p.getMatchRank().equals(3)) {
+                            if(chkSeq(thirdPlace, 3)) {
+                                playerService.saveRankA1(thirdPlace, p.getName(), 3);
+                            }
+                        }
+                        if(p.getMatchRank().equals(4)) {
+                            if(chkSeq(thirdPlace, 2)) {
+                                playerService.saveRankA1(thirdPlace, p.getName(), 2);
+                            }
+                        }
                     }
                 }
             }
@@ -128,6 +138,11 @@ public class ClubRestController {
 
     private boolean chkSeq(Game game, int seq) {
         List<Player> players = (List<Player>) game.getPlayers();
+
+        if(players == null) {
+            return true;
+        }
+
         for(Player p : players) {
             if(p.getSeq().equals(seq)) {
                 if(p.getMatchRank() == null) {
@@ -138,6 +153,7 @@ public class ClubRestController {
                 }
             }
         }
+
         return true;
     }
     @PostMapping("/player/create2/{game_id}")

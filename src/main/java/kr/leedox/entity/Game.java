@@ -1,8 +1,10 @@
 package kr.leedox.entity;
 
 import kr.leedox.CalendarUtil;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -23,11 +25,14 @@ public class Game {
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("seq")
-    private Collection<Player> players;
+    private Collection<Player> players = new ArrayList<Player>();
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     @OrderBy("seq")
     private Collection<Match> matches;
+
+    @Formula("(select count(*) from player a where a.game_id = id)")
+    private int playerCount;
 
     public Collection<Match> getMatches() {
         return matches;
@@ -49,7 +54,6 @@ public class Game {
     }
 
     public Game(String subject, String creator) {
-        this.id = id;
         this.subject = subject;
         this.creator = creator;
         this.createDate = CalendarUtil.formatNow("yyyy-MM-dd HH:mm:ss");
@@ -96,12 +100,7 @@ public class Game {
 
     @Override
     public String toString() {
-        return "Game{" +
-                "id=" + id +
-                ", subject='" + subject + '\'' +
-                ", createDate='" + createDate + '\'' +
-                ", creator='" + creator + '\'' +
-                '}';
+        return String.format("Game ==> { id=%d, subject='%s', createDate='%s' }", id, subject, createDate);
     }
 
     public Member getAuthor() {
@@ -110,5 +109,13 @@ public class Game {
 
     public String getGameDate() {
         return gameDate;
+    }
+
+    public int getPlayerCount() {
+        return playerCount;
+    }
+
+    public void setPlayerCount(int playerCount) {
+        this.playerCount = playerCount;
     }
 }

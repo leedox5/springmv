@@ -1,6 +1,7 @@
 package kr.leedox.service;
 
 import kr.leedox.entity.Game;
+import kr.leedox.entity.Member;
 import kr.leedox.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,8 +18,7 @@ public class GameService {
     GameRepository gameRepository;
 
     public Optional<Game> findById(Integer gameId) {
-        Optional<Game> game = gameRepository.findById(gameId);
-        return game;
+        return gameRepository.findById(gameId);
     }
 
     public List<Game> getList() {
@@ -29,8 +29,8 @@ public class GameService {
         return gameRepository.getById(gameId);
     }
 
-    public void save(Game game) {
-        gameRepository.save(game);
+    public Game save(Game game) {
+        return gameRepository.save(game);
     }
 
     public void delete(Game game) {
@@ -49,5 +49,25 @@ public class GameService {
     public boolean chkPlayer(Integer id) {
         Game game = getById(id);
         return game.getPlayers().isEmpty();
+    }
+
+    public Game getThirdPlace(Game game, Member member) {
+        String subject = String.format("%s 3,4위전", game.getSubject().substring(0, 12));
+        List<Game> games = findBySubject(subject);
+        if(games.isEmpty()) {
+            return save(new Game(subject, member));
+        } else {
+            return games.get(0);
+        }
+    }
+
+    public Game getFinal(Game game, Member member) {
+        String subject = String.format("%s 결승", game.getSubject().substring(0, 12));
+        List<Game> games = findBySubject(subject);
+        if(games.isEmpty()) {
+            return save(new Game(subject, member));
+        } else {
+            return games.get(0);
+        }
     }
 }
