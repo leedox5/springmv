@@ -174,14 +174,19 @@
                     <button th:attr="data-id=${player.id}, data-name=${player.name}, data-birth=${player.birth}" type="button" class="open-modal btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal0108">
                         [[${player.name}]]
                     </button>
-                    <span  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? true : false}" th:text="${player.birth}"></span>
+                    <span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? true : false}" th:text="${player.birth}"></span>
                 </td>
                 <td th:text="${player.matchWin}" class="text-end"></td>
                 <td th:text="${player.matchLose}" class="text-end"></td>
                 <td th:text="${player.gameWin}" class="text-end"></td>
-                <td th:text="${player.gameLose}" class="text-end"> </td>
-                <td th:text="${player.gameSum}" class="text-end">  </td>
-                <td th:text="${player.matchRank}" class="text-end"></td>
+                <td th:text="${player.gameLose}" class="text-end"></td>
+                <td th:text="${player.gameSum}" class="text-end"></td>
+                <td th:if="${player.matchRank == null}" th:text="${player.matchRank}" class="text-center"></td>
+                <td th:if="${game.getSubject().contains('결승') && player.matchRank == 1}" th:text="우승" class="text-center"></td>
+                <td th:if="${game.getSubject().contains('결승') && player.matchRank >  1}" th:text="준우승" class="text-center"></td>
+                <td th:if="${game.getSubject().contains('3,4') && player.matchRank == 1}" th:text="3위" class="text-center"></td>
+                <td th:if="${game.getSubject().contains('3,4') && player.matchRank >  1}" th:text="4위" class="text-center"></td>
+                <td th:if="${game.getSubject().contains('A') || game.getSubject().contains('B')}" th:text="${player.matchRank}" class="text-end"></td>
             </tr>
             </th:block>
         </tbody>
