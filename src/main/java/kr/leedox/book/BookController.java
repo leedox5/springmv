@@ -14,6 +14,7 @@ import kr.leedox.wordbook.WordbookForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,13 +49,15 @@ public class BookController {
         this.paypalConfig = paypalConfig;
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, @AuthenticationPrincipal UserDetails user) {
         /* ---
         model.addAttribute("tit", "내단어장");
         model.addAttribute("path", "/data/wordbook");
         --- */
+        if(user == null) {
+            return "redirect:/book/intro";
+        }
         return "redirect:/book/my";
     }
 
