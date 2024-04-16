@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>헤더</title>
+    <title>Header</title>
 </head>
 <body>
 <div th:fragment="headerFragment" class="container my-2">
@@ -11,7 +11,7 @@
             <span th:text="${tit}"></span>
         </div>
         <div class="col-6 text-end">
-            <span sec:authorize="isAuthenticated()" th:text="'[' + ${#authentication.getPrincipal().getMember().getUsername() + ']님 환영합니다!'}"></span>
+            <span sec:authorize="isAuthenticated()" th:text="'Hello, ' + ${#authentication.getPrincipal().getMember().getEmail()}"></span>
         </div>
     </div>
 </div>

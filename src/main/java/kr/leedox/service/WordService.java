@@ -1,5 +1,6 @@
 package kr.leedox.service;
 
+import kr.leedox.Lang;
 import kr.leedox.entity.Member;
 import kr.leedox.entity.WordMeaning;
 import kr.leedox.entity.Wordbook;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -323,5 +325,25 @@ public class WordService {
             }
         }
         return wordbookList.get(0);
+    }
+
+    public Lang getLang(String code, String language) {
+        List<Wordbook> wordbooks = null;
+        if(language.equals("en")) {
+            wordbooks = wordRepository.findByWord("202404.002");
+        } else {
+            wordbooks = wordRepository.findByWord("202404.003");
+        }
+        Lang lang = new Lang();
+        if (wordbooks != null) {
+            for(WordMeaning wordMeaning  : wordbooks.get(0).getWordMeanings()) {
+                if(wordMeaning.getMeaning().contains(code)) {
+                    String[] strs = wordMeaning.getMeaning().split("\\|");
+                    lang.setKey(code);
+                    lang.setContent(strs[1]);
+                }
+            }
+        }
+        return lang;
     }
 }

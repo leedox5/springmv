@@ -1,0 +1,35 @@
+<html layout:decorate="~{thymeleaf/book/layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="row">
+        <div class="col-4">
+            <h4>[[#{signin.0010}]]</h4>
+        </div>
+        <div class="col-8 text-end">
+            <span>[[#{signin.0020}]], <a href="/book/signup">[[#{signin.0030}]]</a></span>
+        </div>
+    </div>
+    <form th:action="@{/book/login}" method="post" class="post-form">
+
+        <div th:if="${param.error}">
+            <div class="alert alert-danger">
+                Please check your email or password.
+            </div>
+        </div>
+        <div class="mb-2">
+            <label for="username">[[#{signin.0040}]]</label>
+            <input type="text" class="form-control" name="username" id="username">
+        </div>
+        <div class="mb-2">
+            <label for="password">[[#{signin.0050}]]</label>
+            <input type="password" class="form-control" name="password" id="password">
+        </div>
+        <div class="mb-2 form-group form-check">
+            <label class="form-check-label" for="remember-me">[[#{signin.0060}]]</label>
+            <input type="checkbox" class="form-check-input" name="remember-me" id="remember-me" checked>
+        </div>
+		<div class="text-end">
+            <button type="submit" class="btn btn-sm btn-primary">[[#{signin.0010}]]</button>
+		</div>
+    </form>
+</div>
+</html>

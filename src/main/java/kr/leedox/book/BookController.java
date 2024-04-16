@@ -2,6 +2,7 @@ package kr.leedox.book;
 
 import kr.leedox.controller.Open;
 import kr.leedox.entity.Member;
+import kr.leedox.entity.UserCreateForm;
 import kr.leedox.entity.WordMeaning;
 import kr.leedox.entity.Wordbook;
 import kr.leedox.service.MemberAdapter;
@@ -19,14 +20,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Controller
 @RequestMapping("/book")
@@ -50,11 +53,19 @@ public class BookController {
     }
 
     @GetMapping("/")
-    public String home(Model model, @AuthenticationPrincipal UserDetails user) {
+    public String home(Model model, @AuthenticationPrincipal UserDetails user, @RequestParam(required = false) String lang, HttpSession session) {
         /* ---
         model.addAttribute("tit", "내단어장");
         model.addAttribute("path", "/data/wordbook");
         --- */
+        if(lang != null) {
+            if(lang.equals("en")) {
+                session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, Locale.ENGLISH);
+            } else {
+                session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, Locale.KOREA);
+            }
+        }
+
         if(user == null) {
             return "redirect:/book/intro";
         }
@@ -68,6 +79,16 @@ public class BookController {
         return "thymeleaf/book/intro";
     }
 
+    @GetMapping("/signup")
+    public String signup(Model model, UserCreateForm userCreateForm) {
+        return "thymeleaf/book/signup";
+    }
+
+    @RequestMapping("/login")
+    public String login(Model model) {
+        return "thymeleaf/book/login";
+    }
+
     @GetMapping("/means/{word}")
     public String getMeanings(@PathVariable String word, Model model) {
         Wordbook wordbook = wordService.getWordbookByWord(word);
@@ -78,12 +99,13 @@ public class BookController {
     @GetMapping("/stat/{cate}")
     public String getStat(@PathVariable String cate, Model model) {
         List<WordCountDTO> wordCountDTOS = wordService.getWordCount(cate);
-        model.addAttribute("title", "통계");
+        model.addAttribute("title", "Statistics");
         model.addAttribute("wordcounts", wordCountDTOS);
         return "thymeleaf/book/stat";
     }
     @GetMapping("/view/{word}")
     public String getWordbook(@PathVariable String word, Model model, @AuthenticationPrincipal MemberAdapter author ) {
+
         Wordbook wordbook = wordService.getWordbookByWord(word);
         model.addAttribute("tit", wordbook.getMeaning1());
         model.addAttribute("wordbook", wordbook);
@@ -106,7 +128,7 @@ public class BookController {
                        @PathVariable(required = false) Optional<String> key,
                        @PathVariable(required = false) Optional<Integer> page, Model model) {
 
-        model.addAttribute("tit", "내단어장");
+        model.addAttribute("tit", "MY");
         model.addAttribute("opt", opt.orElse("eng"));
         model.addAttribute("key", key.orElse(""));
         model.addAttribute("page", page.orElse(0));
@@ -179,8 +201,47 @@ public class BookController {
         model.addAttribute("path", path);
         model.addAttribute("newline", "\n");
 		model.addAttribute("page", page.orElse(0));
+
         return "thymeleaf/book/word_detail";
     }
+
+    @PostMapping("/signup")
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "thymeleaf/book/signup";
+        }
+
+        if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
+            bindingResult.rejectValue("password2", "passwordInCorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "thymeleaf/book/signup";
+        }
+
+        if (memberService.isExistEmail(userCreateForm.getEmail())) {
+            bindingResult.rejectValue("email", "duplicateEmail", "이미 사용된 이메일입니다.");
+            return "thymeleaf/book/signup";
+        }
+
+        /* ---
+        Member member = new Member();
+        member.setEmail(userCreateForm.getEmail());
+        member.setUsername(userCreateForm.getUsername());
+        member.setPassword(userCreateForm.getPassword1());
+        --- */
+        Member member = Member.builder()
+                .email(userCreateForm.getUsername())
+                .username(userCreateForm.getUsername())
+                .build();
+
+        member.setPassword(userCreateForm.getPassword1());
+        member.setRegDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        memberService.insertMember(member);
+
+        return "redirect:/";
+    }
+
 
     @PostMapping( value = {"/word/{id}/savemeaning", "/word/{id}/savemeaning/{opt}", "/word/{id}/savemeaning/{opt}/{key}"})
     public String saveWordMeaning2(@PathVariable Integer id,
@@ -264,6 +325,7 @@ public class BookController {
         model.addAttribute("opt", opt.orElse(""));
         model.addAttribute("key", key.orElse(""));
         model.addAttribute("opens", opens);
+
         return "thymeleaf/book/create";
     }
 

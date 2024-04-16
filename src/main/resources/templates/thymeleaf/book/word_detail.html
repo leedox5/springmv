@@ -5,10 +5,10 @@
             <h2 th:text="${wordbook.word}"></h2>
         </div>
         <div class="col-8 text-end">
-			<button id="btn1" type="button" class="btn btn-sm btn-outline-primary">목록으로</button>
+			<button id="btn1" type="button" class="btn btn-sm btn-outline-primary">List</button>
         </div>
     </div>
-    <h6 class="small text-muted text-end mt-1" th:text="'조회수 : ' + ${wordbook.access}"></h6>
+    <h6 class="small text-muted text-end mt-1" th:text="'Views : ' + ${wordbook.access}"></h6>
 
     <div th:id="'collap' + ${wordbook.id}" th:class="'collapse show mulcol0' + ${wordbook.id}">
         <div class="card mb-2" >
@@ -16,7 +16,7 @@
                 <span style="white-space: pre-line;" th:utext="${wordbook.meaning1}"></span>
             </div>
             <div class="card-footer text-end comment" th:if="${#authentication.getPrincipal().getUsername() == wordbook.author.email}">
-                <a th:href="'.mulcol0' + ${wordbook.id}" role="button" data-bs-toggle="collapse" class="small">수정</a>
+                <a th:href="'.mulcol0' + ${wordbook.id}" role="button" data-bs-toggle="collapse" class="small">Edit</a>
             </div>
         </div>
     </div>
@@ -32,8 +32,8 @@
                 <input type="text" class="form-control" name="meaning2" id="meaning2" th:field="*{meaning2}">
             </div>
             <div class="text-end">
-                <button type="submit" class="btn btn-sm btn-outline-primary">저장</button>
-                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol0' + ${wordbook.id}">취소</button>
+                <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol0' + ${wordbook.id}">Cancel</button>
             </div>
         </form>
     </div>
@@ -66,8 +66,8 @@
                                     </li>
                                 </ul>
                                 <div class="card-footer text-end comment"  th:if="${#authentication.getPrincipal().getUsername() == wordMeaning.member.email}">
-                                    <a th:href="@{|.mulcol${wordMeaning.id}|}" role="button" data-bs-toggle="collapse" class="small">수정</a>
-                                    <a href="#" class="small delete" th:attr="data-uri='/data/meaning/delete/' + ${wordMeaning.id}">삭제</a>
+                                    <a th:href="@{|.mulcol${wordMeaning.id}|}" role="button" data-bs-toggle="collapse" class="small">Edit</a>
+                                    <a href="#" class="small delete" th:attr="data-uri='/data/meaning/delete/' + ${wordMeaning.id}">Delete</a>
                                 </div>
                             </div>
                         </div>
@@ -79,8 +79,8 @@
                                     <textarea  name="meaning" id="meaning" class="form-control" rows="4">[[${wordMeaning.meaning}]]</textarea>
                                 </div>
                                 <div class="text-end">
-                                    <button type="submit" class="btn btn-sm btn-outline-primary">저장</button>
-                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol' + ${wordMeaning.id}">취소</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" th:attr="data-bs-target='.mulcol' + ${wordMeaning.id}">Cancel</button>
                                 </div>
                             </form>
                         </div>
@@ -96,7 +96,7 @@
         <textarea  name="meaning11" id="meaning11" class="form-control" rows="4"></textarea>
     </div>
     <div class="text-end">
-        <button id="btn2" class="btn btn-sm btn-outline-primary">메모등록</button>
+        <button id="btn2" class="btn btn-sm btn-outline-primary">Add Memo</button>
     </div>
 </div>
 <script layout:fragment="script" type='text/javascript'>
