@@ -1,6 +1,8 @@
 package kr.leedox.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
@@ -9,21 +11,21 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserCreateForm {
-    @NotEmpty(message = "{email.notempty}")
-    @Email
+    @NotEmpty(message = "Not Empty")
     private String email;
 
-    @Size(min = 2, max = 25, message = "이름은 2자 이상입니다.")
-    @NotEmpty(message = "{username.notempty}")
+    @Size(min = 2, max = 25, message = "Min 2")
+    @NotEmpty(message = "Not Empty")
     private String username;
 
-    @Size(min = 8, max = 25, message = "비밀번호는 8자 이상입니다.")
-    @NotEmpty(message = "비밀번호는 필수항목입니다.")
+    @Size(min = 8, max = 25, message = "Min 8")
+    @NotEmpty(message = "Not Empty")
     private String password1;
 
-    @Size(min = 8, max = 25, message = "비밀번호 확인은 8자 이상입니다.")
-    @NotEmpty(message = "비밀번호 확인은 필수항목입니다.")
+    @Size(min = 8, max = 25, message = "Min 8")
+    @NotEmpty(message = "Not Empty")
     private String password2;
-
 }

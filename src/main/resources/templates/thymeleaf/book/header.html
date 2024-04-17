@@ -11,7 +11,7 @@
             <span th:text="${tit}"></span>
         </div>
         <div class="col-6 text-end">
-            <span sec:authorize="isAuthenticated()" th:text="'Hello, ' + ${#authentication.getPrincipal().getMember().getEmail()}"></span>
+            <span sec:authorize="isAuthenticated()" th:text="'Hello, ' + ${#authentication.getPrincipal().getMember().getUsername()}"></span>
         </div>
     </div>
 </div>

@@ -1,29 +1,29 @@
 <html layout:decorate="~{thymeleaf/book/layout}">
 <div layout:fragment="content" class="container my-3">
-    <h5 class="my-3 border-bottom pb-2">단어 등록</h5>
+    <h5 class="my-3 border-bottom pb-2">[[#{create.0010}]]</h5>
     <form method="post" th:object="${wordbookForm}" class="post-form my-3">
         <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
             <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
         </div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div class="mb-2">
-            <label for="word">단어</label>
+            <label for="word">[[#{create.0020}]]</label>
             <input type="text" th:field="*{word}" class="form-control" name="word" id="word">
         </div>
         <div class="mb-2">
-            <label for="meaning1">의미</label>
+            <label for="meaning1">[[#{create.0030}]]</label>
             <textarea th:field="*{meaning1}" class="form-control" name="meaning1" id="meaning1" rows="5"></textarea>
         </div>
         <div class="mb-2">
-            <h6>공개 여부</h6>
+            <h6>[[#{create.0040}]]</h6>
         </div>
         <div th:each="open : ${opens}" class="form-check form-check-inline">
             <input type="radio" th:field="*{seq}" th:value="${open.val}" class="form-check-input">
             <label th:for="${#ids.prev('seq')}" th:text="${open.name}" class="form-check-label"></label>
         </div>
         <div class="mb-2 text-end">
-            <button type="submit" class="btn btn-sm btn-primary">저장</button>
-            <a th:onclick="|javascript:goCancel()|" class="btn btn-sm btn-primary">취소</a>
+            <button type="submit" class="btn btn-sm btn-primary">[[#{create.0070}]]</button>
+            <a th:onclick="|javascript:goCancel()|" class="btn btn-sm btn-primary">[[#{create.0080}]]</a>
         </div>
     </form>
 </div>

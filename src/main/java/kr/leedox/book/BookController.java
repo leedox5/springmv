@@ -316,8 +316,8 @@ public class BookController {
                               @PathVariable(required = false) Optional<String> key,
                               Model model) {
         List<Open> opens = new ArrayList<>();
-        Open open1 = Open.builder().id(1).name("공개").val(-1).build();
-        Open open2 = Open.builder().id(2).name("비공개").val(0).build();
+        Open open1 = Open.builder().id(1).name("Open").val(-1).build();
+        Open open2 = Open.builder().id(2).name("Closed").val(0).build();
 
         opens.add(open1);
         opens.add(open2);

@@ -6,22 +6,26 @@
         </div>
     </div>
     <form th:action="@{/book/signup}" th:object="${userCreateForm}" method="post">
-        <div th:replace="thymeleaf/errors :: formErrorsFragment"></div>
         <div class="mb-2">
             <label for="email" class="form-label">[[#{signup.email}]]</label>
             <input type="email" th:field="*{email}" class="form-control">
+            <div th:if="${#fields.hasErrors('email')}" class="mt-1 alert alert-danger" th:errors="*{email}">
+            </div>
         </div>
         <div class="mb-2">
             <label for="username" class="form-label">[[#{signup.name}]]</label>
             <input type="text" th:field="*{username}" class="form-control">
+            <p th:if="${#fields.hasErrors('username')}" class="mt-1 alert alert-danger" th:errors="*{username}"></p>
         </div>
         <div class="mb-2">
             <label for="password1" class="form-label">[[#{signup.pass1}]]</label>
             <input type="password" th:field="*{password1}" class="form-control">
+            <p th:if="${#fields.hasErrors('password1')}" class="mt-1 alert alert-danger" th:errors="*{password1}"></p>
         </div>
         <div class="mb-2">
             <label for="password2" class="form-label">[[#{signup.pass2}]]</label>
             <input type="password" th:field="*{password2}" class="form-control">
+            <p th:if="${#fields.hasErrors('password2')}" class="mt-1 alert alert-danger" th:errors="*{password2}"></p>
         </div>
         <div class="text-end">
             <button type="submit" class="btn btn-sm btn-primary">[[#{signup.join}]]</button>
