@@ -181,8 +181,8 @@ public class BookRestController {
 
     private List<SearchOption> getOpts() {
         List<SearchOption> opts = new ArrayList<SearchOption>();
-        opts.add(new SearchOption("eng", "Code"));
-        opts.add(new SearchOption("kor", "Mean"));
+        opts.add(new SearchOption("eng", "WORD"));
+        opts.add(new SearchOption("kor", "MEAN"));
         return opts;
     }
 
