@@ -5,7 +5,8 @@
             <h2 th:text="${wordbook.meaning1}"></h2>
         </div>
         <div class="col-8 text-end">
-			<a th:href="@{/club/stat}" class="btn btn-sm btn-primary">시작하기</a>
+			<a sec:authorize="isAuthenticated()" th:href="@{/club/stat}" class="btn btn-sm btn-primary">시작하기</a>
+            <a sec:authorize="isAnonymous()" th:href="@{/club/login}" class="btn btn-sm btn-primary" >로그인</a>
         </div>
     </div>
 
