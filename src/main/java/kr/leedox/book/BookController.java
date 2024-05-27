@@ -128,7 +128,7 @@ public class BookController {
                        @PathVariable(required = false) Optional<String> key,
                        @PathVariable(required = false) Optional<Integer> page, Model model) {
 
-        model.addAttribute("tit", "MY");
+        model.addAttribute("tit", "MY BOOK");
         model.addAttribute("opt", opt.orElse("eng"));
         model.addAttribute("key", key.orElse(""));
         model.addAttribute("page", page.orElse(0));
