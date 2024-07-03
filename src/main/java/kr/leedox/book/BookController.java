@@ -67,7 +67,7 @@ public class BookController {
         }
 
         if(user == null) {
-            return "redirect:/book/intro";
+            return "redirect:/book/login";
         }
         return "redirect:/book/my";
     }
@@ -230,7 +230,7 @@ public class BookController {
         member.setPassword(userCreateForm.getPassword1());
         --- */
         Member member = Member.builder()
-                .email(userCreateForm.getUsername())
+                .email(userCreateForm.getEmail())
                 .username(userCreateForm.getUsername())
                 .build();
 
@@ -239,7 +239,7 @@ public class BookController {
 
         memberService.insertMember(member);
 
-        return "redirect:/";
+        return "redirect:/book/login";
     }
 
 
