@@ -74,7 +74,7 @@ public class BookController {
 
     @GetMapping("/intro")
     public String intro(Model model) {
-        Wordbook wordbook = wordService.getWordbookByWord("202404.004");
+        Wordbook wordbook = wordService.getWordbookByWord("10010");
         model.addAttribute("wordbook", wordbook);
         return "thymeleaf/book/intro";
     }
