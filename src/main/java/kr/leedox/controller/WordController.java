@@ -118,11 +118,14 @@ public class WordController {
 
 	@GetMapping("/")
 	public String getHome() {
+        /* ---
 		Wordbook wordbook = wordService.getWordbookByWord("10030");
         if(wordbook == null) {
             return "redirect:/wordhome";
         }
 		return wordbook.getMeaning1();
+        --- */
+        return "thymeleaf/landing";
 	}
 
     @GetMapping("/wordhome")
