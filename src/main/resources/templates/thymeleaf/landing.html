@@ -14,48 +14,143 @@
     h1, h2 {
       margin-top: 2rem;
     }
-    ul {
-      padding-left: 1.2rem;
-    }
     a {
       color: #0066cc;
       text-decoration: none;
     }
+
+    /* Hero Section */
+    .hero-card {
+      text-align: center;
+      margin-bottom: 3rem;
+      background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
+      padding: 2rem 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    .hero-card h1 {
+      font-size: 2.2rem;
+      color: #1a237e;
+      margin-bottom: 0.5rem;
+    }
+    .hero-card p {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 0.6rem 1.5rem;
+      background-color: #1a73e8;
+      color: white;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .cta-button:hover {
+      background-color: #0c52cc;
+    }
+
+    /* What I Do Section */
+    .service-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .service-card {
+      flex: 1 1 250px;
+      background-color: #f5f7fa;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      font-weight: 500;
+    }
+
+    /* Links Section */
+    .link-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin: 1rem 0;
+    }
+    .link-item {
+      padding: 0.8rem 1rem;
+      background-color: #eef3fb;
+      border-left: 5px solid #1a73e8;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+    }
+    .link-item:hover {
+      background-color: #dde8f6;
+    }
+
+    /* About + Contact */
+    .info-box {
+      background-color: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+      margin: 1rem 0;
+    }
+    .info-box p {
+      font-size: 1rem;
+      color: #333;
+    }
+    /* Footer Center */
+    footer {
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #888;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <h1>Leedox Tommy</h1>
-  <p>기록은 흐름이 되고, 흐름은 운영이 됩니다.</p>
+  <div class="hero-card">
+    <h1>리독스 Tommy</h1>
+    <p>기록은 흐름이 되고,<br>
+      흐름은 나를 움직이고,<br>
+      그 움직임은 결국 나만의 길이 됩니다.</p>
+    <a href="mailto:leedox@naver.com" class="cta-button">작업 문의하기</a>
+  </div>
 
   <h2>What I Do</h2>
-  <ul>
-    <li>SQL 최적화 및 시스템 튜닝</li>
-    <li>데이터 기반 자동화 스크립트 개발</li>
-    <li>Oracle / MySQL / Tibero 실무 컨설팅</li>
-    <li>감성 기반 기술 콘텐츠 운영</li>
-  </ul>
+  <div class="service-list">
+    <div class="service-card">SQL 최적화 및 시스템 튜닝</div>
+    <div class="service-card">데이터 기반 자동화 스크립트 개발</div>
+    <div class="service-card">Oracle / MySQL / Tibero 실무 컨설팅</div>
+    <div class="service-card">감성 기반 기술 콘텐츠 운영</div>
+  </div>
 
   <h2>Links</h2>
-  <ul>
-    <li><a href="https://blog.naver.com/leedox" target="_blank">기술 블로그</a></li>
-    <li><a href="https://kmong.com/gig/331009" target="_blank">크몽 서비스</a></li>
-    <li><a href="#">AI 콘텐츠 소개 (예정)</a></li>
-  </ul>
+  <div class="link-list">
+    <a href="https://blog.naver.com/leedox" target="_blank" class="link-item">기술 블로그</a>
+    <a href="https://kmong.com/gig/331009" target="_blank" class="link-item">크몽 서비스</a>
+    <a href="https://kmong.com/@LEEDOX" target="_blank" class="link-item">크몽 프로필 바로가기</a>
+  </div>
 
   <h2>About</h2>
-  <p>
-    기술을 넘는 감각, 감각을 넘는 구조.<br>
-    데이터, 코드, 사람 사이의 리듬을 설계합니다.<br>
-    ◦ 리듬으로 운영하라 | 리독스 Tommy
-  </p>
+  <div class="info-box">
+    <p>
+      기술을 넘는 감각, 감각을 넘는 구조.<br>
+      데이터, 코드, 사람 사이의 <br>
+      리듬을 설계합니다.<br><br>
+      기록은 그 자체로 의미가 되고,<br>
+      흐름은 우리가 만들어가는 이야기입니다.<br>
+      리듬으로 운영하라 <br><br>
+      – 이것이 리독스 Tommy의 철학입니다.–
+    </p>
+  </div>
 
   <h2>Contact</h2>
-  <p>
-    Email: <a href="mailto:leedox@naver.com">leedox@naver.com</a><br>
-    블로그 DM 또는 톡 오픈채팅을 통해 문의해주세요.
-  </p>
-
-  <footer style="margin-top: 3rem; font-size: 0.9rem; color: #888;">
+  <div style="text-align: center; margin-top: 1.5rem;">
+    <img src="03.jpg" alt="리독스 캐리커처" style="width: 340px; border-radius: 10%; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+  </div>
+  <footer>
     &copy; 2025 Leedox. All rights reserved.
   </footer>
 </body>
