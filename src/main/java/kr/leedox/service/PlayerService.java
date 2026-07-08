@@ -306,13 +306,18 @@ public class PlayerService {
 
     public void getRankBirth(List<Player> players) {
         List<Player> sortedByRank = new ArrayList<>(players);
-        sortedByRank.sort(Comparator.comparing(Player::getMatchRank));
+        sortedByRank.sort(Comparator.comparing(Player::getMatchRank, Comparator.nullsLast(Integer::compareTo)));
 
         int i = 0;
         while (i < sortedByRank.size()) {
             Player first = sortedByRank.get(i);
             Integer rank = first.getMatchRank();
             int j = i + 1;
+
+            if (rank == null) {
+                i = j;
+                continue;
+            }
 
             while (j < sortedByRank.size() && Objects.equals(sortedByRank.get(j).getMatchRank(), rank)) {
                 j++;
