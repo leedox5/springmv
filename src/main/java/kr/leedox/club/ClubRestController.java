@@ -49,8 +49,21 @@ public class ClubRestController {
 
     @PostMapping("/player/savebirth")
     public ResponseEntity<?> saveBirth(@Valid @RequestBody Player player) {
+        String birth = player.getBirth() == null ? "" : player.getBirth().trim();
+        if (!birth.matches("\\d{4}")) {
+            return new ResponseEntity<>(new ErrorResponse("400", "N", "생년은 YYYY 4자리로 입력해 주세요."), HttpStatus.BAD_REQUEST);
+        }
+
+        if (player.getId() == null) {
+            return new ResponseEntity<>(new ErrorResponse("404", "N", "선수를 찾을 수 없습니다."), HttpStatus.NOT_FOUND);
+        }
+
         Player playerRepo = playerService.findById(player.getId());
-        playerRepo.setBirth(player.getBirth());
+        if (playerRepo == null) {
+            return new ResponseEntity<>(new ErrorResponse("404", "N", "선수를 찾을 수 없습니다."), HttpStatus.NOT_FOUND);
+        }
+
+        playerRepo.setBirth(birth);
         playerService.save(playerRepo);
 
         return ResponseEntity.ok(new ErrorResponse("200", "Y", "OK"));
