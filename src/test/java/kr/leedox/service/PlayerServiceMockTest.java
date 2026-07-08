@@ -20,12 +20,25 @@ public class PlayerServiceMockTest {
         List<Player> players = getStubPlayers();
         playerService.getRankBirth(players);
 
-        assertThat(players.get(1).getMatchRank()).isEqualTo(4);
+        assertThat(players.get(0).getMatchRank()).isEqualTo(4);
+        assertThat(players.get(1).getMatchRank()).isEqualTo(3);
+    }
+
+    @Test
+    public void getRankBirthWithInvalidBirthTest() {
+        Player p1 = Player.builder().id(20).seq(1).name("선수A").matchRank(2).birth("abcd").build();
+        Player p2 = Player.builder().id(21).seq(2).name("선수B").matchRank(2).birth("1979").build();
+
+        List<Player> players = List.of(p1, p2);
+        playerService.getRankBirth(players);
+
+        assertThat(players.get(0).getMatchRank()).isEqualTo(3);
+        assertThat(players.get(1).getMatchRank()).isEqualTo(2);
     }
 
     private List<Player> getStubPlayers() {
-        Player p1 = Player.builder().id(10).name("박종만").matchRank(3).birth("1975").build();
-        Player p2 = Player.builder().id(11).name("강민").matchRank(3).birth("1978").build();
+        Player p1 = Player.builder().id(10).seq(2).name("강민").matchRank(3).birth("1978").build();
+        Player p2 = Player.builder().id(11).seq(1).name("박종만").matchRank(3).birth("1975").build();
         return List.of(p1, p2);
     }
 

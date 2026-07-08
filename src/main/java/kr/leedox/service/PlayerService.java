@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PlayerService {
@@ -304,27 +305,49 @@ public class PlayerService {
     }
 
     public void getRankBirth(List<Player> players) {
-        for(int i = 0 ; i < players.size() ; i++) {
-            int r = getNewRankByBirth(players, players.get(i));
-            players.get(i).setMatchRank(r);
+        List<Player> sortedByRank = new ArrayList<>(players);
+        sortedByRank.sort(Comparator.comparing(Player::getMatchRank));
+
+        int i = 0;
+        while (i < sortedByRank.size()) {
+            Player first = sortedByRank.get(i);
+            Integer rank = first.getMatchRank();
+            int j = i + 1;
+
+            while (j < sortedByRank.size() && Objects.equals(sortedByRank.get(j).getMatchRank(), rank)) {
+                j++;
+            }
+
+            if ((j - i) > 1) {
+                List<Player> tieGroup = new ArrayList<>(sortedByRank.subList(i, j));
+                tieGroup.sort(
+                        Comparator.comparing(
+                                        (Player p) -> parseBirthYear(p.getBirth()),
+                                        Comparator.nullsLast(Integer::compareTo))
+                                .thenComparing(Player::getSeq, Comparator.nullsLast(Integer::compareTo))
+                                .thenComparing(Player::getId, Comparator.nullsLast(Integer::compareTo))
+                );
+
+                for (int idx = 0; idx < tieGroup.size(); idx++) {
+                    tieGroup.get(idx).setMatchRank(rank + idx);
+                }
+            }
+
+            i = j;
         }
     }
 
-    private int getNewRankByBirth(List<Player> players, Player curr) {
-        for(Player p : players) {
-            if(p.getId().equals(curr.getId())) return curr.getMatchRank();
-            if(curr.getMatchRank().equals(p.getMatchRank())) {
-                try {
-                    if(Integer.parseInt(curr.getBirth()) > Integer.parseInt(p.getBirth())) {
-                        return curr.getMatchRank() + 1;
-                    }
-                } catch (NumberFormatException e) {
-                    System.err.println(e.getMessage());
-                    return curr.getMatchRank();
-                }
-            }
+    private Integer parseBirthYear(String birth) {
+        if (birth == null) {
+            return null;
         }
-        return curr.getMatchRank();
+
+        String normalized = birth.trim();
+        if (!normalized.matches("\\d{4}")) {
+            return null;
+        }
+
+        return Integer.parseInt(normalized);
     }
 
     public Game getFinal(int i) {
