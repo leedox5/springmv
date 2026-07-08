@@ -1,8 +1,7 @@
 package kr.leedox;
 
-import kr.leedox.repository.WordRepository;
-import kr.leedox.service.WordService;
-import org.springframework.beans.factory.annotation.Autowired;
+import kr.leedox.service.MessageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.stereotype.Component;
 
@@ -10,15 +9,14 @@ import java.text.MessageFormat;
 import java.util.Locale;
 
 @Component("messageSource")
+@RequiredArgsConstructor
 public class DBMessageSource extends AbstractMessageSource {
 
-    @Autowired
-    private WordService wordService;
+    private final MessageService messageService;
 
-    private static final String DEFAULT_LOCALE_CODE = "en";
     @Override
     protected MessageFormat resolveCode(String code, Locale locale) {
-        Lang lang = wordService.getLang(code, locale.getLanguage());
-        return new MessageFormat(lang.getContent(), locale);
+        String message = messageService.getMessage(code, locale);
+        return new MessageFormat(message, locale);
     }
 }
