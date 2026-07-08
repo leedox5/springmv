@@ -1,7 +1,6 @@
 package kr.leedox.service;
 
 import kr.leedox.entity.Member;
-import kr.leedox.entity.WordMeaning;
 import kr.leedox.entity.Wordbook;
 import kr.leedox.repository.WordRepository;
 import kr.leedox.wordbook.WordCountDTO;
@@ -24,11 +23,6 @@ import java.util.Optional;
 public class WordService {
     @Autowired
     WordRepository wordRepository;
-
-    @Autowired
-    MemberService memberService;
-    @Autowired
-    WordMeaningService wordMeaningService;
 
     public List<Wordbook> getList() {
         return wordRepository.findTop10ByOrderByUpdDateDesc();
@@ -54,55 +48,12 @@ public class WordService {
         return wordbook;
     }
 
-	public Wordbook getWordbookByWord(String word) {
-        Wordbook wordbook = null;
-
-        if("10010".equals(word)) {
-            checkInitData(word, "소개");
-            checkDetailData(word, "Welcome to W-Book");
-        }
-
-        if("10030".equals(word)) {
-            checkInitData(word, "redirect:/wordbook/");
-        }
-
-        if("10050".equals(word)) {
-            checkInitData(word, "소개");
-            checkDetailData(word, "Welcome to T-Matches");
-        }
-
-        if("202309.001".equals(word)) {
-            checkInitData(word, "컬럼정의");
-        }
-		List<Wordbook> wordbookList = wordRepository.findByWord(word);
+    public Wordbook getWordbookByWord(String word) {
+        List<Wordbook> wordbookList = wordRepository.findByWord(word);
         if(wordbookList.isEmpty()) {
             return null;
         }
         return wordbookList.get(0);
-	}
-
-    private void checkDetailData(String word, String detail) {
-        Wordbook wordbook = wordRepository.findByWord(word).get(0);
-        List<WordMeaning> wordMeanings = wordMeaningService.getWordMeanings(wordbook);
-        if(wordMeanings.isEmpty()) {
-            WordMeaning wordMeaning = new WordMeaning();
-            wordMeaning.setMeaning(detail);
-            wordMeaningService.save(wordbook, wordMeaning);
-        }
-    }
-
-    private void checkInitData(String word, String meaning) {
-        List<Wordbook> wordbookList = wordRepository.findByWord(word);
-        if(wordbookList.isEmpty()) {
-            WordbookForm form = new WordbookForm();
-            form.setWord(word);
-            form.setMeaning1(meaning);
-            form.setSeq(0);
-
-            Member member = memberService.getMember("leedox@naver.com");
-
-            create(form, member);
-        }
     }
 
     public Wordbook saveWordbook(Wordbook wordbook) {
