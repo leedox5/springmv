@@ -54,6 +54,10 @@ public class ClubRestController {
             return new ResponseEntity<>(new ErrorResponse("400", "N", "생년은 YYYY 4자리로 입력해 주세요."), HttpStatus.BAD_REQUEST);
         }
 
+        if (player.getId() == null) {
+            return new ResponseEntity<>(new ErrorResponse("404", "N", "선수를 찾을 수 없습니다."), HttpStatus.NOT_FOUND);
+        }
+
         Player playerRepo = playerService.findById(player.getId());
         if (playerRepo == null) {
             return new ResponseEntity<>(new ErrorResponse("404", "N", "선수를 찾을 수 없습니다."), HttpStatus.NOT_FOUND);
