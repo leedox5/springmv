@@ -128,6 +128,11 @@ public class WordController {
         return "thymeleaf/landing";
 	}
 
+    @GetMapping("/doha")
+    public String getAiUpgrade() {
+        return "thymeleaf/doha/AI-upgrade";
+    }
+
     @GetMapping("/wordhome")
     public String home(@AuthenticationPrincipal UserDetails user) {
         if (user != null) {
