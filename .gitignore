@@ -35,6 +35,9 @@ build/
 /.mvn/
 /bin/
 
+### Local JOB ###
+.local/
+
 ### ETC ###
 *.log
 src/main/resources/application.properties
