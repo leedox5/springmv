@@ -762,3 +762,111 @@ code .
 ```
 
 Windows와 WSL은 서로 독립된 개발환경으로 보고 각각 JDK와 Maven을 확인하는 것이 좋습니다.
+
+---
+
+## 25. WSL에 MySQL 설치 후 springmv 프로젝트 연결
+
+`springmv` 프로젝트는 `pom.xml`에서 `mysql-connector-java 8.0.27`을 사용하므로, MySQL 서버도 8.0.x 계열을 설치하는 것을 권장합니다.
+
+### 25.1 MySQL 서버 설치
+
+```bash
+sudo apt update
+sudo apt install mysql-server -y
+```
+
+### 25.2 MySQL 서비스 시작 및 상태 확인
+
+WSL은 기본적으로 systemd가 아닌 경우가 많으므로 `service` 명령을 사용합니다.
+
+```bash
+sudo service mysql start
+sudo service mysql status
+```
+
+버전 확인:
+
+```bash
+mysql --version
+```
+
+### 25.3 root로 접속
+
+Ubuntu의 MySQL은 기본적으로 `auth_socket` 인증을 사용하므로 `sudo` 없이 접속하면 비밀번호 없이도 막힐 수 있습니다.
+
+```bash
+sudo mysql
+```
+
+### 25.4 프로젝트용 데이터베이스와 사용자 생성
+
+`src/main/resources/application.properties`는 gitignore 대상이라 저장소에는 없습니다. 로컬에서 사용할 DB 이름, 사용자명, 비밀번호를 정하고 아래 값을 자신의 값으로 바꿔서 실행합니다.
+
+```sql
+CREATE DATABASE <DB_NAME> CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER '<DB_USER>'@'localhost' IDENTIFIED BY '<DB_PASSWORD>';
+GRANT ALL PRIVILEGES ON <DB_NAME>.* TO '<DB_USER>'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+### 25.5 접속 테스트
+
+```bash
+mysql -u <DB_USER> -p
+```
+
+실행하면 다음처럼 비밀번호 입력 프롬프트가 뜹니다. 여기에 25.4에서 설정한 `<DB_PASSWORD>`를 입력합니다.
+
+```text
+Enter password:
+```
+
+정상적으로 접속되어 `mysql>` 프롬프트가 뜨면 준비가 된 것입니다.
+
+### 25.6 application.properties에 datasource 설정
+
+`src/main/resources/application.properties`가 없다면 새로 만들고, 위에서 만든 DB 이름/사용자/비밀번호를 아래 형태로 반영합니다.
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/<DB_NAME>?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC
+spring.datasource.username=<DB_USER>
+spring.datasource.password=<DB_PASSWORD>
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+```
+
+`ddl-auto=update`로 두면 Spring Data JPA가 엔티티 기준으로 테이블을 자동 생성/갱신하므로, 스키마를 직접 만들 필요는 없습니다. (Spring Security remember-me용 토큰 테이블도 이 과정에서 함께 생성됩니다.)
+
+### 25.7 애플리케이션 실행 및 연결 확인
+
+```bash
+mvn spring-boot:run
+```
+
+콘솔에 `HikariPool` 관련 로그가 에러 없이 뜨고, 브라우저에서 아래 주소가 열리면 DB 연결이 정상입니다.
+
+```text
+http://localhost:8080/
+```
+
+### 25.8 자주 보는 문제
+
+**`Access denied for user`**
+사용자명/비밀번호가 `application.properties`와 실제 MySQL 계정이 일치하는지 확인합니다.
+
+**`Unknown database`**
+25.4에서 만든 `<DB_NAME>`과 `application.properties`의 URL에 있는 DB 이름이 같은지 확인합니다.
+
+**`Public Key Retrieval is not allowed`**
+JDBC URL에 `allowPublicKeyRetrieval=true`가 포함되어 있는지 확인합니다.
+
+**MySQL 서비스가 재부팅 후 꺼져 있음**
+WSL은 Windows 재부팅 시 자동으로 서비스가 시작되지 않으므로, 매번 아래 명령으로 수동 시작이 필요합니다.
+
+```bash
+sudo service mysql start
+```
